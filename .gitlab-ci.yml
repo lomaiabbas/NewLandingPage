@@ -1,0 +1,30 @@
+stages:
+  - build
+
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+  DOCKER_HOST: tcp://docker:2375
+  REGISTRY_URL: registry.gitlab.com/atraslink/dashboard
+  IMAGE_TAG: registry.gitlab.com/atraslink/dashboard/atraslink-dashboard:latest
+
+# This is needed for Docker-in-Docker service
+services:
+  - docker:20.10.16-dind
+
+build:
+  stage: build
+  image: docker:20.10.16
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "production"'
+      when: manual
+      allow_failure: false  
+  before_script:
+    # Login to GitLab Container Registry
+    - echo "Logging into GitLab Container Registry..."
+    - docker login -u tarek.alkhalili.93 -p glpat-pmaFDN0eEKyam4B7kzRRoG86MQp1OjM5OWEzCw.01.120lq09ih registry.gitlab.com
+  script:
+    - echo "Building Docker image..."
+    - docker build -t $IMAGE_TAG .
+    - echo "Pushing Docker image to registry..."
+    - docker push $IMAGE_TAG

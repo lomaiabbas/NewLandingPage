@@ -1,0 +1,123 @@
+.titleArea{
+  text-align: center;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.titleArea .subTitle{
+  color: var(--accent);
+  font-size: var(--eyebrow-fs);
+  letter-spacing: var(--eyebrow-tracking);
+  border-radius: 12px;
+  font-weight: 700;
+  padding: 10px 15px;
+  position: relative;
+}
+
+.titleArea .subTitle::after{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--accent);
+  opacity: 0.1;
+  content: '';
+  border-radius: 12px;
+}
+
+.titleArea .secTitle{
+  font-size: var(--h2-fs);
+  line-height: var(--h2-line);
+  font-weight: 700;
+  max-width: 700px;
+}
+
+.contactUs{
+  color: var(--text);
+  position: relative;
+  isolation: isolate;
+  background: var(--band);
+  margin-top: -32px;
+  padding: 128px 0 96px;
+  clip-path: polygon(0 0, 100% 32px, 100% 100%, 0 100%);
+}
+
+.btn{
+  position:relative;
+  z-index:2;
+  overflow:hidden;
+  vertical-align:middle;
+  display:inline-block;
+  border:none;
+  text-transform:capitalize;
+  text-align:center;
+  background:var(--on-accent);
+  color:var(--accent);
+  font-size:16px;
+  font-weight:500;
+  line-height:1;
+  padding:19.5px 40px;
+  border-radius:100px;
+  transition: transform .18s ease, filter .18s ease;
+}
+.btn:hover{
+  transform: translateY(-1px);
+  filter: brightness(1.06);
+}
+
+.star1, .star2{
+  position: absolute;
+  z-index: 11;
+}
+.star1{
+  right: 2%;
+  top: 50px;
+}
+
+.star2{
+  right: 5%;
+  top: 100px;
+}
+
+
+@media (max-width: 575px){
+  .star1{
+    right: 3%;
+    top: -35px;
+  }
+  
+  .star2{
+    right: 8%;
+    top: 20px;
+  }
+}
+
+.spin{
+  -webkit-animation:spin 15s linear infinite;
+  animation:spin 15s linear infinite;
+}
+@-webkit-keyframes spin{
+  0%{
+    -webkit-transform:rotate(0);
+    transform:rotate(0);
+  }
+  100%{
+    -webkit-transform:rotate(360deg);
+    transform:rotate(360deg);
+  }
+}
+@keyframes spin{
+  0%{
+    -webkit-transform:rotate(0);
+    transform:rotate(0);
+  }
+  100%{
+    -webkit-transform:rotate(360deg);
+    transform:rotate(360deg);
+  }
+}

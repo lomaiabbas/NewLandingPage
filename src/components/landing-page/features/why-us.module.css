@@ -1,0 +1,110 @@
+.bandSection{
+  position: relative;
+  isolation: isolate;
+  background: var(--band);
+  margin-top: -32px;
+  clip-path: polygon(0 0, 100% 32px, 100% 100%, 0 100%);
+}
+
+.titleArea{
+  text-align: center;
+  margin-bottom: 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.titleArea .subTitle{
+  color: var(--accent);
+  font-size: var(--eyebrow-fs);
+  letter-spacing: var(--eyebrow-tracking);
+  border-radius: 12px;
+  font-weight: 700;
+  padding: 10px 15px;
+  position: relative;
+}
+
+.titleArea .subTitle::after{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--accent);
+  opacity: 0.1;
+  content: '';
+  border-radius: 12px;
+}
+
+.titleArea .secTitle{
+  font-size: var(--h2-fs);
+  line-height: var(--h2-line);
+  font-weight: 700;
+  color: var(--text);
+}
+
+.featureCard{
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  margin-bottom: 25px;
+  padding: 22px;
+  border-radius: 14px;
+  min-height: 150px;
+  transition: transform .2s ease, border-color .2s ease;
+}
+
+.featureCard:hover{
+  transform: translateY(-4px);
+  border-color: var(--accent);
+}
+
+.featureCard > div:first-child{
+  flex: 0 0 56px;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  color: var(--accent);
+}
+
+.featureCard .boxTitle{
+  color: var(--accent);
+  font-size: var(--h3-fs);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.featureCard .boxText{
+  font-size: 15px;
+  line-height: var(--body-line);
+  color: var(--muted);
+}
+
+.featureCard .boxIcon{
+  min-width:70px;
+  height:130px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+  overflow: hidden;
+}
+
+.featureCard .boxIcon img{
+  -webkit-transition:all 0.4s ease-in-out;
+  transition:all 0.4s ease-in-out;
+}
+
+.featureCard:hover .boxIcon img{
+  -webkit-transform:scale(-1) rotate(180deg);
+  -ms-transform:scale(-1) rotate(180deg);
+  transform:scale(-1) rotate(180deg);
+}

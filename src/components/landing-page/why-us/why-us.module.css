@@ -1,0 +1,393 @@
+.bandSection{
+  position: relative;
+  isolation: isolate;
+  background: var(--band);
+  margin-top: -32px;
+  clip-path: polygon(0 0, 100% 32px, 100% 100%, 0 100%);
+}
+
+.titleArea{
+  text-align: center;
+  margin-bottom: 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.titleArea .subTitle{
+  color: var(--accent);
+  font-size: var(--eyebrow-fs);
+  letter-spacing: var(--eyebrow-tracking);
+  border-radius: 12px;
+  font-weight: 700;
+  padding: 10px 15px;
+  position: relative;
+}
+
+.titleArea .subTitle::after{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--accent);
+  opacity: 0.1;
+  content: '';
+  border-radius: 12px;
+}
+
+.titleArea .secTitle{
+  font-size: var(--h2-fs);
+  line-height: var(--h2-line);
+  font-weight: 700;
+  color: var(--text);
+}
+
+.stage{
+  position: relative;
+  background: var(--hero-grad);
+  border-radius: 20px;
+  padding: 38px;
+  min-height: 560px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.stage::after{
+  content: '';
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent-soft) 40%, transparent), transparent 70%);
+  top: -120px;
+  inset-inline-end: -100px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+@media (max-width: 760px){
+  .stage{
+    padding: 24px;
+    min-height: 0;
+  }
+}
+
+.stage:fullscreen,
+.stage.fullscreen{
+  width: 100%;
+  height: 100vh;
+  min-height: 100vh;
+  border-radius: 0;
+  overflow-y: auto;
+  background: var(--accent-2);
+}
+
+.stage:fullscreen .panel,
+.stage.fullscreen .panel{
+  max-width: 560px;
+}
+
+.fullscreenBtn{
+  position: absolute;
+  z-index: 4;
+  top: 16px;
+  inset-inline-end: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(4px);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+.fullscreenBtn:hover,
+.fullscreenBtn:focus-visible{
+  background: rgba(255, 255, 255, 0.22);
+  border-color: var(--accent-soft);
+}
+.fullscreenBtn:focus-visible{
+  outline: 2px solid var(--accent-soft);
+  outline-offset: 2px;
+}
+
+/* Tab switcher */
+.tabs{
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 32px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  margin-bottom: 44px;
+}
+
+.tabBtn{
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 2px 16px;
+  border: none;
+  background: transparent;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.tabArrow{
+  display: inline-flex;
+  opacity: 0;
+  --slide: -4px;
+  transform: translateX(var(--slide));
+  transition: all 0.2s ease;
+}
+:global(html[dir='rtl']) .tabArrow{
+  --slide: 4px;
+  transform: scaleX(-1) translateX(var(--slide));
+}
+.tabBtn.active{
+  color: #fff;
+}
+.tabBtn.active .tabArrow{
+  opacity: 1;
+  transform: translateX(0);
+}
+:global(html[dir='rtl']) .tabBtn.active .tabArrow{
+  transform: scaleX(-1) translateX(0);
+}
+.tabBtn:not(.active):hover{
+  color: rgba(255, 255, 255, 0.8);
+}
+.tabBtn:focus-visible{
+  outline: 2px solid var(--accent-soft);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+/* The moving progress underline — a real element (not ::after) so React
+   can restart the animation on tab change by remounting it. */
+.tabProgress{
+  position: absolute;
+  inset-inline-start: 0;
+  bottom: -1px;
+  height: 2px;
+  width: 0%;
+  background: var(--accent-soft);
+  animation: whyUsFill var(--dur, 5s) linear forwards;
+}
+@keyframes whyUsFill{
+  from{ width: 0%; }
+  to{ width: 100%; }
+}
+
+/* Body */
+.body{
+  position: relative;
+  z-index: 2;
+}
+
+.panel{
+  display: grid;
+  grid-template-columns: 1fr;
+  max-width: 420px;
+  align-items: center;
+}
+
+.steps{
+  position: relative;
+  padding-inline-start: 42px;
+}
+.steps::before{
+  content: '';
+  position: absolute;
+  inset-inline-start: 16px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  border-radius: 2px;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.02),
+    rgba(255, 255, 255, 0.22) 12%,
+    rgba(255, 255, 255, 0.22) 88%,
+    rgba(255, 255, 255, 0.02)
+  );
+}
+
+.bgImg{
+  position: absolute;
+  inset: -4px;
+  background-size: cover;
+  background-position: center;
+  filter: blur(1px) saturate(1.05);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 0;
+}
+.bgImg.show{
+  opacity: 1;
+}
+
+.bgTint{
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    color-mix(in srgb, var(--accent-2) 78%, black) 0%,
+    color-mix(in srgb, var(--accent-2) 55%, transparent) 42%,
+    color-mix(in srgb, var(--accent-2) 15%, transparent) 68%,
+    transparent 100%
+  );
+  z-index: 1;
+}
+:global(html[dir='rtl']) .bgTint{
+  background: linear-gradient(
+    260deg,
+    color-mix(in srgb, var(--accent-2) 78%, black) 0%,
+    color-mix(in srgb, var(--accent-2) 55%, transparent) 42%,
+    color-mix(in srgb, var(--accent-2) 15%, transparent) 68%,
+    transparent 100%
+  );
+}
+
+.step{
+  position: relative;
+  padding-bottom: 28px;
+  opacity: 0.42;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: opacity 0.3s ease, background-color 0.2s ease;
+}
+.step.stepActive{
+  opacity: 1;
+}
+.step.stepDone{
+  opacity: 0.7;
+}
+.step:last-child{
+  padding-bottom: 0;
+}
+.step:hover{
+  opacity: 0.8;
+}
+.step.stepActive:hover{
+  opacity: 1;
+}
+.step:focus-visible{
+  outline: 2px solid var(--accent-soft);
+  outline-offset: 4px;
+}
+
+.stepsFill{
+  position: absolute;
+  inset-inline-start: 16px;
+  top: 8px;
+  width: 2px;
+  height: 0;
+  border-radius: 2px;
+  background: linear-gradient(
+    to bottom,
+    var(--accent-soft),
+    color-mix(in srgb, var(--accent-soft) 65%, white)
+  );
+  box-shadow: 0 0 10px color-mix(in srgb, var(--accent-soft) 65%, transparent);
+  transition: height 0.4s ease;
+}
+
+.stepNum{
+  position: absolute;
+  inset-inline-start: -42px;
+  top: -2px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(4px);
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  color: #fff;
+  font-weight: 700;
+  font-size: 13.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.step.stepDone .stepNum{
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--accent-soft) 85%, white),
+    var(--accent-soft)
+  );
+  border-color: transparent;
+  color: var(--accent-2);
+  box-shadow: 0 2px 10px color-mix(in srgb, var(--accent-soft) 45%, transparent);
+}
+.step.stepActive .stepNum{
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--accent-soft) 85%, white),
+    var(--accent-soft)
+  );
+  border-color: transparent;
+  color: var(--accent-2);
+  transform: scale(1.16);
+  animation: whyUsStepPulse 2.2s ease-in-out infinite;
+}
+.stepCheck{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes whyUsStepPulse{
+  0%, 100%{
+    box-shadow:
+      0 0 0 5px color-mix(in srgb, var(--accent-soft) 20%, transparent),
+      0 4px 14px color-mix(in srgb, var(--accent-soft) 55%, transparent);
+  }
+  50%{
+    box-shadow:
+      0 0 0 9px color-mix(in srgb, var(--accent-soft) 10%, transparent),
+      0 4px 18px color-mix(in srgb, var(--accent-soft) 65%, transparent);
+  }
+}
+
+.step h4{
+  font-size: 16.5px;
+  font-weight: 700;
+  margin: 0 0 4px;
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+.step p{
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.82);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.45);
+}
+
+.tags{
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+.tag{
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 4px 9px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
