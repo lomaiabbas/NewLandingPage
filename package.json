@@ -128,10 +128,18 @@
     "github": {
       "release": true
     },
+    {
+  "name": "...",
+  "version": "...",
+  "engines": {
+    "node": "22.x"
+  }
+},
     "git": {
       "requireBranch": "main",
       "commitMessage": "chore: release v${version}",
       "requireCleanWorkingDir": false
     }
+    
   }
 }
