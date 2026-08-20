@@ -2,6 +2,9 @@
   "name": "atraslink",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -125,21 +128,13 @@
         }
       }
     },
-    "github": {
-      "release": true
-    },
-    {
-  "name": "...",
-  "version": "...",
-  "engines": {
-    "node": "22.x"
-  }
+  "github": {
+  "release": true
 },
-    "git": {
-      "requireBranch": "main",
-      "commitMessage": "chore: release v${version}",
-      "requireCleanWorkingDir": false
-    }
-    
+"git": {
+  "requireBranch": "main",
+  "commitMessage": "chore: release v${version}",
+  "requireCleanWorkingDir": false
+}
   }
 }
