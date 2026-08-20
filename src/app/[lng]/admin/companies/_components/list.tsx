@@ -48,7 +48,7 @@ import Link from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import AddEditDrawer from './add-edit-drawer'
-import { CompanyActionsDrawer } from './company-actions-drawer'
+// import { CompanyActionsDrawer } from './company-actions-drawer'
 import ManageFeaturesDrawer from './manage-features-drawer'
 
 const INDEX_PAGE_SIZE_DEFAULT = 20
@@ -1136,7 +1136,7 @@ export const CompaniesList = ({ lng }: { lng: string }) => {
         }}
       />
       {/* Actions Drawer */}
-      <CompanyActionsDrawer
+      {/* <CompanyActionsDrawer
         lng={lng}
         company={selectedCompany}
         open={drawerOpen}
@@ -1144,7 +1144,7 @@ export const CompaniesList = ({ lng }: { lng: string }) => {
         onUpdate={async () => {
           await getData(meta.pageSize, (meta.page - 1) * meta.pageSize, keywords, filters)
         }}
-      />
+      /> */}
 
       <Modal
         title={t('RegisterPhoneNumberWithMeta')}

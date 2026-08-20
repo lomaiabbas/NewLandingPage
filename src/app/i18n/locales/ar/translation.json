@@ -493,6 +493,7 @@
   "Live": "مباشر",
   "HeroDemoVideoAlt": "عرض توضيحي لواجهة تحكم AtrasLink",
   "HeroDemoVideoFullscreen": "عرض الفيديو بملء الشاشة",
+  "HeroDemoVideoExitFullscreen": "الخروج من وضع ملء الشاشة",
   "ContactTitle": "ليكن دوران AtrasLink جزءاً من نجاحك! تواصل معنا لمعرفة المزيد حول خدماتنا.",
   "OurLocation": "موقعنا",
   "SayHello": "قل مرحباً",
@@ -2394,11 +2395,13 @@
   "OccurrenceRescheduledSuccessfully": "تمت إعادة جدولة الموعد بنجاح.",
   "OccurrenceAddedSuccessfully": "تمت إضافة الموعد بنجاح.",
   "Attendee": "الحاضر",
-  "SocialProofToast1Title": "124 دعوة أرسلت",
+  "SocialProofToast1Title": "124 دعوة أرسلت.\nشوف الرحلة كاملة",
   "SocialProofToast1Cta": "خل أتراس لينك يديرها",
-  "SocialProofToast2Title": "17 مدعوًا قاموا بتسجيل الدخول الآن",
+  "SocialProofToast2Title": "17 مدعو حضروا للقاعة الآن\nجاهز تخلي تجربة ضيوفك لا تُنسى؟",
   "SocialProofToast2Cta": "سجل اشتراك الآن",
   "SocialProofToast3Title": "ودّع الجداول والمتابعة اليدوية. وخلك مركز على الحدث نفسه.",
   "SocialProofToast3Cta": "اكتشف أتراس لينك",
-  "SocialProofDismiss": "إغلاق"
+  "SocialProofDismiss": "إغلاق",
+  "SocialProofLiveActivity": "نشاط مباشر",
+  "SocialProofJustNow": "منذ دقيقة"
 }

@@ -492,6 +492,7 @@
   "Live": "Live",
   "HeroDemoVideoAlt": "AtrasLink dashboard demo",
   "HeroDemoVideoFullscreen": "View video in fullscreen",
+  "HeroDemoVideoExitFullscreen": "Exit fullscreen",
   "ContactTitle": "Let’s be a part of your success! Get in touch with us for answers to all your questions about our services.",
   "OurLocation": "Our location",
   "SayHello": "Say hello",
@@ -2391,11 +2392,13 @@
   "OccurrenceRescheduledSuccessfully": "The occurrence has been rescheduled.",
   "OccurrenceAddedSuccessfully": "The occurrence has been added.",
   "Attendee": "Attendee",
-  "SocialProofToast1Title": "124 invitations sent",
+  "SocialProofToast1Title": "124 invitations sent.\nSee the full journey",
   "SocialProofToast1Cta": "Let AtrasLink handle it",
-  "SocialProofToast2Title": "17 invitees just logged in",
+  "SocialProofToast2Title": "17 guests have arrived at the venue now\nReady to make your guests' experience unforgettable?",
   "SocialProofToast2Cta": "Register now",
   "SocialProofToast3Title": "Say goodbye to spreadsheets and manual follow-ups. Stay focused on the event itself.",
   "SocialProofToast3Cta": "Discover AtrasLink",
-  "SocialProofDismiss": "Dismiss"
+  "SocialProofDismiss": "Dismiss",
+  "SocialProofLiveActivity": "Live Activity",
+  "SocialProofJustNow": "1 minute ago"
 }

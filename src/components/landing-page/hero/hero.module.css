@@ -154,6 +154,25 @@
   background: var(--accent-2);
 }
 
+.demoFrame:fullscreen,
+.demoFrame.demoFrameFullscreen{
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0;
+  transform: none;
+  background: #000;
+}
+
+.demoFrame:fullscreen .demoVideo,
+.demoFrame.demoFrameFullscreen .demoVideo{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 .fullscreenBtn{
   position: absolute;
   bottom: 14px;
@@ -173,6 +192,14 @@
   cursor: pointer;
   transition: background .25s ease, transform .25s ease, box-shadow .25s ease;
   box-shadow: 0 0 0 0 rgba(0,255,140,0);
+}
+
+.demoFrame:fullscreen .fullscreenBtn,
+.demoFrame.demoFrameFullscreen .fullscreenBtn{
+  bottom: env(safe-area-inset-bottom, 18px);
+  inset-inline-end: max(18px, env(safe-area-inset-right, 18px));
+  width: 46px;
+  height: 46px;
 }
 
 .fullscreenBtn:hover,

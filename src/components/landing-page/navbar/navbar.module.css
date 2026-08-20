@@ -58,14 +58,13 @@
   padding: 11px 22px;
   background: linear-gradient(
     135deg,
-    #ffffff 0%,
-    #f7f4ec 45%,
-    #dfeee5 100%
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(247, 244, 236, 0.16) 45%,
+    rgba(223, 238, 229, 0.14) 100%
   );
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    0 0 16px 2px rgba(83, 255, 184, 0.2),
-    0 10px 26px -16px rgba(4, 32, 23, 0.45);
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 10px 26px -18px rgba(4, 32, 23, 0.35);
 }
 
 @media (max-width: 1100px) {
@@ -177,11 +176,11 @@
 /* ---------- CTA ---------- */
 .navCta {
   font-family: 'IBM Plex Sans Arabic', var(--font-sans), sans-serif !important;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 15px;
   line-height: 1;
-  color: #fff !important;
-  background: linear-gradient(135deg, var(--primary-color, #07c692), var(--accent-2, #0b2e24));
+  color: #0b2e24 !important;
+  background: linear-gradient(135deg, var(--primary-color, #07c692), #e9e4d9);
   border: 0;
   border-radius: 999px;
   padding: 13px 24px;
@@ -197,7 +196,7 @@
     box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .navCta:hover {
-  color: #fff !important;
+  color: #0b2e24 !important;
   filter: brightness(1.08);
   transform: translateY(-1px);
   box-shadow: 0 14px 28px -10px rgba(7, 198, 146, 0.8);
@@ -309,10 +308,10 @@
   width: 100%;
   text-align: center;
   font-family: 'IBM Plex Sans Arabic', var(--font-sans), sans-serif !important;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 16px;
-  color: #fff;
-  background: linear-gradient(135deg, var(--primary-color, #07c692), var(--accent-2, #0b2e24));
+  color: #0b2e24;
+  background: linear-gradient(135deg, var(--primary-color, #07c692), #e9e4d9);
   border-radius: 999px;
   padding: 16px 24px;
   text-decoration: none;

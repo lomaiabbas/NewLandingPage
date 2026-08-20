@@ -15,7 +15,6 @@ import {
   renderBodyText2,
   setTextAlignment,
 } from '@/lib/helpers'
-import { MessageDto } from '@/lib/services/chats/dto'
 import { MessageStatus, TemplateTypes } from '@/lib/services/types'
 import { Alert, Flex, Image, Space } from 'antd'
 import {
@@ -52,7 +51,7 @@ export default function Message({
 
   let refMessage = undefined
   if (item.contextId) {
-    refMessage = allMessages?.filter((i: MessageDto) => i.messageId === item.contextId)?.[0]
+    refMessage = allMessages?.filter((i: any) => i.messageId === item.contextId)?.[0]
   }
 
   const STATUS_MESSAGES: Partial<Record<any, string>> = {
@@ -420,7 +419,7 @@ export default function Message({
                         key={index}
                         style={{
                           color: allMessages?.filter(
-                            (i: MessageDto) =>
+                            (i: any) =>
                               i.contextId === item.messageId && button.type === 'QUICK_REPLY'
                           )?.[0]
                             ? '#ccc'

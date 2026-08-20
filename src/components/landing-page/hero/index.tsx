@@ -2,7 +2,8 @@
 
 import { getClientTranslation } from '@/app/i18n/client';
 import { Col, Row } from 'antd';
-import React, { useEffect, useRef } from 'react'
+import { Maximize2, Minimize2 } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react'
 import styles from './hero.module.css';
 import Star1 from '../shared/star1';
 import Star2 from '../shared/star2';
@@ -11,6 +12,8 @@ import AOS from 'aos';
 export default function Hero({ lng }: { lng: string }) {
   const { t } = getClientTranslation(lng);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const frameRef = useRef<HTMLDivElement>(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
     AOS.init({
@@ -19,17 +22,43 @@ export default function Hero({ lng }: { lng: string }) {
     });
   }, []);
 
+  useEffect(() => {
+    const handleChange = () => {
+      setIsFullscreen(document.fullscreenElement === frameRef.current);
+    };
+    document.addEventListener('fullscreenchange', handleChange);
+    document.addEventListener('webkitfullscreenchange', handleChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleChange);
+      document.removeEventListener('webkitfullscreenchange', handleChange);
+    };
+  }, []);
+
   const handleFullscreen = () => {
+    const frame = frameRef.current as any;
     const video = videoRef.current as any;
-    if (!video) return;
-    if (video.requestFullscreen) {
-      video.requestFullscreen();
-    } else if (video.webkitRequestFullscreen) {
-      video.webkitRequestFullscreen();
-    } else if (video.webkitEnterFullscreen) {
+    if (!frame) return;
+
+    if (document.fullscreenElement || (document as any).webkitFullscreenElement) {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if ((document as any).webkitExitFullscreen) {
+        (document as any).webkitExitFullscreen();
+      }
+      return;
+    }
+
+    // Fullscreen the whole frame (not just the video) so our exit button
+    // stays visible/tappable, since a fullscreened element hides its siblings.
+    if (frame.requestFullscreen) {
+      frame.requestFullscreen();
+    } else if (frame.webkitRequestFullscreen) {
+      frame.webkitRequestFullscreen();
+    } else if (video?.webkitEnterFullscreen) {
+      // Older iOS Safari: only the native video player supports fullscreen.
       video.webkitEnterFullscreen();
-    } else if (video.msRequestFullscreen) {
-      video.msRequestFullscreen();
+    } else if (video?.requestFullscreen) {
+      video.requestFullscreen();
     }
   };
 
@@ -51,7 +80,7 @@ export default function Hero({ lng }: { lng: string }) {
           <Col xs={24} lg={14} className='relative z-10 min-w-0'>
             <div className={styles.mock} data-aos="fade-up" data-aos-delay="300">
               <div className={styles.floorShadow} aria-hidden="true"></div>
-              <div className={styles.demoFrame}>
+              <div ref={frameRef} className={`${styles.demoFrame} ${isFullscreen ? styles.demoFrameFullscreen : ''}`}>
                 <video
                   ref={videoRef}
                   className={styles.demoVideo}
@@ -70,12 +99,10 @@ export default function Hero({ lng }: { lng: string }) {
                   type="button"
                   className={styles.fullscreenBtn}
                   onClick={handleFullscreen}
-                  aria-label={t("HeroDemoVideoFullscreen")}
-                  title={t("HeroDemoVideoFullscreen")}
+                  aria-label={t(isFullscreen ? "HeroDemoVideoExitFullscreen" : "HeroDemoVideoFullscreen")}
+                  title={t(isFullscreen ? "HeroDemoVideoExitFullscreen" : "HeroDemoVideoFullscreen")}
                 >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M4 9V4h5M4 4l6 6M20 9V4h-5M20 4l-6 6M4 15v5h5M4 20l6-6M20 15v5h-5M20 20l-6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
+                  {isFullscreen ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
                 </button>
               </div>
             </div>

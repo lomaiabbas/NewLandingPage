@@ -3,8 +3,7 @@
 import { getClientTranslation } from '@/app/i18n/client'
 import { useAppContext } from '@/lib/context'
 import { popupConfirm } from '@/lib/popup-confirm'
-import tasksServiceInstance from '@/lib/services/tasks'
-import { TaskItemStatus, EntityType } from '@/lib/services/types'
+import { TaskItemStatus } from '@/lib/services/types'
 import { App, Button, Drawer, Modal, Spin, Tour, Typography } from 'antd'
 import { TourProps } from 'antd/lib'
 import { CheckCircle2, ListTodo, Plus, X } from 'lucide-react'
@@ -117,13 +116,13 @@ export default function TaskList({ lng }: { lng: string }) {
     },
     ...(canLinkChat
       ? [
-        {
-          title: t('SelectConversation') || 'Related Conversation',
-          description: t('SearchByNameOrPhoneNumber') || 'Link this task to a chat if needed',
-          target: () => document.querySelector('[data-tour="task-add-chat"]')! as HTMLElement,
-          nextButtonProps: { children: t('Next') || 'Next' },
-        },
-      ]
+          {
+            title: t('SelectConversation') || 'Related Conversation',
+            description: t('SearchByNameOrPhoneNumber') || 'Link this task to a chat if needed',
+            target: () => document.querySelector('[data-tour="task-add-chat"]')! as HTMLElement,
+            nextButtonProps: { children: t('Next') || 'Next' },
+          },
+        ]
       : []),
     {
       title: t('TasksManagement.Tasks.Create') || 'Create Task',
@@ -153,7 +152,9 @@ export default function TaskList({ lng }: { lng: string }) {
     // Step 0: Open drawer
     {
       title: t('TasksManagement.TasksForHost') || 'Tasks',
-      description: t('TourStep1Desc') || 'Manage and track your tasks directly from this menu. Click here to open your task list drawer.',
+      description:
+        t('TourStep1Desc') ||
+        'Manage and track your tasks directly from this menu. Click here to open your task list drawer.',
       target: () => document.getElementById('task-list-trigger')! as HTMLElement,
       nextButtonProps: {
         children: t('Continue') || 'Continue',
@@ -168,7 +169,9 @@ export default function TaskList({ lng }: { lng: string }) {
     // Step 1: Add task button
     {
       title: t('TasksManagement.Tasks.Create') || 'Add new task',
-      description: t('TourStep2Desc') || 'Click here to quickly create a new task. You can assign it, set its status, and add descriptions.',
+      description:
+        t('TourStep2Desc') ||
+        'Click here to quickly create a new task. You can assign it, set its status, and add descriptions.',
       target: () => document.getElementById('task-add-button')! as HTMLElement,
       nextButtonProps: {
         children: t('Continue') || 'Continue',
@@ -183,14 +186,18 @@ export default function TaskList({ lng }: { lng: string }) {
     // Step 2: Edit + Delete task (combined)
     {
       title: `${t('TasksManagement.Tasks.Update') || 'Edit'} | ${t('TasksManagement.Tasks.Delete') || 'Delete'}`,
-      description: t('TourStep4Desc') || 'Click the edit icon to update task details, or the delete icon to remove it.',
+      description:
+        t('TourStep4Desc') ||
+        'Click the edit icon to update task details, or the delete icon to remove it.',
       target: () => document.querySelector('[data-tour="task-edit-delete-btns"]')! as HTMLElement,
       nextButtonProps: { children: t('Continue') || 'Continue' },
     },
     // Step 3: View all tasks
     {
       title: t('ViewAllTasks') || 'View All Tasks',
-      description: t('TourStep5Desc') || 'Click here to view the full Kanban Board where you can manage all tasks in one place.',
+      description:
+        t('TourStep5Desc') ||
+        'Click here to view the full Kanban Board where you can manage all tasks in one place.',
       target: () => document.getElementById('task-all-tasks-footer')! as HTMLElement,
       nextButtonProps: {
         children: t('Continue') || 'Continue',
@@ -244,8 +251,6 @@ export default function TaskList({ lng }: { lng: string }) {
     }, 100)
   }
 
-
-
   const mapApiStatusToUI = (status: TaskItemStatus): TaskStatus => {
     if (status === TaskItemStatus.Doing) return 'inprogress'
     if (status === TaskItemStatus.Done) return 'completed'
@@ -264,17 +269,18 @@ export default function TaskList({ lng }: { lng: string }) {
     try {
       setLoading(true)
       const currentSkip = reset ? 0 : tasks.length
-      const response = await tasksServiceInstance.getAll(
-        {
-          maxResultCount: PAGE_SIZE,
-          skipCount: currentSkip,
-          onlyActiveTasks: onlyActiveTasks,
-          relatedEntityId: tasksFilterChat ? String(tasksFilterChat.id) : undefined,
-          relatedEntityType: tasksFilterChat ? EntityType.Chat : undefined,
-        },
-        !!tenant
-      )
-      const mappedTasks: Task[] = response.items.map((t) => ({
+      // const response = await tasksServiceInstance.getAll(
+      //   {
+      //     maxResultCount: PAGE_SIZE,
+      //     skipCount: currentSkip,
+      //     onlyActiveTasks: onlyActiveTasks,
+      //     relatedEntityId: tasksFilterChat ? String(tasksFilterChat.id) : undefined,
+      //     relatedEntityType: tasksFilterChat ? EntityType.Chat : undefined,
+      //   },
+      //   !!tenant
+      // )
+      const response: any = null
+      const mappedTasks: Task[] = response.items.map((t: any) => ({
         id: t.id,
         title: t.title,
         description: t.description,
@@ -355,7 +361,7 @@ export default function TaskList({ lng }: { lng: string }) {
     }
     try {
       const prevTask = tasks.find((tk) => tk.id === id)
-      await tasksServiceInstance.changeStatus(id, mapUIStatusToApi(status), !!tenant)
+      // await tasksServiceInstance.changeStatus(id, mapUIStatusToApi(status), !!tenant)
       setTasks((prev) => prev.map((tk) => (tk.id === id ? { ...tk, status } : tk)))
       message.success(t('StatusUpdatedSuccessfully'))
       // Adjust badge count: completing a task decreases active, un-completing increases
@@ -383,7 +389,7 @@ export default function TaskList({ lng }: { lng: string }) {
     popupConfirm(
       async () => {
         try {
-          await tasksServiceInstance.delete(id, !!tenant)
+          // await tasksServiceInstance.delete(id, !!tenant)
           setTasks((prev) => prev.filter((tk) => tk.id !== id))
           message.success(t('TaskDeletedSuccessfully'))
           setTasksCount((prev: number) => Math.max(0, prev - 1))
@@ -433,18 +439,18 @@ export default function TaskList({ lng }: { lng: string }) {
     }
 
     try {
-      const newTask = await tasksServiceInstance.create(
-        {
-          title,
-          description,
-          assignedUserId: assignedUserId || null,
-          relatedEntityId: relatedEntityId || null,
-          relatedEntityType: relatedEntityType,
-          status: mapUIStatusToApi(status),
-        },
-        !!tenant
-      )
-
+      // const newTask = await tasksServiceInstance.create(
+      //   {
+      //     title,
+      //     description,
+      //     assignedUserId: assignedUserId || null,
+      //     relatedEntityId: relatedEntityId || null,
+      //     relatedEntityType: relatedEntityType,
+      //     status: mapUIStatusToApi(status),
+      //   },
+      //   !!tenant
+      // )
+      const newTask: any = null
       setTasks((prev) => {
         const filtered = prev.filter((t) => t.id !== dummyTaskId)
         return [
@@ -491,14 +497,14 @@ export default function TaskList({ lng }: { lng: string }) {
         prev.map((tk) =>
           tk.id === dummyTaskId
             ? {
-              ...tk,
-              title,
-              description,
-              assignedUserId,
-              relatedEntityId,
-              relatedEntityType,
-              status,
-            }
+                ...tk,
+                title,
+                description,
+                assignedUserId,
+                relatedEntityId,
+                relatedEntityType,
+                status,
+              }
             : tk
         )
       )
@@ -508,32 +514,32 @@ export default function TaskList({ lng }: { lng: string }) {
       return
     }
     try {
-      await tasksServiceInstance.update(
-        editingTask.id,
-        {
-          title,
-          description,
-          assignedUserId: assignedUserId || null,
-          relatedEntityId: relatedEntityId || null,
-          relatedEntityType: relatedEntityType,
-          status: mapUIStatusToApi(status),
-        },
-        !!tenant
-      )
+      // await tasksServiceInstance.update(
+      //   editingTask.id,
+      //   {
+      //     title,
+      //     description,
+      //     assignedUserId: assignedUserId || null,
+      //     relatedEntityId: relatedEntityId || null,
+      //     relatedEntityType: relatedEntityType,
+      //     status: mapUIStatusToApi(status),
+      //   },
+      //   !!tenant
+      // )
 
       setTasks((prev) =>
         prev.map((tk) =>
           tk.id === editingTask.id
             ? {
-              ...tk,
-              title,
-              description,
-              assignedUserId,
-              relatedEntityId,
-              relatedEntityType,
-              status,
-              chatInfo: chatInfo || tk.chatInfo || null,
-            }
+                ...tk,
+                title,
+                description,
+                assignedUserId,
+                relatedEntityId,
+                relatedEntityType,
+                status,
+                chatInfo: chatInfo || tk.chatInfo || null,
+              }
             : tk
         )
       )
@@ -592,9 +598,7 @@ export default function TaskList({ lng }: { lng: string }) {
         >
           <ListTodo size={18} />
           {tasksCount && tasksCount > 0 ? (
-            <span className={styles.badge}>
-              {tasksCount > 99 ? '99+' : tasksCount}
-            </span>
+            <span className={styles.badge}>{tasksCount > 99 ? '99+' : tasksCount}</span>
           ) : null}
         </div>
       </li>
@@ -613,10 +617,7 @@ export default function TaskList({ lng }: { lng: string }) {
         }}
         title={
           <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 bg-white">
-            <div
-              id="task-all-tasks-link"
-              className="flex items-center gap-3"
-            >
+            <div id="task-all-tasks-link" className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
                 <ListTodo size={18} className="text-primary" />
               </div>
@@ -687,47 +688,48 @@ export default function TaskList({ lng }: { lng: string }) {
           {(startTour ||
             grantedPolicies?.includes('TasksManagement.TasksForHost.Create') ||
             grantedPolicies?.includes('TasksManagement.Tasks.Create')) && (
-              <div className="p-4 bg-white border-b border-slate-100 flex-shrink-0">
-                {!showAddForm ? (
-                  <div
-                    id="task-add-button"
-                    onClick={() => {
-                      if (startTour) return
-                      setShowAddForm(true)
-                      if (startTour && currentStep === 1) {
-                        setTimeout(() => {
-                          handleStepChange(2)
-                        }, 150)
-                      }
-                    }}
-                    className={`flex items-center gap-3 bg-white border border-dashed border-slate-200 ${startTour
+            <div className="p-4 bg-white border-b border-slate-100 flex-shrink-0">
+              {!showAddForm ? (
+                <div
+                  id="task-add-button"
+                  onClick={() => {
+                    if (startTour) return
+                    setShowAddForm(true)
+                    if (startTour && currentStep === 1) {
+                      setTimeout(() => {
+                        handleStepChange(2)
+                      }, 150)
+                    }
+                  }}
+                  className={`flex items-center gap-3 bg-white border border-dashed border-slate-200 ${
+                    startTour
                       ? 'opacity-50 cursor-not-allowed'
                       : 'hover:border-primary hover:bg-primary/5 cursor-pointer'
-                      } text-slate-400 p-3 rounded-xl transition-all shadow-sm group`}
-                  >
-                    <div className="w-6 h-6 rounded-md bg-primary/10 flex items-center justify-center text-primary transition-colors">
-                      <Plus size={14} />
-                    </div>
-                    <span className="text-sm font-medium">
-                      {t('TasksManagement.Tasks.Create') || 'Add a new task...'}
-                    </span>
+                  } text-slate-400 p-3 rounded-xl transition-all shadow-sm group`}
+                >
+                  <div className="w-6 h-6 rounded-md bg-primary/10 flex items-center justify-center text-primary transition-colors">
+                    <Plus size={14} />
                   </div>
-                ) : (
-                  <TaskAddForm
-                    t={t}
-                    onAdd={handleAdd}
-                    onCancel={() => setShowAddForm(false)}
-                    withContainer
-                    usersList={users}
-                    chatsList={chats}
-                    grantedPolicies={grantedPolicies ?? []}
-                    initialAssignedUserId={currentUser?.id}
-                    initialRelatedEntityId={tasksFilterChat?.id}
-                    initialChatInfo={tasksFilterChat}
-                  />
-                )}
-              </div>
-            )}
+                  <span className="text-sm font-medium">
+                    {t('TasksManagement.Tasks.Create') || 'Add a new task...'}
+                  </span>
+                </div>
+              ) : (
+                <TaskAddForm
+                  t={t}
+                  onAdd={handleAdd}
+                  onCancel={() => setShowAddForm(false)}
+                  withContainer
+                  usersList={users}
+                  chatsList={chats}
+                  grantedPolicies={grantedPolicies ?? []}
+                  initialAssignedUserId={currentUser?.id}
+                  initialRelatedEntityId={tasksFilterChat?.id}
+                  initialChatInfo={tasksFilterChat}
+                />
+              )}
+            </div>
+          )}
 
           {/* Scrollable Tasks list in the middle */}
           <div

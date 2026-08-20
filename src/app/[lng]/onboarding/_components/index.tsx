@@ -23,7 +23,6 @@ import Rules, {
 import abpServiceInstance from '@/lib/services/abp'
 import applicationReqsServiceInstance from '@/lib/services/application-reqs'
 import { ApplicationRequestDto } from '@/lib/services/application-reqs/dto'
-import banksServiceInstance from '@/lib/services/banks'
 import companiesServiceInstance from '@/lib/services/companies'
 import { ApplicationRequestStatus, LiteEntityDto, LocationType } from '@/lib/services/dto'
 import imageServiceInstance from '@/lib/services/images'
@@ -189,8 +188,8 @@ export default function Onboarding({
     setCountries(result.items)
   }
   const getBanks = async () => {
-    let result = await banksServiceInstance.getAllLite({ skipCount: 0, maxResultCount: 1000 })
-    setBanks(result.items)
+    // let result = await banksServiceInstance.getAllLite({ skipCount: 0, maxResultCount: 1000 })
+    // setBanks(result.items)
   }
 
   useEffect(

@@ -1,7 +1,5 @@
 import { useAppContext } from '@/lib/context'
 import Rules from '@/lib/rules'
-import adminChatServiceInstance from '@/lib/services/admin/chat'
-import managerChatServiceInstance from '@/lib/services/manager/chat'
 import { EntityType } from '@/lib/services/types'
 import { Button, Form, Input, Select, Spin, Typography } from 'antd'
 import { CheckCircle2, Clock3, Loader2, PencilLine, SquarePlus } from 'lucide-react'
@@ -132,9 +130,10 @@ export default function TaskAddForm({
     try {
       const pageSize = 15
       const skipCount = (page - 1) * pageSize
-      const res = tenant
-        ? await managerChatServiceInstance.getChats(null, skipCount, pageSize, search || undefined)
-        : await adminChatServiceInstance.getChats(null, skipCount, pageSize, search || undefined)
+      // const res = tenant
+      //   ? await managerChatServiceInstance.getChats(null, skipCount, pageSize, search || undefined)
+      //   : await adminChatServiceInstance.getChats(null, skipCount, pageSize, search || undefined)
+      const res: any = null
 
       const mapped = (res.items || []).map((c: any) => ({
         id: String(c.id),
@@ -145,7 +144,7 @@ export default function TaskAddForm({
       if (append) {
         setLocalChats((prev) => {
           const existingIds = new Set(prev.map((item) => item.id))
-          const newItems = mapped.filter((item) => !existingIds.has(item.id))
+          const newItems = mapped.filter((item: any) => !existingIds.has(item.id))
           const updated = [...prev, ...newItems]
           const hasMore = updated.length < res.totalCount
           setHasMoreChats(hasMore)
@@ -157,9 +156,9 @@ export default function TaskAddForm({
           const initialChatObj = prev.find((x) => String(x.id) === String(initialRelatedEntityId))
           const updated = initialChatObj
             ? [
-              initialChatObj,
-              ...mapped.filter((item) => String(item.id) !== String(initialRelatedEntityId)),
-            ]
+                initialChatObj,
+                ...mapped.filter((item: any) => String(item.id) !== String(initialRelatedEntityId)),
+              ]
             : mapped
           const hasMore = updated.length < res.totalCount
           setHasMoreChats(hasMore)
@@ -210,9 +209,10 @@ export default function TaskAddForm({
         try {
           const chatId = Number(initialRelatedEntityId)
           if (!isNaN(chatId)) {
-            const chatDetails = tenant
-              ? await managerChatServiceInstance.getChat(chatId)
-              : await adminChatServiceInstance.getChat(chatId)
+            // const chatDetails = tenant
+            //   ? await managerChatServiceInstance.getChat(chatId)
+            //   : await adminChatServiceInstance.getChat(chatId)
+            const chatDetails: any = null
             if (chatDetails) {
               const initialChatObj = {
                 id: String(chatDetails.id),
@@ -281,12 +281,12 @@ export default function TaskAddForm({
         status,
         selectedChat
           ? {
-            id: selectedChat.id,
-            name: selectedChat.userName,
-            userName: selectedChat.userName,
-            clientProfileName: selectedChat.userName,
-            phoneNumber: selectedChat.phoneNumber,
-          }
+              id: selectedChat.id,
+              name: selectedChat.userName,
+              userName: selectedChat.userName,
+              clientProfileName: selectedChat.userName,
+              phoneNumber: selectedChat.phoneNumber,
+            }
           : null
       )
       setTitle('')
@@ -529,10 +529,11 @@ export default function TaskAddForm({
           </Button>
           <Button
             type="primary"
-            className={`px-6 h-9 rounded-lg text-sm font-semibold transition-all border-none shadow-sm ${title.trim() && desc.trim() && !loading && !isSubmitDisabled && !disabled
+            className={`px-6 h-9 rounded-lg text-sm font-semibold transition-all border-none shadow-sm ${
+              title.trim() && desc.trim() && !loading && !isSubmitDisabled && !disabled
                 ? 'bg-primary text-white hover:bg-primary/90 cursor-pointer'
                 : 'bg-slate-100 text-slate-400 cursor-not-allowed'
-              }`}
+            }`}
             onClick={handleSubmit}
             disabled={!title.trim() || !desc.trim() || loading || isSubmitDisabled || disabled}
             loading={loading}

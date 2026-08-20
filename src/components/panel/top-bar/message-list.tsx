@@ -3,8 +3,6 @@ import { useAppContext } from '@/lib/context'
 import { NotificationContext } from '@/lib/context/notifications-context'
 import { SignalRContext } from '@/lib/context/signalR-constext'
 import { isImageUrl } from '@/lib/helpers'
-import adminChatServiceInstance from '@/lib/services/admin/chat'
-import managerChatServiceInstance from '@/lib/services/manager/chat'
 import { ChatUserType } from '@/lib/services/types'
 import { Badge, Button, Popover, Spin } from 'antd'
 import { Image, MessageCircle, MessagesSquare } from 'lucide-react'
@@ -84,12 +82,12 @@ export default function MessageList({ lng }: { lng: string }) {
     try {
       let res
       setIsDataLoading(true)
-      if (tenant) {
-        res = await managerChatServiceInstance.getLastMessages()
-      } else {
-        res = await adminChatServiceInstance.getLastMessages()
-      }
-      setData(res)
+      // if (tenant) {
+      //   res = await managerChatServiceInstance.getLastMessages()
+      // } else {
+      //   res = await adminChatServiceInstance.getLastMessages()
+      // }
+      // setData(res)
     } catch (error: any) {
       if (error.code === 'ECONNABORTED') {
         console.error('Request timeout (Error Code => ECONNABORTED):', error)

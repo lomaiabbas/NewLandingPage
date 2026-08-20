@@ -3,7 +3,6 @@
 import { getClientTranslation } from '@/app/i18n/client'
 import Loader from '@/components/panel/loader'
 import { CardContent, CardHeader } from '@/components/ui/card'
-import banksServiceInstance from '@/lib/services/banks'
 import companiesForManagerServiceInstance from '@/lib/services/companies-for-manager'
 import { ApplicationRequestStatus, LiteEntityDto, LocationType } from '@/lib/services/dto'
 import locationServiceInstance from '@/lib/services/locations'
@@ -53,8 +52,8 @@ export default function CompleteRegisterCard({ lng, host }: { lng: string; host:
     setCountries(result.items)
   }
   const getBanks = async () => {
-    let result = await banksServiceInstance.getAllLite({ skipCount: 0, maxResultCount: 1000 })
-    setBanks(result.items)
+    // let result = await banksServiceInstance.getAllLite({ skipCount: 0, maxResultCount: 1000 })
+    // setBanks(result.items)
   }
 
   return (

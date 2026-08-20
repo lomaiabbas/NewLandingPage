@@ -30,9 +30,6 @@ import { TabsProps } from 'antd/lib'
 import { ChevronLeft, ChevronRight, Power, Send, X } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
-import { MetaActions } from './meta-actions'
-import RolesList from './roles-list'
-import StaffList from './staff-list'
 
 export default function Details({ lng, id }: { lng: string; id: number }) {
   const { modal } = useContext(ModalContext)
@@ -723,33 +720,34 @@ export default function Details({ lng, id }: { lng: string; id: number }) {
         />
       ),
     },
-    {
-      key: '3',
-      label: t('Roles'),
-      children: <RolesList lng={lng} id={id} />,
-    },
-    {
-      key: '4',
-      label: t('Staff'),
-      children: <StaffList lng={lng} id={id} />,
-    },
-    ...(hasPermission(grantedPolicies, 'CompaniesManagement.Companies.ManageMetaActions')
-      ? [
-          {
-            key: '5',
-            label: t('MetaActions'),
-            children: (
-              <MetaActions
-                lng={lng}
-                company={data}
-                onUpdate={async () => {
-                  await getData(id)
-                }}
-              />
-            ),
-          },
-        ]
-      : []),
+    // {
+    //   key: '3',
+    //   label: t('Roles'),
+    //   children: <RolesList lng={lng} id={id} />,
+    // },
+
+    // {
+    //   key: '4',
+    //   label: t('Staff'),
+    //   children: <StaffList lng={lng} id={id} />,
+    // },
+    // ...(hasPermission(grantedPolicies, 'CompaniesManagement.Companies.ManageMetaActions')
+    //   ? [
+    //       {
+    //         key: '5',
+    //         label: t('MetaActions'),
+    //         children: (
+    //           <MetaActions
+    //             lng={lng}
+    //             company={data}
+    //             onUpdate={async () => {
+    //               await getData(id)
+    //             }}
+    //           />
+    //         ),
+    //       },
+    //     ]
+    //   : []),
     // {
     //   key: '5',
     //   label: t('Contacts'),

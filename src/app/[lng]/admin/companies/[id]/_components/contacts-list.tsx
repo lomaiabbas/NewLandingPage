@@ -1,12 +1,10 @@
 import { getClientTranslation } from '@/app/i18n/client'
 import { DrawerType } from '@/lib/constants'
 import { resolvePersianAndArabicNumbers } from '@/lib/helpers'
-import contactsServiceInstance from '@/lib/services/contacts'
 import { App, Button, Collapse, Dropdown, Input, Popover, Table } from 'antd'
 import { CollapseProps } from 'antd/lib'
 import { Edit, Eye, MoreVertical, PlusSquare, Save, SearchIcon, Undo } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import AddEditDrawer from '../../../contacts-management/contacts/_components/add-edit-drawer'
 import ContactDetailsDrawer from './contact-details-drawer'
 
 const INDEX_PAGE_SIZE_DEFAULT = 20
@@ -83,18 +81,19 @@ export default function ContactsList({ lng, id }: { lng: string; id: number }) {
     }
   ) => {
     setLoadingContacts(true)
-    let result = await contactsServiceInstance.getAllContactsForCompany({
-      skipCount: skipCount,
-      maxResultCount: maxResultCount,
-      firstName: keywords.firstName?.trim(),
-      surname: keywords.surname?.trim(),
-      email: keywords.email?.trim(),
-      phoneNumber: keywords.phoneNumber?.trim(),
-      companyId: id,
-    })
+    // let result = await contactsServiceInstance.getAllContactsForCompany({
+    //   skipCount: skipCount,
+    //   maxResultCount: maxResultCount,
+    //   firstName: keywords.firstName?.trim(),
+    //   surname: keywords.surname?.trim(),
+    //   email: keywords.email?.trim(),
+    //   phoneNumber: keywords.phoneNumber?.trim(),
+    //   companyId: id,
+    // })
 
-    setContactsData(result.items)
-    setContactsTotalCount(result.totalCount)
+    //
+    // setContactsData(result.items)
+    // setContactsTotalCount(result.totalCount)
     setLoadingContacts(false)
   }
 
@@ -402,7 +401,7 @@ export default function ContactsList({ lng, id }: { lng: string; id: number }) {
         dataSource={contactsData}
         columns={contactsTableColumns}
       />
-
+      {/* 
       <AddEditDrawer
         drawer={addEditContactDrawer}
         setDrawer={setAddEditContactDrawer}
@@ -418,7 +417,7 @@ export default function ContactsList({ lng, id }: { lng: string; id: number }) {
             keywords
           )
         }
-      />
+      /> */}
 
       <ContactDetailsDrawer drawer={detailsDrawer} setDrawer={setDetailsDrawer} lng={lng} />
     </>
