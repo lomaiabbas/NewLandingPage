@@ -17,8 +17,8 @@ export default function Hero({ lng }: { lng: string }) {
 
   useEffect(() => {
     AOS.init({
-      duration: 1000, // Animation duration (in milliseconds)
-      easing: 'ease-in-out', // Easing function
+      duration: 1000,
+      easing: 'ease-in-out',
     });
   }, []);
 

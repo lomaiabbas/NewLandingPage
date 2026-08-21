@@ -116,7 +116,6 @@
   outline-offset: 2px;
 }
 
-/* Tab switcher */
 .tabs{
   position: relative;
   z-index: 3;
@@ -188,7 +187,6 @@
   to{ width: 100%; }
 }
 
-/* Body */
 .body{
   position: relative;
   z-index: 2;

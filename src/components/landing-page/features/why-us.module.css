@@ -61,7 +61,6 @@
 
 .featureCard:hover{
   transform: translateY(-4px);
-  border-color: var(--accent);
 }
 
 .featureCard > div:first-child{

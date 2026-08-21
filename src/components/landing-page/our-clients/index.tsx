@@ -49,14 +49,14 @@ export default async function OurClients({ lng }: { lng: string }) {
             {lng === 'ar' ? (
               <>
                 انضم إلى قائمة الشركات التي تعتمد على{' '}
-                <span className="text-primary font-extrabold tracking-wide text-[1.1rem] drop-shadow-[0_0_1px_rgba(var(--primary-color-rgb),0.2)]">
+                <span className="text-white font-extrabold tracking-wide text-[1.1rem] drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]">
                   AtrasLink
                 </span>
               </>
             ) : (
               <>
                 Join the list of businesses that rely on{' '}
-                <span className="text-primary font-extrabold tracking-wide text-[1.1rem] drop-shadow-[0_0_1px_rgba(var(--primary-color-rgb),0.2)]">
+                <span className="text-white font-extrabold tracking-wide text-[1.1rem] drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]">
                   AtrasLink
                 </span>
               </>
@@ -89,7 +89,6 @@ export default async function OurClients({ lng }: { lng: string }) {
         </div>
       )}
 
-      {/* Stats bar */}
       <StatsBar clientCount={clients.length} t={t} />
     </section>
   )

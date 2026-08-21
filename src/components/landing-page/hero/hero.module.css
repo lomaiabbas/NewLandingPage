@@ -97,7 +97,7 @@
   overflow: hidden;
   background: radial-gradient(circle at 50% 50%, #00c988 0%, #00a070 38%, #007852 68%, #004535 100%);
   border: 1px solid rgba(255,255,255,.08);
-  transform: perspective(1400px) rotateX(7deg) rotateY(16deg) rotateZ(-2deg);
+  transform: perspective(1400px) rotateX(1.47deg) rotateY(3.36deg) rotateZ(-0.42deg);
   transform-origin: 92% 50%;
   transform-style: preserve-3d;
   box-shadow:
@@ -111,7 +111,7 @@
 }
 
 .demoFrame:hover{
-  transform: perspective(1400px) rotateX(6deg) rotateY(13deg) rotateZ(-1.6deg) scale(1.012);
+  transform: perspective(1400px) rotateX(1.26deg) rotateY(2.73deg) rotateZ(-0.336deg) scale(1.012);
   box-shadow:
     0px 0px 7px 2px rgba(255,250,220,1),
     0px 0px 18px 6px rgba(214,255,170,.9),
@@ -258,7 +258,7 @@
 
 .star1{
   left: 20px;
-  bottom: -40px;
+  bottom: 20px;
 }
 
 .star2{
@@ -286,7 +286,7 @@
 	border-radius: 50px;
 	position: absolute;
   left: 50%;
-  bottom: -40px;
+  bottom: 40px;
   z-index: 9;
   transform: translateX(-50%);
 }
