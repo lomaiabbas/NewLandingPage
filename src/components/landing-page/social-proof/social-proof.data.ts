@@ -10,9 +10,6 @@ export type SocialProofToast = {
 
 export const SOCIAL_PROOF_INTERVAL_MS = 4000
 export const SOCIAL_PROOF_INITIAL_DELAY_MS = 1500
-// After this many full loops through the toasts, hide automatically instead
-// of cycling forever — keeps it from lingering on screen indefinitely.
-export const SOCIAL_PROOF_MAX_LOOPS = 2
 export const SOCIAL_PROOF_EXIT_MS = 300
 
 export const SOCIAL_PROOF_TOASTS: SocialProofToast[] = [

@@ -48,14 +48,11 @@ export default function Hero({ lng }: { lng: string }) {
       return;
     }
 
-    // Fullscreen the whole frame (not just the video) so our exit button
-    // stays visible/tappable, since a fullscreened element hides its siblings.
     if (frame.requestFullscreen) {
       frame.requestFullscreen();
     } else if (frame.webkitRequestFullscreen) {
       frame.webkitRequestFullscreen();
     } else if (video?.webkitEnterFullscreen) {
-      // Older iOS Safari: only the native video player supports fullscreen.
       video.webkitEnterFullscreen();
     } else if (video?.requestFullscreen) {
       video.requestFullscreen();
@@ -66,18 +63,18 @@ export default function Hero({ lng }: { lng: string }) {
     <div className={styles.hero} id="hero">
       <div className="container">
         <Row align="middle" justify="space-between" gutter={[32, 48]}>
-          <Col xs={24} lg={10} className='min-w-0'>
-            <div className={`${styles.heroStyle} gap-4 flex flex-col text-start`}>
-              <h1 className="text-white text-[clamp(2.1rem,4vw+1rem,3.5rem)] font-extrabold leading-[1.15] tracking-tight mb-6 lg:mb-0" data-aos="fade-up">
+          <Col xs={24} lg={9} className='min-w-0'>
+            <div className={`${styles.heroStyle} gap-4 flex flex-col text-center`}>
+              <h1 className="text-white text-[clamp(2.1rem,4vw+1rem,3.5rem)] font-extrabold leading-[1.15] tracking-tight mb-6 lg:mb-0">
                 <span className="text-primary">{t("HeroTitle1")}</span>
                 {t("HeroTitle2")}
                 {t("HeroTitle3")}
               </h1>
-              <p className="text-base leading-relaxed text-white/85 max-w-full sm:max-w-[500px]" data-aos="fade-up" data-aos-delay="400">
+              <p className="text-base leading-relaxed text-white max-w-full sm:max-w-[500px]">
                 {t("HeroDesc1")}{t("HeroDesc2")}{t("HeroDesc3")}</p>
             </div>
           </Col>
-          <Col xs={24} lg={14} className='relative z-10 min-w-0'>
+          <Col xs={24} lg={15} className='relative z-10 min-w-0'>
             <div className={styles.mock} data-aos="fade-up" data-aos-delay="300">
               <div className={styles.floorShadow} aria-hidden="true"></div>
               <div ref={frameRef} className={`${styles.demoFrame} ${isFullscreen ? styles.demoFrameFullscreen : ''}`}>

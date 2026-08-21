@@ -2,7 +2,7 @@ export type WhyUsStep = {
   titleKey: string;
   bodyKey?: string;
   tagKeys?: string[];
-  img: string;
+  img?: string;
 };
 
 export type WhyUsTab = {
@@ -25,28 +25,17 @@ export const WHY_US_TABS: WhyUsTab[] = [
       },
       {
         titleKey: 'WhyUsOrgStep2Title',
-        bodyKey: 'WhyUsOrgStep2Desc',
-        img: '/images/why-us/organizer-create-invitation.png',
+        img: '/images/why-us/organizer-pick-template.png',
       },
       {
         titleKey: 'WhyUsOrgStep3Title',
         bodyKey: 'WhyUsOrgStep3Desc',
-        img: '/images/why-us/organizer-upload-guests.png',
+        img: '/images/why-us/organizer-create-invitation.png',
       },
       {
         titleKey: 'WhyUsOrgStep4Title',
         bodyKey: 'WhyUsOrgStep4Desc',
-        img: '/images/why-us/organizer-pick-template.png',
-      },
-      {
-        titleKey: 'WhyUsOrgStep5Title',
-        tagKeys: ['WhyUsOrgStep5Tag1', 'WhyUsOrgStep5Tag2', 'WhyUsOrgStep5Tag3'],
-        img: '/images/why-us/organizer-toggle-features.png',
-      },
-      {
-        titleKey: 'WhyUsOrgStep6Title',
-        bodyKey: 'WhyUsOrgStep6Desc',
-        img: '/images/why-us/organizer-send.png',
+        img: '/images/why-us/organizer-upload-guests.png',
       },
     ],
   },
@@ -88,17 +77,17 @@ export const WHY_US_TABS: WhyUsTab[] = [
       {
         titleKey: 'WhyUsGkStep2Title',
         bodyKey: 'WhyUsGkStep2Desc',
-        img: '/images/why-us/gatekeeper-scan-qr.png',
+        img: '/images/why-us/gatekeeper-live-attendance.png',
       },
       {
         titleKey: 'WhyUsGkStep3Title',
-        tagKeys: ['WhyUsGkStep3Tag1', 'WhyUsGkStep3Tag2', 'WhyUsGkStep3Tag3'],
-        img: '/images/why-us/gatekeeper-instant-check.png',
+        bodyKey: 'WhyUsGkStep3Desc',
+        img: '/images/why-us/gatekeeper-scan-qr.png',
       },
       {
         titleKey: 'WhyUsGkStep4Title',
         bodyKey: 'WhyUsGkStep4Desc',
-        img: '/images/why-us/gatekeeper-live-attendance.png',
+        img: '/images/why-us/gatekeeper-instant-check.png',
       },
     ],
   },

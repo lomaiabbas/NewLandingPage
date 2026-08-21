@@ -122,9 +122,15 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 32px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
-  margin-bottom: 44px;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto 44px;
+  gap: 4px;
+  padding: 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15);
 }
 
 .tabBtn{
@@ -132,14 +138,16 @@
   display: flex;
   align-items: center;
   gap: 7px;
-  padding: 0 2px 16px;
+  padding: 10px 20px 12px;
   border: none;
+  border-radius: 999px;
   background: transparent;
-  font-size: 14.5px;
+  font-size: 14px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(255, 255, 255, 0.6);
   cursor: pointer;
   white-space: nowrap;
+  transition: background 0.25s ease, color 0.25s ease;
 }
 .tabArrow{
   display: inline-flex;
@@ -154,6 +162,8 @@
 }
 .tabBtn.active{
   color: #fff;
+  background: linear-gradient(120deg, var(--primary-color, #07c692), var(--accent-soft));
+  box-shadow: 0 4px 14px -4px color-mix(in srgb, var(--accent-soft) 70%, transparent);
 }
 .tabBtn.active .tabArrow{
   opacity: 1;
@@ -163,23 +173,32 @@
   transform: scaleX(-1) translateX(0);
 }
 .tabBtn:not(.active):hover{
-  color: rgba(255, 255, 255, 0.8);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
 }
 .tabBtn:focus-visible{
   outline: 2px solid var(--accent-soft);
-  outline-offset: 4px;
-  border-radius: 2px;
+  outline-offset: 3px;
 }
 
-/* The moving progress underline — a real element (not ::after) so React
-   can restart the animation on tab change by remounting it. */
 .tabProgress{
   position: absolute;
+  inset-inline-start: 16px;
+  inset-inline-end: 16px;
+  bottom: 6px;
+  height: 2.5px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.25);
+  overflow: hidden;
+}
+.tabProgress::after{
+  content: '';
+  position: absolute;
   inset-inline-start: 0;
-  bottom: -1px;
-  height: 2px;
+  top: 0;
+  bottom: 0;
   width: 0%;
-  background: var(--accent-soft);
+  background: #fff;
   animation: whyUsFill var(--dur, 5s) linear forwards;
 }
 @keyframes whyUsFill{
@@ -244,6 +263,7 @@
     color-mix(in srgb, var(--accent-2) 15%, transparent) 68%,
     transparent 100%
   );
+  transition: background 0.5s ease;
   z-index: 1;
 }
 :global(html[dir='rtl']) .bgTint{
@@ -253,6 +273,23 @@
     color-mix(in srgb, var(--accent-2) 55%, transparent) 42%,
     color-mix(in srgb, var(--accent-2) 15%, transparent) 68%,
     transparent 100%
+  );
+}
+
+.bgTintSolid{
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--accent-2) 96%, black) 0%,
+    color-mix(in srgb, var(--accent-2) 88%, black) 55%,
+    color-mix(in srgb, var(--accent-2) 78%, black) 100%
+  );
+}
+:global(html[dir='rtl']) .bgTintSolid{
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--accent-2) 96%, black) 0%,
+    color-mix(in srgb, var(--accent-2) 88%, black) 55%,
+    color-mix(in srgb, var(--accent-2) 78%, black) 100%
   );
 }
 
@@ -369,8 +406,9 @@
   margin: 0;
   font-size: 14px;
   line-height: 1.55;
-  color: rgba(255, 255, 255, 0.82);
-  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.45);
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.96);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.75), 0 1px 10px rgba(0, 0, 0, 0.5);
 }
 
 .tags{

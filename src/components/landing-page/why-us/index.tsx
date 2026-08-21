@@ -31,6 +31,7 @@ export default function WhyUs({ lng }: { lng: string }) {
   const tab = WHY_US_TABS[tabIndex];
   const steps = tab.steps;
   const currentStep = steps[stepIndex];
+  const hasImage = Boolean(currentStep?.img);
 
   useEffect(() => {
     const isLastStep = stepIndex >= steps.length - 1;
@@ -48,8 +49,8 @@ export default function WhyUs({ lng }: { lng: string }) {
   }, [tabIndex, stepIndex, steps.length]);
 
   useEffect(() => {
-    const url = currentStep?.img ?? null;
-    if (!url || url === lastImgRef.current) return;
+    const url = currentStep?.img || null;
+    if (url === lastImgRef.current) return;
     lastImgRef.current = url;
 
     setBg((prev) =>
@@ -95,7 +96,6 @@ export default function WhyUs({ lng }: { lng: string }) {
     }
   }
 
-  // The underline animation should take exactly as long as the whole tab.
   const tabDuration = `${(steps.length * WHY_US_STEP_MS) / 1000}s`;
 
   return (
@@ -128,7 +128,7 @@ export default function WhyUs({ lng }: { lng: string }) {
             className={`${styles.bgImg} ${!bg.showA ? styles.show : ''}`}
             style={bg.b ? { backgroundImage: `url('${bg.b}')` } : undefined}
           />
-          <div className={styles.bgTint} />
+          <div className={`${styles.bgTint} ${hasImage ? '' : styles.bgTintSolid}`} />
 
           <button
             type="button"
@@ -158,7 +158,6 @@ export default function WhyUs({ lng }: { lng: string }) {
                   </span>{' '}
                   {t(tabItem.labelKey)}
                   {isActive && (
-                    // key={tabIndex} remounts this element so the CSS animation restarts
                     <span
                       key={tabIndex}
                       className={styles.tabProgress}

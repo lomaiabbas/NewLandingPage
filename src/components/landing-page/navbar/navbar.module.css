@@ -1,6 +1,3 @@
-/* width:max-content makes the pill hug its own content (no Tailwind
-   `container` fighting it into a fixed width) — max-width is only a
-   safety cap for narrow viewports, never the thing that sizes it. */
 .headerLayout {
   top: 34px;
   left: 50%;
@@ -18,9 +15,6 @@
   }
 }
 
-/* Frosted paper-white glass with a faint mint cast, warm enough to
-   sit on the hero's green without disappearing into it, cool enough
-   to still read as glass. A soft inset top edge sells the depth. */
 .nav {
   direction: rtl;
   display: flex;
@@ -138,6 +132,7 @@
   padding: 9px 16px;
   border-radius: 999px;
   text-decoration: none;
+  position: relative;
   transition:
     color 0.15s cubic-bezier(0.4, 0, 0.2, 1),
     background 0.15s cubic-bezier(0.4, 0, 0.2, 1);
@@ -147,10 +142,20 @@
   background: rgba(7, 198, 146, 0.1);
 }
 .navLink[aria-current='page'] {
-  color: #fff;
-  font-weight: 600;
-  background: linear-gradient(120deg, var(--primary-color, #07c692), var(--accent-soft, #12c98a));
-  box-shadow: 0 6px 14px -8px rgba(7, 198, 146, 0.65);
+  color: var(--primary-color, #07c692);
+  font-weight: 700;
+  background: transparent;
+}
+.navLink[aria-current='page']::after {
+  content: '';
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 3px;
+  border-radius: 999px;
+  background: var(--primary-color, #07c692);
 }
 .isLang {
   margin-inline-start: 6px;
@@ -174,8 +179,8 @@
   font-weight: 700;
   font-size: 15px;
   line-height: 1;
-  color: #0b2e24 !important;
-  background: linear-gradient(135deg, var(--primary-color, #07c692), #e9e4d9);
+  color: #fff !important;
+  background: var(--primary-color, #07c692) !important;
   border: 0;
   border-radius: 999px;
   padding: 13px 24px;
@@ -191,8 +196,8 @@
     box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .navCta:hover {
-  color: #0b2e24 !important;
-  filter: brightness(1.08);
+  color: #fff !important;
+  filter: brightness(1.1);
   transform: translateY(-1px);
   box-shadow: 0 14px 28px -10px rgba(7, 198, 146, 0.8);
 }
@@ -303,11 +308,26 @@
   font-family: 'IBM Plex Sans Arabic', var(--font-sans), sans-serif !important;
   font-weight: 700;
   font-size: 16px;
-  color: #0b2e24;
-  background: linear-gradient(135deg, var(--primary-color, #07c692), #e9e4d9);
+  color: #fff !important;
+  background: var(--primary-color, #07c692) !important;
+  border: 0;
   border-radius: 999px;
   padding: 16px 24px;
   text-decoration: none;
+  box-shadow: 0 10px 22px -10px rgba(7, 198, 146, 0.7);
+  transition:
+    filter 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.drawerCtaBtn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px -10px rgba(7, 198, 146, 0.8);
+}
+.drawerCtaBtn:active {
+  transform: translateY(1px);
+  box-shadow: 0 6px 14px -8px rgba(7, 198, 146, 0.7);
 }
 .drawerCtaBtn:focus-visible {
   outline: 2px solid #2fc78b;

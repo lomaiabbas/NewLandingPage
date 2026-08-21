@@ -9,7 +9,6 @@ import {
   SOCIAL_PROOF_EXIT_MS,
   SOCIAL_PROOF_INITIAL_DELAY_MS,
   SOCIAL_PROOF_INTERVAL_MS,
-  SOCIAL_PROOF_MAX_LOOPS,
   SOCIAL_PROOF_TOASTS,
   type SocialProofIcon,
 } from './social-proof.data'
@@ -21,38 +20,46 @@ const ICONS: Record<SocialProofIcon, typeof Send> = {
   chart: BarChart3,
 }
 
-const MAX_SHOWS = SOCIAL_PROOF_TOASTS.length * SOCIAL_PROOF_MAX_LOOPS
-
 export default function SocialProof({ lng }: { lng: string }) {
   const { t } = getClientTranslation(lng)
-  const [visible, setVisible] = useState(false)
+  const [readyToShow, setReadyToShow] = useState(false)
+  const [heroInView, setHeroInView] = useState(true)
   const [index, setIndex] = useState(0)
   const [dismissed, setDismissed] = useState(false)
+  const [closing, setClosing] = useState(false)
+
+  // Keeps recurring (cycling through the toasts) as long as the user hasn't
+  // dismissed it and isn't looking at the hero section.
+  const visible = readyToShow && !heroInView && !dismissed && !closing
 
   const close = () => {
-    setVisible(false)
+    setClosing(true)
     setTimeout(() => setDismissed(true), SOCIAL_PROOF_EXIT_MS)
   }
 
   useEffect(() => {
-    const startTimer = setTimeout(() => setVisible(true), SOCIAL_PROOF_INITIAL_DELAY_MS)
+    const startTimer = setTimeout(() => setReadyToShow(true), SOCIAL_PROOF_INITIAL_DELAY_MS)
     return () => clearTimeout(startTimer)
   }, [])
 
   useEffect(() => {
-    if (!visible || dismissed) return
-    let shows = 1
+    const heroEl = document.getElementById('hero')
+    if (!heroEl) return
+    const observer = new IntersectionObserver(
+      ([entry]) => setHeroInView(entry.isIntersecting),
+      { threshold: 0.2 }
+    )
+    observer.observe(heroEl)
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    if (!visible) return
     const timer = setInterval(() => {
-      shows += 1
-      if (shows > MAX_SHOWS) {
-        clearInterval(timer)
-        close()
-        return
-      }
       setIndex((i) => (i + 1) % SOCIAL_PROOF_TOASTS.length)
     }, SOCIAL_PROOF_INTERVAL_MS)
     return () => clearInterval(timer)
-  }, [visible, dismissed])
+  }, [visible])
 
   if (dismissed) return null
 
@@ -65,7 +72,7 @@ export default function SocialProof({ lng }: { lng: string }) {
       role="status"
       aria-live="polite"
     >
-      <div key={toast.id} className={styles.toast}>
+      <div className={styles.toast}>
         <div className={styles.header}>
           <span className={styles.brand}>
             <AtrasLinkLogo XL />

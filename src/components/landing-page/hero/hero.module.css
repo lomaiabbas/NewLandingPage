@@ -55,15 +55,10 @@
 .heroStyle{
   position:relative;
   z-index:6;
-  max-width:560px
-}
-@media (max-width: 1199px)
-{
-  .heroStyle{
+  max-width:560px;
   text-align:center;
   display:block;
-  margin:auto
-}
+  margin:auto;
 }
 @media (max-width: 575px){
   .hero{
@@ -77,16 +72,16 @@
   width: 100%;
   perspective: 1000px;
   perspective-origin: 78% 38%;
-  max-width: 496px;
+  max-width: 620px;
   margin-inline-start: auto;
   margin-top: 0;
 }
 
 @media (min-width: 1200px){
   .mock{
-    max-width: 528px;
+    max-width: 760px;
     width: 100%;
-    margin-inline-start: 4%;
+    margin-inline-start: 2%;
     margin-top: 4.5rem;
   }
 }
@@ -101,10 +96,8 @@
   transform-origin: 92% 50%;
   transform-style: preserve-3d;
   box-shadow:
-    0px 0px 6px 2px rgba(255,250,220,.95),
-    0px 0px 16px 5px rgba(214,255,170,.85),
-    0px 0px 34px 11px rgba(83,255,184,.75),
-    0px 0px 60px 20px rgba(20,255,140,.35),
+    0px 0px 16px 4px rgba(168,230,207,.45),
+    0px 0px 34px 10px rgba(126,217,183,.3),
     0 50px 100px -20px rgba(0,0,0,.55),
     0 0 0 1px rgba(255,255,255,.06) inset;
   transition: transform .7s cubic-bezier(.2,.7,.3,1), box-shadow .7s ease;
@@ -113,10 +106,8 @@
 .demoFrame:hover{
   transform: perspective(1400px) rotateX(1.26deg) rotateY(2.73deg) rotateZ(-0.336deg) scale(1.012);
   box-shadow:
-    0px 0px 7px 2px rgba(255,250,220,1),
-    0px 0px 18px 6px rgba(214,255,170,.9),
-    0px 0px 40px 13px rgba(83,255,184,.85),
-    0px 0px 68px 24px rgba(20,255,140,.4),
+    0px 0px 18px 5px rgba(168,230,207,.5),
+    0px 0px 38px 12px rgba(126,217,183,.35),
     0 58px 115px -20px rgba(0,0,0,.58),
     0 0 0 1px rgba(255,255,255,.06) inset;
 }

@@ -20,7 +20,6 @@ export default function StatsBar({ clientCount, t }: StatsBarProps) {
               +50K
             </span>
             <span className={styles.labelPrimary}>{t('MessageOurClient')}</span>
-            <span className={styles.descLine}>{t('MessagesDeliveredDesc')}</span>
           </div>
           <div className={`${styles.iconCol} ${styles.iconColLg} ${styles.iconColGlass}`}>
             <MailCheck strokeWidth={1} className={`${styles.iconGlass} ${styles.iconSvgHero}`} />
@@ -37,7 +36,6 @@ export default function StatsBar({ clientCount, t }: StatsBarProps) {
               +15K
             </span>
             <span className={styles.labelPrimary}>{t('ConversationsClientslandingpag')}</span>
-            <span className={styles.descLine}>{t('ConversationsManagedDesc')}</span>
           </div>
           <div className={`${styles.iconCol} ${styles.iconColLg} ${styles.iconColGlass}`}>
             <MessageCircle
