@@ -57,11 +57,11 @@ export default function Navbar({ lng }: { lng: string }) {
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 40)
-      let mouse: any = document.querySelector('.mouse')
-      if (window.scrollY > 60 && mouse) {
-        mouse.style.display = 'none'
-      } else if (mouse) {
-        mouse.style.display = 'flex'
+      const scrollHint = document.getElementById('scroll-hint')
+      if (window.scrollY > 60 && scrollHint) {
+        scrollHint.style.display = 'none'
+      } else if (scrollHint) {
+        scrollHint.style.display = 'flex'
       }
     }
 
@@ -70,10 +70,12 @@ export default function Navbar({ lng }: { lng: string }) {
   }, [])
 
   useEffect(() => {
+    const hero = document.getElementById('hero')
     const sections = NAV_LINKS.map((link) => document.getElementById(link.hash)).filter(
       (el): el is HTMLElement => Boolean(el)
     )
-    if (sections.length === 0) return
+    const watched = hero ? [hero, ...sections] : sections
+    if (watched.length === 0) return
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -82,12 +84,12 @@ export default function Navbar({ lng }: { lng: string }) {
         const closest = visible.reduce((a, b) =>
           a.boundingClientRect.top < b.boundingClientRect.top ? a : b
         )
-        setActiveHash(closest.target.id)
+        setActiveHash(closest.target.id === 'hero' ? null : closest.target.id)
       },
       { rootMargin: '-35% 0px -55% 0px', threshold: 0 }
     )
 
-    sections.forEach((el) => observer.observe(el))
+    watched.forEach((el) => observer.observe(el))
     return () => observer.disconnect()
   }, [])
 
@@ -119,7 +121,7 @@ export default function Navbar({ lng }: { lng: string }) {
           ))}
           <a
             href="#lng"
-            className={`${styles.navLink} ${styles.isLang}`}
+            className={`${styles.navLink} ${styles.langLink}`}
             onClick={(e) => {
               e.preventDefault()
               toggleLanguage()
@@ -176,7 +178,7 @@ export default function Navbar({ lng }: { lng: string }) {
           ))}
           <a
             href="#lng"
-            className={`${styles.drawerLink} ${styles.isLang}`}
+            className={`${styles.drawerLink} ${styles.langLink}`}
             onClick={(e) => {
               e.preventDefault()
               setOpenDrawer(false)

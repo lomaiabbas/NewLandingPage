@@ -1,54 +1,19 @@
 .grid {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-areas:
-    'a'
-    'b'
-    'c'
-    'd';
   gap: 20px;
 }
 
 @media (min-width: 640px) {
   .grid {
-    grid-template-columns: 1fr 1fr;
-    grid-template-areas:
-      'a a'
-      'b b'
-      'c d';
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (min-width: 1024px) {
   .grid {
-    grid-template-columns: 1.55fr 1fr 1fr;
-    grid-template-areas:
-      'a b b'
-      'a c d';
-  }
-}
-
-.cardA {
-  grid-area: a;
-  min-height: 150px;
-}
-.cardB {
-  grid-area: b;
-  min-height: 84px;
-}
-.cardC {
-  grid-area: c;
-}
-.cardD {
-  grid-area: d;
-}
-
-@media (min-width: 1024px) {
-  .cardA {
-    min-height: 170px;
-  }
-  .cardB {
-    min-height: 96px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
   }
 }
 
@@ -57,11 +22,27 @@
   align-items: stretch;
   overflow: hidden;
   border-radius: 22px;
+  min-height: 90px;
+  max-height: 110px;
   transition:
     transform 0.25s ease,
     box-shadow 0.25s ease,
     background-color 0.25s ease,
     border-color 0.25s ease;
+}
+
+@media (min-width: 640px) {
+  .card {
+    min-height: 100px;
+    max-height: 120px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .card {
+    min-height: 110px;
+    max-height: 130px;
+  }
 }
 
 .card:hover {
@@ -71,17 +52,14 @@
 .glass {
   background: rgba(255, 255, 255, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 
 .glass:hover {
   background: rgba(255, 255, 255, 0.17);
   border-color: rgba(255, 255, 255, 0.32);
   box-shadow: 0 20px 40px -22px rgba(0, 0, 0, 0.45);
-}
-
-.cardA.glass {
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
 }
 
 .white {
@@ -126,11 +104,9 @@
 }
 
 @media (min-width: 640px) {
-  .iconColSm {
-    width: 90px;
-  }
+  .iconColSm,
   .iconColLg {
-    width: 128px;
+    width: 96px;
   }
 }
 
@@ -152,22 +128,16 @@
   color: #0d7a52;
 }
 
-.iconSvgHero,
-.iconSvgB {
-  width: 42px;
-  height: 42px;
-}
+.iconSvgXl,
+.iconSvgLg,
 .iconSvgSm {
   width: 34px;
   height: 34px;
 }
 
 @media (min-width: 640px) {
-  .iconSvgHero,
-  .iconSvgB {
-    width: 50px;
-    height: 50px;
-  }
+  .iconSvgXl,
+  .iconSvgLg,
   .iconSvgSm {
     width: 40px;
     height: 40px;
@@ -175,18 +145,15 @@
 }
 
 @media (min-width: 1024px) {
-  .iconSvgHero,
-  .iconSvgB {
-    width: 62px;
-    height: 62px;
-  }
+  .iconSvgXl,
+  .iconSvgLg,
   .iconSvgSm {
     width: 50px;
     height: 50px;
   }
 }
 
-.numberHero {
+.numberXl {
   display: block;
   font-weight: 800;
   font-size: 42px;
@@ -195,13 +162,13 @@
   color: #fff;
 }
 @media (min-width: 1024px) {
-  .numberHero {
+  .numberXl {
     font-size: 56px;
     letter-spacing: -2px;
   }
 }
 
-.numberB {
+.numberLg {
   display: block;
   font-weight: 800;
   font-size: 30px;
@@ -210,7 +177,7 @@
   color: #fff;
 }
 @media (min-width: 1024px) {
-  .numberB {
+  .numberLg {
     font-size: 38px;
     letter-spacing: -1.2px;
   }

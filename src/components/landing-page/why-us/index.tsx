@@ -23,6 +23,8 @@ export default function WhyUs({ lng }: { lng: string }) {
 
   const stepsRef = useRef<HTMLDivElement | null>(null);
   const numRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const tabsRef = useRef<HTMLDivElement | null>(null);
+  const tabBtnRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const lastImgRef = useRef<string | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
 
@@ -75,6 +77,17 @@ export default function WhyUs({ lng }: { lng: string }) {
     document.addEventListener('fullscreenchange', handleChange);
     return () => document.removeEventListener('fullscreenchange', handleChange);
   }, []);
+
+  useEffect(() => {
+    const container = tabsRef.current;
+    const btn = tabBtnRefs.current[tabIndex];
+    if (!container || !btn) return;
+
+    const containerRect = container.getBoundingClientRect();
+    const btnRect = btn.getBoundingClientRect();
+    const offset = btnRect.left - containerRect.left - (containerRect.width - btnRect.width) / 2;
+    container.scrollBy({ left: offset, behavior: 'smooth' });
+  }, [tabIndex]);
 
   function selectTab(index: number) {
     setTabIndex(index);
@@ -140,7 +153,7 @@ export default function WhyUs({ lng }: { lng: string }) {
             {isFullscreen ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
           </button>
 
-          <div className={styles.tabs} role="tablist" aria-label={t('AddedValueWithAtrasLink')}>
+          <div className={styles.tabs} role="tablist" aria-label={t('AddedValueWithAtrasLink')} ref={tabsRef}>
             {WHY_US_TABS.map((tabItem, i) => {
               const isActive = i === tabIndex;
               return (
@@ -152,6 +165,9 @@ export default function WhyUs({ lng }: { lng: string }) {
                   aria-controls={`why-us-panel-${tabItem.id}`}
                   className={`${styles.tabBtn} ${isActive ? styles.active : ''}`}
                   onClick={() => selectTab(i)}
+                  ref={(el) => {
+                    tabBtnRefs.current[i] = el;
+                  }}
                 >
                   <span className={styles.tabArrow}>
                     <ArrowRight size={14} />

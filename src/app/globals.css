@@ -6,13 +6,13 @@
   --primary-color: #07c692;
   --border-color: #ddd;
 
-  /* Landing page — Light Premium SaaS theme */
   --accent: #0f6b4e;
   --accent-soft: #12c98a;
   --accent-2: #0b2e24;
 
   --bg: #f5f3ec;
   --band: #eae7dd;
+  --background: 47 31% 94%;
   --surface: #ffffff;
   --surface-2: #f1efe7;
 
@@ -40,6 +40,10 @@
   }
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   overflow-x: hidden;
 }
@@ -51,9 +55,7 @@ body {
   font-family: var(--font-sans) !important;
   margin: 0;
   padding: 0;
-  scroll-behavior: smooth !important;
   box-sizing: border-box;
-  /* line-height: 5px; */
 }
 
 .admin-area *,
@@ -276,8 +278,6 @@ body {
 
 .main-table .ant-table {
   max-height: calc(100vh - 320px);
-  /* height: calc(100vh - 280px); */
-  /* min-height: 250px; */
   overflow-y: auto;
   border: 1px solid #ddd;
   border-radius: 10px;
@@ -337,10 +337,6 @@ body {
 .ant-btn-default {
   border-color: var(--primary-color) !important;
 }
-
-/* .ant-btn-primary:hover {
-  background-color: #0be7ac !important;
-} */
 
 .ant-btn-default:hover {
   border-color: var(--primary-color) !important;
@@ -438,7 +434,6 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-/* Firefox */
 input[type='number'] {
   -moz-appearance: textfield;
 }
@@ -545,8 +540,6 @@ input[type='number'] {
   z-index: 99999999;
 }
 
-/* Navbar 2e+ mobile drawer — antd applies both `id` and `className`
-   to the panel node itself, so `.landing-drawer` targets the panel. */
 .landing-drawer {
   background-color: #0c4a37 !important;
 }
@@ -676,10 +669,6 @@ html[dir='rtl'] .landing-drawer .ant-drawer-close {
   border-top-left-radius: 6px !important;
   border-bottom-left-radius: 6px !important;
   padding: 3px 11px !important;
-  /* margin-right: 11px; */
-  /* display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important; */
 }
 
 .intl-tel-input.error {
@@ -852,9 +841,7 @@ html[dir='rtl'] .ant-input-show-count .ant-input-suffix {
   fill: #fff !important;
 }
 
-.square-btn.active svg
-
-/* .square-btn.outlined:hover svg */ {
+.square-btn.active svg {
   stroke: #fff !important;
 }
 
@@ -984,8 +971,6 @@ p.from-them.gray:before {
   line-height: 1.8;
   display: block;
   border: 1px solid #ccc;
-  /* box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px; */
-  /* transform: rotate(-90deg); */
 }
 
 .ribbon span {
@@ -1001,16 +986,6 @@ p.from-them.gray:before {
   bottom: 0px;
   z-index: 98;
 }
-
-/* html[dir="ltr"] .ribbon{
-  transform: rotate(180deg);
-  right: unset;
-  left: 0;
-  top: 0;
-  padding: 2px 17px 11px calc(10px + 15px);
-  inset: 0px auto auto -19px;
-}
-*/
 
 html[dir='ltr'] .ribbon {
   left: -10px;
@@ -1041,7 +1016,6 @@ html[dir='ltr'] .ribbon2 {
   padding: 10px;
   margin: 5px;
   border-radius: 15px;
-  /* padding-inline-end: 40px; */
   position: relative;
 }
 
@@ -1128,14 +1102,8 @@ html[dir='rtl'] .other.message.unsupported::after {
   font-size: 10px;
   color: #444;
   position: relative;
-  /* left: 30px; */
   text-align: end;
 }
-
-/* html[dir="rtl"] .message .time{
-  right: 30px;
-  left: unset;
-} */
 
 .chat-sider {
   position: relative;
@@ -1234,12 +1202,10 @@ html[dir='rtl'] .other.message.unsupported::after {
 
 .statistics {
   margin-bottom: 20px;
-  /* user-select: none; */
 }
 
 .statistic-col {
   margin-bottom: 20px;
-  /* max-width: 390px; */
 }
 
 .ant-picker-content th {
@@ -1490,7 +1456,6 @@ html[lang='ar'] .more-dropdown {
   overflow: visible;
   height: 45px !important;
   position: relative;
-  /* box-shadow: rgb(from var(--primary-color) r g b / .8) 0px 7px 29px 0px; */
   box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 }
 

@@ -39,20 +39,18 @@
 .hero{
   position:relative;
   isolation:isolate;
-  overflow-x:hidden;
-  padding:220px 0 140px;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  padding:120px 0 80px;
+  background:linear-gradient(135deg, #12c98a 0%, #0f6b4e 100%);
 }
 
-.hero::before{
-  content:"";
-  position:absolute;
-  inset:-140px 0 0;
-  z-index:-1;
-  background:var(--hero-grad);
-  opacity:.92;
+.hero > :global(.container){
+  width:100%;
 }
 
-.heroStyle{
+.heroContent{
   position:relative;
   z-index:6;
   max-width:560px;
@@ -62,11 +60,11 @@
 }
 @media (max-width: 575px){
   .hero{
-    padding:220px 0 110px
+    padding:95px 0 60px
   }
 }
 
-.mock{
+.demoMockup{
   position: relative;
   isolation: isolate;
   width: 100%;
@@ -78,7 +76,7 @@
 }
 
 @media (min-width: 1200px){
-  .mock{
+  .demoMockup{
     max-width: 760px;
     width: 100%;
     margin-inline-start: 2%;
@@ -112,7 +110,7 @@
     0 0 0 1px rgba(255,255,255,.06) inset;
 }
 
-.mock::after{
+.demoMockup::after{
   content:'';
   position:absolute;
   inset:-32% -38% -40% -38%;
@@ -203,7 +201,7 @@
 }
 
 @media (max-width: 991px){
-  .mock{
+  .demoMockup{
     margin-inline:auto;
     max-width:100%;
     perspective:none;
@@ -277,7 +275,7 @@
 	border-radius: 50px;
 	position: absolute;
   left: 50%;
-  bottom: 40px;
+  bottom: 16px;
   z-index: 9;
   transform: translateX(-50%);
 }

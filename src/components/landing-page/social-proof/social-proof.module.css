@@ -201,7 +201,7 @@
   bottom: 0;
   width: 0%;
   background: linear-gradient(90deg, #16a34a, #4ade80);
-  animation: socialProofFill var(--dur, 4s) linear forwards;
+  animation: socialProofFill var(--dur, 14s) linear forwards;
 }
 :global(html[dir='rtl']) .progressFill {
   background: linear-gradient(270deg, #16a34a, #4ade80);

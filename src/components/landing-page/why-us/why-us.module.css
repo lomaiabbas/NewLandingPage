@@ -47,6 +47,7 @@
 
 .stage{
   position: relative;
+  isolation: isolate;
   background: var(--hero-grad);
   border-radius: 20px;
   padding: 38px;
@@ -57,6 +58,7 @@
 .stage::after{
   content: '';
   position: absolute;
+  z-index: -1;
   width: 420px;
   height: 420px;
   background: radial-gradient(circle, color-mix(in srgb, var(--accent-soft) 40%, transparent), transparent 70%);
@@ -120,8 +122,8 @@
   position: relative;
   z-index: 3;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
   width: fit-content;
   max-width: 100%;
   margin: 0 auto 44px;
@@ -131,12 +133,22 @@
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-behavior: smooth;
+  scroll-snap-type: x proximity;
+}
+.tabs::-webkit-scrollbar{
+  display: none;
 }
 
 .tabBtn{
   position: relative;
   display: flex;
   align-items: center;
+  flex: none;
   gap: 7px;
   padding: 10px 20px 12px;
   border: none;
@@ -147,7 +159,15 @@
   color: rgba(255, 255, 255, 0.6);
   cursor: pointer;
   white-space: nowrap;
+  scroll-snap-align: center;
   transition: background 0.25s ease, color 0.25s ease;
+}
+
+@media (max-width: 480px){
+  .tabBtn{
+    padding: 9px 16px 11px;
+    font-size: 13px;
+  }
 }
 .tabArrow{
   display: inline-flex;

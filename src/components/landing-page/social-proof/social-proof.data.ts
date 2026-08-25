@@ -8,7 +8,7 @@ export type SocialProofToast = {
   href: (lng: string) => string
 }
 
-export const SOCIAL_PROOF_INTERVAL_MS = 4000
+export const SOCIAL_PROOF_AUTO_HIDE_MS = 10000
 export const SOCIAL_PROOF_INITIAL_DELAY_MS = 1500
 export const SOCIAL_PROOF_EXIT_MS = 300
 
@@ -34,4 +34,18 @@ export const SOCIAL_PROOF_TOASTS: SocialProofToast[] = [
     ctaKey: 'SocialProofToast3Cta',
     href: (lng) => `/${lng}#contact`,
   },
+]
+
+export const SOCIAL_PROOF_HIDDEN_SECTIONS = ['hero', 'why-us']
+
+export const SOCIAL_PROOF_SECTION_TOAST: Record<string, string> = {
+  'key-features': 'ditch-spreadsheets',
+  about: 'invitations-sent',
+  'our-clients': 'invitees-logged-in',
+  contact: 'invitations-sent',
+}
+
+export const SOCIAL_PROOF_SECTION_IDS = [
+  ...SOCIAL_PROOF_HIDDEN_SECTIONS,
+  ...Object.keys(SOCIAL_PROOF_SECTION_TOAST),
 ]

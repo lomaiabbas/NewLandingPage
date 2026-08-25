@@ -64,7 +64,7 @@ export default function Hero({ lng }: { lng: string }) {
       <div className="container">
         <Row align="middle" justify="space-between" gutter={[32, 48]}>
           <Col xs={24} lg={9} className='min-w-0'>
-            <div className={`${styles.heroStyle} gap-4 flex flex-col text-center`}>
+            <div className={`${styles.heroContent} gap-4 flex flex-col text-center`}>
               <h1 className="text-white text-[clamp(2.1rem,4vw+1rem,3.5rem)] font-extrabold leading-[1.15] tracking-tight mb-6 lg:mb-0">
                 <span className="text-primary">{t("HeroTitle1")}</span>
                 {t("HeroTitle2")}
@@ -75,7 +75,7 @@ export default function Hero({ lng }: { lng: string }) {
             </div>
           </Col>
           <Col xs={24} lg={15} className='relative z-10 min-w-0'>
-            <div className={styles.mock} data-aos="fade-up" data-aos-delay="300">
+            <div className={styles.demoMockup} data-aos="fade-up" data-aos-delay="300">
               <div className={styles.floorShadow} aria-hidden="true"></div>
               <div ref={frameRef} className={`${styles.demoFrame} ${isFullscreen ? styles.demoFrameFullscreen : ''}`}>
                 <video
@@ -106,7 +106,7 @@ export default function Hero({ lng }: { lng: string }) {
           </Col>
         </Row>
       </div>
-      <div className={`${styles.mouse} mouse`}></div>
+      <div className={styles.mouse} id="scroll-hint"></div>
       <Star2 styles={styles}/>
 
   <Star1 styles={styles}/>
