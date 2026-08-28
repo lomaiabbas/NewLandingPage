@@ -5,8 +5,6 @@ import { Col, Row } from 'antd';
 import { Maximize2, Minimize2 } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react'
 import styles from './hero.module.css';
-import Star1 from '../shared/star1';
-import Star2 from '../shared/star2';
 import AOS from 'aos';
 
 export default function Hero({ lng }: { lng: string }) {
@@ -65,12 +63,12 @@ export default function Hero({ lng }: { lng: string }) {
         <Row align="middle" justify="space-between" gutter={[32, 48]}>
           <Col xs={24} lg={9} className='min-w-0'>
             <div className={`${styles.heroContent} gap-4 flex flex-col text-center`}>
-              <h1 className="text-white text-[clamp(2.1rem,4vw+1rem,3.5rem)] font-extrabold leading-[1.15] tracking-tight mb-6 lg:mb-0">
+              <h1 className="text-white text-[clamp(2.1rem,4vw+1rem,3.5rem)] font-extrabold leading-[1.15] tracking-tight mb-6 lg:mb-0 text-pretty">
                 <span className="text-primary">{t("HeroTitle1")}</span>
                 {t("HeroTitle2")}
                 {t("HeroTitle3")}
               </h1>
-              <p className="text-base leading-relaxed text-white max-w-full sm:max-w-[500px]">
+              <p className="text-base leading-relaxed text-white max-w-full sm:max-w-[500px] text-pretty">
                 {t("HeroDesc1")}{t("HeroDesc2")}{t("HeroDesc3")}</p>
             </div>
           </Col>
@@ -107,9 +105,6 @@ export default function Hero({ lng }: { lng: string }) {
         </Row>
       </div>
       <div className={styles.mouse} id="scroll-hint"></div>
-      <Star2 styles={styles}/>
-
-  <Star1 styles={styles}/>
     </div>
   );
 }

@@ -7,79 +7,33 @@ interface StatsBarProps {
 }
 
 export default function StatsBar({ clientCount, t }: StatsBarProps) {
+  const stats = [
+    { icon: Clock, value: '24/7', label: t('Support') },
+    { icon: Briefcase, value: `+${clientCount}`, label: t('ActiveCompanies') },
+    { icon: MessageCircle, value: '+15K', label: t('ConversationsClientslandingpag') },
+    { icon: MailCheck, value: '+50K', label: t('MessageOurClient') },
+  ]
+
   return (
     <div className="container">
-      <div className={styles.grid}>
-        <div
-          className={`${styles.card} ${styles.white}`}
-          data-aos="fade-up"
-          data-aos-delay="500"
-        >
-          <div className={styles.content}>
-            <span className={`${styles.numberXl} ${styles.numberOnWhite}`} dir="ltr">
-              +50K
+      <div className={styles.row}>
+        {stats.map(({ icon: Icon, value, label }, idx) => (
+          <div
+            key={idx}
+            className={styles.card}
+            data-aos="fade-up"
+            data-aos-delay={500 + idx * 80}
+          >
+            <span className={styles.iconBadge}>
+              <Icon strokeWidth={2} className={styles.icon} />
             </span>
-            <span className={`${styles.labelPrimary} ${styles.labelOnWhite}`}>
-              {t('MessageOurClient')}
+            <span className={styles.number} dir="ltr">
+              {value}
             </span>
+            <span className={styles.label}>{label}</span>
+            <span className={styles.underline} aria-hidden="true" />
           </div>
-          <div className={`${styles.iconCol} ${styles.iconColLg} ${styles.iconColWhite}`}>
-            <MailCheck strokeWidth={1} className={`${styles.iconWhite} ${styles.iconSvgXl}`} />
-          </div>
-        </div>
-
-        <div
-          className={`${styles.card} ${styles.glass}`}
-          data-aos="fade-up"
-          data-aos-delay="580"
-        >
-          <div className={styles.content}>
-            <span className={styles.numberLg} dir="ltr">
-              +15K
-            </span>
-            <span className={styles.labelPrimary}>{t('ConversationsClientslandingpag')}</span>
-          </div>
-          <div className={`${styles.iconCol} ${styles.iconColLg} ${styles.iconColGlass}`}>
-            <MessageCircle
-              strokeWidth={1.05}
-              className={`${styles.iconGlass} ${styles.iconSvgLg}`}
-            />
-          </div>
-        </div>
-
-        <div
-          className={`${styles.card} ${styles.glass}`}
-          data-aos="fade-up"
-          data-aos-delay="660"
-        >
-          <div className={styles.content}>
-            <span className={`${styles.numberSm} ${styles.numberOnGlass}`} dir="ltr">
-              {clientCount}+
-            </span>
-            <span className={`${styles.labelSm} ${styles.labelOnGlass}`}>
-              {t('ActiveCompanies')}
-            </span>
-          </div>
-          <div className={`${styles.iconCol} ${styles.iconColSm} ${styles.iconColGlass}`}>
-            <Briefcase strokeWidth={1.1} className={`${styles.iconGlass} ${styles.iconSvgSm}`} />
-          </div>
-        </div>
-
-        <div
-          className={`${styles.card} ${styles.glass}`}
-          data-aos="fade-up"
-          data-aos-delay="740"
-        >
-          <div className={styles.content}>
-            <span className={`${styles.numberSm} ${styles.numberOnGlass}`} dir="ltr">
-              24/7
-            </span>
-            <span className={`${styles.labelSm} ${styles.labelOnGlass}`}>{t('Support')}</span>
-          </div>
-          <div className={`${styles.iconCol} ${styles.iconColSm} ${styles.iconColGlass}`}>
-            <Clock strokeWidth={1.1} className={`${styles.iconGlass} ${styles.iconSvgSm}`} />
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   )

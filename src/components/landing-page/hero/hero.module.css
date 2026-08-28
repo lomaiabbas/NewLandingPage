@@ -110,6 +110,14 @@
     0 0 0 1px rgba(255,255,255,.06) inset;
 }
 
+:global(html[dir='rtl']) .demoFrame{
+  transform-origin: 8% 50%;
+}
+
+:global(html[dir='rtl']) .demoMockup{
+  perspective-origin: 22% 38%;
+}
+
 .demoMockup::after{
   content:'';
   position:absolute;
