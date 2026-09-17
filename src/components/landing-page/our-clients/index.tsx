@@ -67,7 +67,7 @@ export default async function OurClients({ lng }: { lng: string }) {
 
       {isSmallList ? (
         <div className="container mb-14" data-aos="fade-up" data-aos-delay="400">
-          <div className="flex flex-wrap justify-center gap-12 md:gap-20 py-8">
+          <div className="flex flex-wrap justify-center gap-7 sm:gap-12 md:gap-20 py-8">
             {clients.map((client, idx) => (
               <ClientCard key={`${client.name}-${idx}`} client={client} isLarge={true} />
             ))}
@@ -80,7 +80,7 @@ export default async function OurClients({ lng }: { lng: string }) {
           data-aos-delay="400"
         >
           <div
-            className={`flex gap-12 md:gap-20 w-max py-6 hover:[animation-play-state:paused] ${lng === 'ar' ? 'animate-marquee-rtl' : 'animate-marquee'}`}
+            className={`flex gap-7 sm:gap-12 md:gap-20 w-max py-6 hover:[animation-play-state:paused] ${lng === 'ar' ? 'animate-marquee-rtl' : 'animate-marquee'}`}
           >
             {doubled.map((client, idx) => (
               <ClientCard key={`${client.name}-${idx}`} client={client} isLarge={true} />
@@ -89,7 +89,15 @@ export default async function OurClients({ lng }: { lng: string }) {
         </div>
       )}
 
-      <StatsBar clientCount={clients.length} t={t} />
+      <StatsBar
+        clientCount={clients.length}
+        labels={{
+          support: t('Support'),
+          companies: t('ActiveCompanies'),
+          conversations: t('ConversationsClientslandingpag'),
+          messages: t('MessageOurClient'),
+        }}
+      />
     </section>
   )
 }

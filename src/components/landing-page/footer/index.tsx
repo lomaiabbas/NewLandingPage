@@ -21,7 +21,7 @@ export default async function Footer({ lng }: { lng: string }) {
       <div className="container">
         <div className={styles.footerInner}>
           <Row
-            gutter={20}
+            gutter={[20, 8]}
             className="flex wow fadeInUp"
             style={{ visibility: 'visible', animationName: 'fadeInUp' }}
           >
@@ -31,7 +31,7 @@ export default async function Footer({ lng }: { lng: string }) {
                   <AtrasLinkLogo XL />
                 </Link>
                 <p className="copyright text-start">
-                  <span className="block max-w-[80%]">{t('FooterDesc')}</span>
+                  <span className="block max-w-full md:max-w-[80%]">{t('FooterDesc')}</span>
                 </p>
               </div>
             </Col>

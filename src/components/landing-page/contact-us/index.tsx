@@ -47,7 +47,7 @@ export default function ContactUs({ lng }: { lng: string }) {
       <Star2 styles={styles} />
 
       <Star1 styles={styles} />
-      <div>
+      <div className="container">
         <div className={styles.titleArea}>
           <span className={styles.subTitle} data-aos="fade-up">
             {t('Contact')}
@@ -59,8 +59,8 @@ export default function ContactUs({ lng }: { lng: string }) {
         </div>
       </div>
 
-      <div className="container relative my-24 ">
-        <Row>
+      <div className="container relative my-12 md:my-24">
+        <Row gutter={[24, 40]}>
           <Col xs={24} md={8}>
             <div>
               <div className="flex flex-col gap-2 mb-6 border-b-2 border-gray-500 w-fit pb-3 text-start">

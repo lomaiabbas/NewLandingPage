@@ -264,7 +264,8 @@
   inset: -4px;
   background-size: cover;
   background-position: center;
-  filter: blur(1px) saturate(1.05);
+  /* blur(1px) was imperceptible but forced both full-size layers onto the GPU on every step */
+  filter: saturate(1.05);
   opacity: 0;
   transition: opacity 0.5s ease;
   z-index: 0;
@@ -446,4 +447,124 @@
   backdrop-filter: blur(4px);
   border: 1px solid rgba(255, 255, 255, 0.25);
   color: #fff;
+}
+
+/* ---------- responsive ---------- */
+
+/* The tint is a start-to-end gradient sized for the desktop split layout, where the copy
+   occupies the first 420px and the screenshot shows through on the other side. On a phone the
+   panel is the full width, so the end of the copy sat on top of a bright screenshot. Below
+   tablet, tint top-to-bottom instead and keep the copy fully covered. */
+@media (max-width: 991px){
+  .bgTint{
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--accent-2) 72%, black) 0%,
+      color-mix(in srgb, var(--accent-2) 80%, black) 45%,
+      color-mix(in srgb, var(--accent-2) 90%, black) 100%
+    );
+  }
+  :global(html[dir='rtl']) .bgTint{
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--accent-2) 72%, black) 0%,
+      color-mix(in srgb, var(--accent-2) 80%, black) 45%,
+      color-mix(in srgb, var(--accent-2) 90%, black) 100%
+    );
+  }
+
+  .panel{
+    max-width: none;
+  }
+
+  /* the tab strip spans the full stage below desktop, so leave a row for the
+     fullscreen button rather than letting the two overlap on the end edge */
+  .tabs{
+    margin-top: 30px;
+    margin-bottom: 32px;
+  }
+
+  /* the toggle is the only way to read the step screenshots on a phone */
+  .fullscreenBtn{
+    width: 40px;
+    height: 40px;
+    top: 12px;
+    inset-inline-end: 12px;
+  }
+}
+
+@media (max-width: 575px){
+  .titleArea{
+    margin-bottom: 40px;
+  }
+
+  .stage{
+    padding: 20px 16px;
+    border-radius: 16px;
+  }
+
+  /* the 34px step markers hang 42px into the start gutter; shrink both so the body copy
+     keeps a usable measure on a 320px screen */
+  .steps{
+    padding-inline-start: 34px;
+  }
+  .steps::before,
+  .stepsFill{
+    inset-inline-start: 13px;
+  }
+  .stepNum{
+    inset-inline-start: -34px;
+    width: 28px;
+    height: 28px;
+    font-size: 12.5px;
+  }
+
+  .step{
+    padding-bottom: 22px;
+  }
+  .step h4{
+    font-size: 15.5px;
+  }
+  .step p{
+    font-size: 13.5px;
+  }
+
+  /* There are only three short labels, so scrolling them was never worth it: the strip sized
+     itself to the content, so it changed width with every tab, and the label that did not fit
+     ("مشرف الدخول") was cut off by the overflow. Lay them out as three fixed columns instead —
+     constant width, nothing clipped, nothing to scroll. */
+  .tabs{
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: 100%;
+    max-width: 100%;
+    overflow: visible;
+    border-radius: 18px;
+    gap: 4px;
+    margin-top: 34px;
+    margin-bottom: 26px;
+  }
+
+  .tabBtn{
+    justify-content: center;
+    text-align: center;
+    min-width: 0;
+    padding: 9px 6px 14px;
+    font-size: 12.5px;
+    line-height: 1.3;
+    border-radius: 14px;
+    /* labels wrap onto a second line rather than forcing the column wider */
+    white-space: normal;
+  }
+
+  /* the arrow costs ~20px per tab, which is most of what pushed the last label out */
+  .tabArrow{
+    display: none;
+  }
+
+  .tabProgress{
+    inset-inline-start: 10px;
+    inset-inline-end: 10px;
+    bottom: 5px;
+  }
 }

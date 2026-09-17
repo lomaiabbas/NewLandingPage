@@ -21,9 +21,9 @@ export default async function AboutUs({ lng }: { lng: string }) {
   ];
   
   return (
-    <section className={`${styles.section} pt-[128px] pb-24`} id="about">
+    <section className={`${styles.section} pt-[96px] pb-16 md:pt-[128px] md:pb-24`} id="about">
       <div className="container">
-        <Row gutter={20} justify={'space-between'} align={"middle"}>
+        <Row gutter={[20, 40]} justify={'space-between'} align={"middle"}>
           <Col xs={24} lg={12} >
 
             <div className={styles.titleArea}>

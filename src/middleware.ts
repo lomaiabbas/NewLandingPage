@@ -114,5 +114,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|images|videos|flags|sounds|img|favicon.ico|sw.js).*)'],
+  matcher: ['/((?!api|_next/static|_next/image|images|videos|flags|sounds|img|dashboard-demo|favicon.ico|sw.js).*)'],
 }

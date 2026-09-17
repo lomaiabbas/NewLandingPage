@@ -1,6 +1,7 @@
 .wrap {
   position: fixed;
-  left: 16px;
+  /* physical `left` put the toast on the wrong side of an RTL page */
+  inset-inline-start: 16px;
   bottom: max(16px, env(safe-area-inset-bottom, 0px) + 12px);
   z-index: 60;
   width: min(280px, calc(100vw - 32px));
@@ -18,8 +19,25 @@
 
 @media (max-width: 420px) {
   .wrap {
-    left: 10px;
+    inset-inline-start: 10px;
     width: min(240px, calc(100vw - 20px));
+  }
+}
+
+/* the toast now sits on the right in Arabic, so it has to grow from that corner */
+:global(html[dir='rtl']) .toast {
+  transform-origin: bottom right;
+  animation-name: socialProofPopRtl, socialProofGradient;
+}
+
+@keyframes socialProofPopRtl {
+  from {
+    opacity: 0;
+    transform: translate(12px, 12px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
   }
 }
 
@@ -104,7 +122,9 @@
   white-space: nowrap;
 }
 
+/* an 18px hit area is impossible to hit on a phone; keep the dot small but pad the target out */
 .close {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -116,6 +136,16 @@
   color: #9ca3af;
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease;
+}
+
+.close::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  transform: translate(-50%, -50%);
 }
 .close:hover {
   background: rgba(0, 0, 0, 0.06);

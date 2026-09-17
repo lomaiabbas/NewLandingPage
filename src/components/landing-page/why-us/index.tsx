@@ -15,6 +15,11 @@ export default function WhyUs({ lng }: { lng: string }) {
 
   const [fillHeight, setFillHeight] = useState(0);
 
+  /* Tabs hold different amounts of copy, so the stage grew and shrank on every switch — very
+     visible on mobile, where .stage drops its 560px min-height. Reserve the tallest measured
+     step list instead of hard-coding a number that any translation change would invalidate. */
+  const [stepsMinHeight, setStepsMinHeight] = useState(0);
+
   const [bg, setBg] = useState<{ a: string | null; b: string | null; showA: boolean }>({
     a: null,
     b: null,
@@ -60,6 +65,18 @@ export default function WhyUs({ lng }: { lng: string }) {
     );
   }, [currentStep]);
 
+  useEffect(() => {
+    /* A step lasts WHY_US_STEP_MS, which is not long enough to fetch a background from scratch
+       without the stage flashing, so warm the next one (and the next tab's first) ahead of time. */
+    const next =
+      steps[stepIndex + 1]?.img ??
+      WHY_US_TABS[(tabIndex + 1) % WHY_US_TABS.length].steps[0]?.img;
+    if (!next) return;
+
+    const img = new window.Image();
+    img.src = next;
+  }, [tabIndex, stepIndex, steps]);
+
   useLayoutEffect(() => {
     const container = stepsRef.current;
     const numEl = numRefs.current[stepIndex];
@@ -69,6 +86,21 @@ export default function WhyUs({ lng }: { lng: string }) {
     const numRect = numEl.getBoundingClientRect();
     setFillHeight(numRect.top - containerTop + numRect.height / 2 - 6);
   }, [tabIndex, stepIndex]);
+
+  useLayoutEffect(() => {
+    const el = stepsRef.current;
+    if (!el) return;
+    // the reservation sits on .panel, so this stays the tab's true content height
+    setStepsMinHeight((prev) => Math.max(prev, el.offsetHeight));
+  }, [tabIndex]);
+
+  useEffect(() => {
+    // line lengths change with the viewport, so re-seed from the current tab and let the
+    // effect above grow it back to the tallest one as the tabs cycle
+    const handleResize = () => setStepsMinHeight(stepsRef.current?.offsetHeight ?? 0);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const handleChange = () => {
@@ -191,6 +223,7 @@ export default function WhyUs({ lng }: { lng: string }) {
               id={`why-us-panel-${tab.id}`}
               role="tabpanel"
               aria-label={t(tab.labelKey)}
+              style={stepsMinHeight ? { minHeight: stepsMinHeight } : undefined}
             >
               <div className={styles.steps} ref={stepsRef}>
                 <div className={styles.stepsFill} style={{ height: fillHeight }} />

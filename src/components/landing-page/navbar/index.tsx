@@ -55,18 +55,44 @@ export default function Navbar({ lng }: { lng: string }) {
   }
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 40)
-      const scrollHint = document.getElementById('scroll-hint')
-      if (window.scrollY > 60 && scrollHint) {
-        scrollHint.style.display = 'none'
-      } else if (scrollHint) {
-        scrollHint.style.display = 'flex'
+    /* This used to run on every scroll event, unthrottled, and query + write the DOM each time —
+       a forced style recalc per frame for the whole duration of a smooth scroll. Now it coalesces
+       into one rAF and only touches anything when a threshold is actually crossed. */
+    let raf = 0
+    let hintEl: HTMLElement | null = null
+    let scrolled: boolean | null = null
+    let hintHidden: boolean | null = null
+
+    const update = () => {
+      raf = 0
+      const y = window.scrollY
+
+      const nextScrolled = y > 40
+      if (nextScrolled !== scrolled) {
+        scrolled = nextScrolled
+        setIsScrolled(nextScrolled)
+      }
+
+      // the hint is owned by the hero, so resolve it lazily and cache it
+      hintEl ??= document.getElementById('scroll-hint')
+      const nextHintHidden = y > 60
+      if (hintEl && nextHintHidden !== hintHidden) {
+        hintHidden = nextHintHidden
+        hintEl.style.display = nextHintHidden ? 'none' : 'flex'
       }
     }
 
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    const handleScroll = () => {
+      if (raf) return
+      raf = requestAnimationFrame(update)
+    }
+
+    update()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      if (raf) cancelAnimationFrame(raf)
+    }
   }, [])
 
   useEffect(() => {
@@ -109,15 +135,18 @@ export default function Navbar({ lng }: { lng: string }) {
         </Link>
 
         <div className={styles.navLinks}>
+          {/* plain anchors, not next/link: these point at sections of the page that is already
+              rendered, and a Link would run a full App Router navigation (RSC fetch + middleware)
+              just to jump to a hash */}
           {NAV_LINKS.map((link) => (
-            <Link
+            <a
               key={link.hash}
-              href={`/${lng}#${link.hash}`}
+              href={`#${link.hash}`}
               className={styles.navLink}
               aria-current={activeHash === link.hash ? 'page' : undefined}
             >
               {t(link.key)}
-            </Link>
+            </a>
           ))}
           <a
             href="#lng"
@@ -152,7 +181,8 @@ export default function Navbar({ lng }: { lng: string }) {
       <Drawer
         id="nav-drawer"
         zIndex={1005}
-        width={'70%'}
+        /* 70% meant a 540px drawer on a tablet and a cramped 224px one on a small phone */
+        width={'min(340px, 85vw)'}
         title={
           <div className="flex flex-row gap-3 font-bold text-lg items-center justify-center text-[#e9e4d9]">
             <AtrasLinkLogo XL />
@@ -166,15 +196,15 @@ export default function Navbar({ lng }: { lng: string }) {
       >
         <div className={styles.drawerLinks}>
           {NAV_LINKS.map((link) => (
-            <Link
+            <a
               key={link.hash}
-              href={`/${lng}#${link.hash}`}
+              href={`#${link.hash}`}
               className={styles.drawerLink}
               aria-current={activeHash === link.hash ? 'page' : undefined}
               onClick={() => setOpenDrawer(false)}
             >
               {t(link.key)}
-            </Link>
+            </a>
           ))}
           <a
             href="#lng"
