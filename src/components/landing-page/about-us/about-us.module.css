@@ -48,3 +48,14 @@
   line-height: var(--body-line);
 }
 
+
+.titleArea .secTitle,
+.titleArea .secText{
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 991px){
+  .titleArea{
+    margin-bottom: 8px;
+  }
+}

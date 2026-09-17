@@ -44,6 +44,20 @@ html {
   scroll-behavior: smooth;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* the nav bar is fixed, so a hash jump would otherwise land the section heading underneath it */
+#key-features,
+#about,
+#why-us,
+#contact {
+  scroll-margin-top: 90px;
+}
+
 body {
   overflow-x: hidden;
 }
@@ -552,24 +566,22 @@ html[dir='ltr'] .landing-drawer {
   border-radius: 22px 0 0 22px !important;
 }
 
+/* The close handle used to be position:fixed at a hard-coded 25% of the *viewport*, so it only
+   lined up with the drawer edge at one drawer width and floated over the page everywhere else.
+   Keep it in the header flow, where it tracks the drawer at any size. */
 .landing-drawer .ant-drawer-close {
-  position: fixed !important;
-  top: 105px !important;
+  position: static !important;
+  flex-shrink: 0;
   border-radius: 100% !important;
   background: #e9e4d9 !important;
   padding: 6px !important;
-  display: block !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
   width: 40px !important;
   height: 40px !important;
   color: #0c4a37 !important;
-  left: 25% !important;
   font-weight: bold !important;
-  z-index: 99999 !important;
-}
-
-html[dir='rtl'] .landing-drawer .ant-drawer-close {
-  right: 25% !important;
-  left: unset;
 }
 
 .landing-drawer .ant-drawer-header {
@@ -602,6 +614,17 @@ html[dir='rtl'] .landing-drawer .ant-drawer-close {
 .landing-select .ant-select-item-option-active,
 .landing-select .ant-select-item-option-selected {
   background-color: var(--accent) !important;
+}
+
+/* iOS Safari zooms the whole page when a focused control's text is under 16px */
+@media (max-width: 767px) {
+  .contact-form input,
+  .contact-form textarea,
+  .contact-form .ant-select-selector,
+  .contact-form .ant-select-selection-item,
+  .contact-form .ant-select-selection-placeholder {
+    font-size: 16px !important;
+  }
 }
 
 .error-msg {

@@ -105,3 +105,36 @@
   -ms-transform:scale(-1) rotate(180deg);
   transform:scale(-1) rotate(180deg);
 }
+
+/* ---------- responsive ---------- */
+
+@media (max-width: 767px){
+  .titleArea{
+    margin-bottom: 40px;
+  }
+
+  /* the fixed 150px floor left a lot of dead space once the cards go full width */
+  .featureCard{
+    min-height: 0;
+    padding: 18px;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .featureCard > div:first-child{
+    flex: 0 0 48px;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+  }
+
+  .featureCard:hover{
+    transform: none;
+  }
+}
+
+/* long unbroken words (URLs, English terms inside Arabic copy) must not widen the card */
+.featureCard .boxTitle,
+.featureCard .boxText{
+  overflow-wrap: anywhere;
+}

@@ -13,7 +13,7 @@ export default function ClientCard({ client, isLarge = false }: ClientCardProps)
     <div
       className={twMerge(
         isLarge
-          ? 'w-[148px] h-[148px] md:w-[176px] md:h-[176px] p-1.5'
+          ? 'w-[104px] h-[104px] sm:w-[132px] sm:h-[132px] md:w-[176px] md:h-[176px] p-1.5'
           : 'w-[110px] h-[110px] max-md:w-20 max-md:h-20 max-sm:w-[70px] max-sm:h-[70px] p-1',
         'rounded-full border bg-[var(--surface)] shadow-[var(--shadow)] backdrop-blur-md flex items-center justify-center transition-all duration-400 relative overflow-hidden group-hover:scale-105',
         `border-[rgb(from_${accent}_r_g_b/0.12)]`,
@@ -45,7 +45,7 @@ export default function ClientCard({ client, isLarge = false }: ClientCardProps)
       ) : (
         content
       )}
-      <span className="text-[12px] md:text-[14px] text-white/75 font-medium max-w-[140px] md:max-w-[170px] text-center whitespace-nowrap overflow-hidden text-ellipsis transition-colors duration-300 group-hover:text-white">
+      <span className="text-[11px] sm:text-[12px] md:text-[14px] text-white/75 font-medium max-w-[104px] sm:max-w-[132px] md:max-w-[170px] text-center whitespace-nowrap overflow-hidden text-ellipsis transition-colors duration-300 group-hover:text-white">
         {client.name}
       </span>
     </div>

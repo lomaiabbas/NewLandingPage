@@ -1,125 +1,226 @@
-.row {
+.switcher {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  gap: 16px;
+  gap: 8px;
+  margin-bottom: 20px;
 }
 
-@media (min-width: 640px) {
-  .row {
-    flex-wrap: nowrap;
-    gap: 20px;
-  }
-
-  .card {
-    width: 164px;
-    max-width: none;
-  }
+.switchBtn {
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 6px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
-.card {
+.switchBtn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.switchBtnActive,
+.switchBtnActive:hover {
+  background: #fff;
+  color: #2c7a54;
+  border-color: #fff;
+}
+
+/* ---------- 1a: icon circles on a glass panel over the brand gradient ---------- */
+.panelA {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  background: #f4ecdf;
-  border-radius: 16px;
-  padding: 14px 8px 16px;
-  width: calc(50% - 8px);
-  max-width: 174px;
+  background: var(--hero-grad);
+  padding: 30px 40px 28px;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  box-shadow: var(--shadow), 0 0 0 1px rgba(8, 60, 45, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+.panelA::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(120% 140% at 15% -30%, rgba(255, 255, 255, 0.16), transparent 60%);
+}
+
+.dividerA {
+  width: 1px;
+  align-self: stretch;
+  background: rgba(255, 255, 255, 0.22);
+  margin: 8px 0;
+}
+
+.itemA {
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
-  box-shadow:
-    0 16px 34px -18px rgba(6, 40, 28, 0.35),
-    0 2px 6px rgba(6, 40, 28, 0.06);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  gap: 12px;
+  flex: 1;
+  padding: 0 8px;
+  min-width: 90px;
 }
 
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow:
-    0 22px 40px -16px rgba(6, 40, 28, 0.4),
-    0 2px 6px rgba(6, 40, 28, 0.08);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .card {
-    transition: none;
-  }
-  .card:hover {
-    transform: none;
-  }
-}
-
-.iconBadge {
-  position: absolute;
-  inset-inline-start: 0;
-  top: 0;
-  z-index: -1;
-  width: 46px;
-  height: 46px;
+.iconWrapA {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-inline-end: 8px;
-  padding-block-end: 8px;
-  border-start-start-radius: 16px;
-  border-end-end-radius: 100%;
-  background: linear-gradient(135deg, var(--accent-soft) 0%, var(--primary-color) 100%);
 }
 
-.icon {
-  width: 20px;
-  height: 20px;
-  color: #fff;
+.iconSvgA {
+  width: 24px;
+  height: 24px;
 }
 
-@media (min-width: 1024px) {
-  .iconBadge {
-    width: 52px;
-    height: 52px;
-  }
-  .icon {
-    width: 23px;
-    height: 23px;
-  }
-}
-
-.number {
-  margin-top: 24px;
+.numberA {
   font-weight: 800;
-  font-size: 29px;
-  line-height: 1.1;
-  letter-spacing: -0.5px;
-  color: var(--accent-2);
+  font-size: 34px;
+  color: #fff;
+  direction: ltr;
   unicode-bidi: isolate;
 }
 
-@media (min-width: 1024px) {
-  .number {
-    font-size: 33px;
-  }
+.labelA {
+  font-size: 16px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.75);
 }
 
-.label {
-  margin-top: 4px;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 1.4;
-  color: rgba(11, 46, 36, 0.65);
+/* ---------- 1b: bold numbers, beige accents on a deep gradient card ---------- */
+.panelB {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: linear-gradient(160deg, #0f6b4e 0%, #0a5c46 70%, #084b3a 100%);
+  padding: 30px 40px 28px;
+  display: flex;
+  border-radius: 22px;
+  box-shadow: var(--shadow);
 }
 
-@media (min-width: 1024px) {
-  .label {
-    font-size: 15px;
-  }
+.itemB {
+  flex: 1;
+  min-width: 90px;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
 }
 
-.underline {
-  margin-top: 10px;
-  width: 28px;
+.iconSvgB {
+  width: 22px;
+  height: 22px;
+}
+
+.numberB {
+  font-size: 40px;
+  font-weight: 800;
+  color: #fff;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+.labelB {
+  font-size: 16px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.underlineB {
+  width: 36px;
   height: 3px;
-  border-radius: 4px;
-  background: linear-gradient(90deg, var(--accent-soft), var(--primary-color));
+  background: #f5f3ec;
+  border-radius: 2px;
+  margin: 6px auto 0;
+}
+
+/* ---------- responsive ---------- */
+
+/* Below ~900px four stat columns cannot hold their numbers side by side. Wrapping the flex row
+   left the 1px stretched dividers floating at the start of each new line, so switch to a
+   2-up grid and drop the dividers entirely instead. */
+@media (max-width: 900px) {
+  .panelA,
+  .panelB {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 26px 8px;
+    padding: 26px 20px 24px;
+  }
+
+  .dividerA {
+    display: none;
+  }
+
+  .itemA,
+  .itemB {
+    min-width: 0;
+    padding: 0 4px;
+  }
+
+  .numberA {
+    font-size: 30px;
+  }
+
+  .numberB {
+    font-size: 32px;
+  }
+
+  .labelA,
+  .labelB {
+    font-size: 14px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 420px) {
+  .panelA,
+  .panelB {
+    gap: 22px 6px;
+    padding: 22px 12px 20px;
+    border-radius: 18px;
+  }
+
+  .iconWrapA {
+    width: 46px;
+    height: 46px;
+  }
+
+  .numberA {
+    font-size: 26px;
+  }
+
+  .numberB {
+    font-size: 28px;
+  }
+
+  .labelA,
+  .labelB {
+    font-size: 12.5px;
+    line-height: 1.35;
+  }
+
+  .itemA {
+    gap: 8px;
+  }
+}
+
+/* long labels must be allowed to break instead of forcing the grid wider than the screen */
+.labelA,
+.labelB {
+  overflow-wrap: anywhere;
 }
