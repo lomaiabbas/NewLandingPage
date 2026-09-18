@@ -430,7 +430,7 @@
   "WhyUsGkStep2Title": "Enters the event details",
   "WhyUsGkStep2Desc": "The event number and his phone number bring up everything he needs.",
   "WhyUsGkStep3Title": "Scans the QR code",
-  "WhyUsGkStep3Desc": "Straight off the guest's phone, with his own device.",
+  "WhyUsGkStep3Desc": "Using a phone or the gatekeeper's device.",
   "WhyUsGkStep4Title": "Confirms the guest",
   "WhyUsGkStep4Desc": "AtrasLink verifies the code, logs the check-in, and updates the stats instantly.",
   "ViewFullscreen": "View fullscreen",

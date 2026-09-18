@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, useState, type SVGProps } from 'react'
+import { Fragment, type SVGProps } from 'react'
 import styles from './stats-bar.module.css'
 
 interface StatsBarProps {
@@ -12,13 +12,6 @@ interface StatsBarProps {
     messages: string
   }
 }
-
-type Variant = 'a' | 'b'
-
-const VARIANTS: { id: Variant; label: string }[] = [
-  { id: 'a', label: '1a' },
-  { id: 'b', label: '1b' },
-]
 
 type IconKind = 'clock' | 'briefcase' | 'chat' | 'envelope'
 
@@ -59,8 +52,6 @@ function StatIcon({ kind, color, ...props }: SVGProps<SVGSVGElement> & { kind: I
 }
 
 export default function StatsBar({ clientCount, labels }: StatsBarProps) {
-  const [variant, setVariant] = useState<Variant>('a')
-
   const stats: { icon: IconKind; value: string; label: string }[] = [
     { icon: 'clock', value: '24/7', label: labels.support },
     { icon: 'briefcase', value: `+${clientCount}`, label: labels.companies },
@@ -70,54 +61,22 @@ export default function StatsBar({ clientCount, labels }: StatsBarProps) {
 
   return (
     <div className="container">
-      <div className={styles.switcher} role="tablist" aria-label="Stats style">
-        {VARIANTS.map(({ id, label }) => (
-          <button
-            key={id}
-            type="button"
-            role="tab"
-            aria-selected={variant === id}
-            className={`${styles.switchBtn} ${variant === id ? styles.switchBtnActive : ''}`}
-            onClick={() => setVariant(id)}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
-
-      {variant === 'a' && (
-        <div className={styles.panelA} data-aos="fade-up" data-aos-delay="450">
-          {stats.map(({ icon, value, label }, idx) => (
-            <Fragment key={idx}>
-              {idx > 0 && <span className={styles.dividerA} aria-hidden="true" />}
-              <div className={styles.itemA}>
-                <span className={styles.iconWrapA}>
-                  <StatIcon kind={icon} color="#fff" className={styles.iconSvgA} />
-                </span>
-                <span className={styles.numberA} dir="ltr">
-                  {value}
-                </span>
-                <span className={styles.labelA}>{label}</span>
-              </div>
-            </Fragment>
-          ))}
-        </div>
-      )}
-
-      {variant === 'b' && (
-        <div className={styles.panelB} data-aos="fade-up" data-aos-delay="450">
-          {stats.map(({ icon, value, label }, idx) => (
-            <div key={idx} className={styles.itemB}>
-              <StatIcon kind={icon} color="#f5f3ec" className={styles.iconSvgB} />
-              <span className={styles.numberB} dir="ltr">
+      <div className={styles.panelA} data-aos="fade-up" data-aos-delay="450">
+        {stats.map(({ icon, value, label }, idx) => (
+          <Fragment key={idx}>
+            {idx > 0 && <span className={styles.dividerA} aria-hidden="true" />}
+            <div className={styles.itemA}>
+              <span className={styles.iconWrapA}>
+                <StatIcon kind={icon} color="#fff" className={styles.iconSvgA} />
+              </span>
+              <span className={styles.numberA} dir="ltr">
                 {value}
               </span>
-              <span className={styles.labelB}>{label}</span>
-              <span className={styles.underlineB} aria-hidden="true" />
+              <span className={styles.labelA}>{label}</span>
             </div>
-          ))}
-        </div>
-      )}
+          </Fragment>
+        ))}
+      </div>
     </div>
   )
 }
