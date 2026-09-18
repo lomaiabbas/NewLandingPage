@@ -1,39 +1,9 @@
-.switcher {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-bottom: 20px;
-}
-
-.switchBtn {
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-  font-size: 12.5px;
-  font-weight: 700;
-  padding: 6px 16px;
-  border-radius: 999px;
-  cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-}
-
-.switchBtn:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.switchBtnActive,
-.switchBtnActive:hover {
-  background: #fff;
-  color: #2c7a54;
-  border-color: #fff;
-}
-
 /* ---------- 1a: icon circles on a glass panel over the brand gradient ---------- */
 .panelA {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  background: var(--hero-grad);
+  background: linear-gradient(90deg, #073b2e 0%, #0a5c46 55%, #0f6b4e 100%);
   padding: 30px 40px 28px;
   display: flex;
   justify-content: space-between;
@@ -98,64 +68,13 @@
   color: rgba(255, 255, 255, 0.75);
 }
 
-/* ---------- 1b: bold numbers, beige accents on a deep gradient card ---------- */
-.panelB {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  background: linear-gradient(160deg, #0f6b4e 0%, #0a5c46 70%, #084b3a 100%);
-  padding: 30px 40px 28px;
-  display: flex;
-  border-radius: 22px;
-  box-shadow: var(--shadow);
-}
-
-.itemB {
-  flex: 1;
-  min-width: 90px;
-  padding: 0 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  text-align: center;
-}
-
-.iconSvgB {
-  width: 22px;
-  height: 22px;
-}
-
-.numberB {
-  font-size: 40px;
-  font-weight: 800;
-  color: #fff;
-  direction: ltr;
-  unicode-bidi: isolate;
-}
-
-.labelB {
-  font-size: 16px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.underlineB {
-  width: 36px;
-  height: 3px;
-  background: #f5f3ec;
-  border-radius: 2px;
-  margin: 6px auto 0;
-}
-
 /* ---------- responsive ---------- */
 
 /* Below ~900px four stat columns cannot hold their numbers side by side. Wrapping the flex row
    left the 1px stretched dividers floating at the start of each new line, so switch to a
    2-up grid and drop the dividers entirely instead. */
 @media (max-width: 900px) {
-  .panelA,
-  .panelB {
+  .panelA {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 26px 8px;
@@ -166,8 +85,7 @@
     display: none;
   }
 
-  .itemA,
-  .itemB {
+  .itemA {
     min-width: 0;
     padding: 0 4px;
   }
@@ -176,20 +94,14 @@
     font-size: 30px;
   }
 
-  .numberB {
-    font-size: 32px;
-  }
-
-  .labelA,
-  .labelB {
+  .labelA {
     font-size: 14px;
     text-align: center;
   }
 }
 
 @media (max-width: 420px) {
-  .panelA,
-  .panelB {
+  .panelA {
     gap: 22px 6px;
     padding: 22px 12px 20px;
     border-radius: 18px;
@@ -204,12 +116,7 @@
     font-size: 26px;
   }
 
-  .numberB {
-    font-size: 28px;
-  }
-
-  .labelA,
-  .labelB {
+  .labelA {
     font-size: 12.5px;
     line-height: 1.35;
   }
@@ -220,7 +127,6 @@
 }
 
 /* long labels must be allowed to break instead of forcing the grid wider than the screen */
-.labelA,
-.labelB {
+.labelA {
   overflow-wrap: anywhere;
 }
