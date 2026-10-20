@@ -1,0 +1,7 @@
+/* The shared Tailwind .container utility caps at 1400px (see tailwind.config.ts), which left
+   it narrower than the navbar pill above it. Scoped to the landing page only (not the shared
+   .container used elsewhere in the app) so both share the exact same width ceiling as the
+   navbar (navbar/navbar.module.css). */
+.landingPage :global(.container) {
+  max-width: min(calc(100vw - 24px), 1200px);
+}

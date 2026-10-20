@@ -48,8 +48,8 @@
   gap: 15px;
   align-items: flex-start;
   color: var(--text);
-  background: var(--surface);
-  border: 1px solid var(--border);
+  background: transparent;
+  border: none;
   margin-bottom: 25px;
   padding: 22px;
   border-radius: 14px;

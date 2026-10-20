@@ -119,9 +119,34 @@ export default function Navbar({ lng }: { lng: string }) {
     return () => observer.disconnect()
   }, [])
 
+  useEffect(() => {
+    /* Loading the page with a section hash already in the URL (a refresh, or a shared/
+       bookmarked link) makes the browser jump to that section before the hero mockup,
+       stats counters and fonts finish loading and growing the page's height — so it lands
+       short, with the fixed nav overlapping a spot that isn't the section's real top. Redo
+       the jump once the page has actually settled. */
+    const hash = window.location.hash.slice(1)
+    if (!hash) return
+    const target = document.getElementById(hash)
+    if (!target) return
+
+    const settle = () => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => target.scrollIntoView({ behavior: 'auto', block: 'start' }))
+      })
+    }
+
+    if (document.readyState === 'complete') {
+      settle()
+      return
+    }
+    window.addEventListener('load', settle, { once: true })
+    return () => window.removeEventListener('load', settle)
+  }, [])
+
   return (
     <header
-      className={`${styles.headerLayout} z-50 ${isScrolled ? 'fixed' : 'absolute'}`}
+      className={`${styles.headerLayout} z-50 ${isScrolled ? styles.scrolled : ''}`}
     >
       <nav
         className={`${styles.nav} ${isScrolled ? styles.isScrolled : ''}`}
