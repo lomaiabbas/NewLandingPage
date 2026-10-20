@@ -109,82 +109,74 @@
   position: relative;
   isolation: isolate;
   width: 100%;
-  perspective: 1000px;
-  perspective-origin: 78% 38%;
-  max-width: 620px;
-  margin-inline-start: auto;
+  /* the mockup faces the viewer flat now, so it is centred in its column and kept
+     narrow enough to leave an even band of green on both sides */
+  max-width: 520px;
+  margin-inline: auto;
   margin-top: 0;
 }
 
 @media (min-width: 1200px){
   .demoMockup{
-    max-width: 760px;
-    /* leaves room for the 2% start offset so the glow is not clipped */
-    width: 98%;
-    margin-inline-start: 2%;
-    margin-top: 4.5rem;
+    max-width: 620px;
+    margin-top: 1.5rem;
   }
 }
 
 .demoFrame{
   position: relative;
-  border-radius: 22px;
+  border-radius: 18px;
   overflow: hidden;
   background: radial-gradient(circle at 50% 50%, #00c988 0%, #00a070 38%, #007852 68%, #004535 100%);
-  border: 1px solid rgba(255,255,255,.08);
-  transform: perspective(1400px) rotateX(1.47deg) rotateY(3.36deg) rotateZ(-0.42deg);
-  transform-origin: 92% 50%;
-  transform-style: preserve-3d;
-  box-shadow:
-    0px 0px 16px 4px rgba(168,230,207,.45),
-    0px 0px 34px 10px rgba(126,217,183,.3),
-    0 50px 100px -20px rgba(0,0,0,.55),
-    0 0 0 1px rgba(255,255,255,.06) inset;
-  transition: transform .7s cubic-bezier(.2,.7,.3,1), box-shadow .7s ease;
+  box-shadow: 0 34px 70px -28px rgba(0,0,0,.45);
+  transition: box-shadow .7s ease;
 }
 
 .demoFrame:hover{
-  transform: perspective(1400px) rotateX(1.26deg) rotateY(2.73deg) rotateZ(-0.336deg) scale(1.012);
-  box-shadow:
-    0px 0px 18px 5px rgba(168,230,207,.5),
-    0px 0px 38px 12px rgba(126,217,183,.35),
-    0 58px 115px -20px rgba(0,0,0,.58),
-    0 0 0 1px rgba(255,255,255,.06) inset;
+  box-shadow: 0 40px 80px -28px rgba(0,0,0,.5);
 }
 
-:global(html[dir='rtl']) .demoFrame{
-  transform-origin: 8% 50%;
-}
-
-:global(html[dir='rtl']) .demoMockup{
-  perspective-origin: 22% 38%;
-}
-
-.demoMockup::after{
-  content:'';
+/* the solid backdrop that replaces the old blurred glow: one flat band in the same mint
+   the glow used, riding along the dashboard's top edge only. The elliptical top radii
+   make it swell past the middle and taper back down at both ends, and the rest of its
+   height stays hidden behind the dashboard. */
+.demoBlob{
   position:absolute;
-  inset:-32% -38% -40% -38%;
-  background:
-    radial-gradient(48% 45% at 38% 52%, color-mix(in srgb, var(--accent-soft) 62%, white 12%) 0%, transparent 72%),
-    radial-gradient(52% 48% at 68% 42%, color-mix(in srgb, var(--primary-color) 55%, transparent) 0%, transparent 75%),
-    radial-gradient(70% 62% at 50% 58%, color-mix(in srgb, var(--accent-soft) 42%, transparent) 0%, transparent 80%);
-  /* the radial gradients underneath are already soft, so a 120px radius cost a lot of paint
-     for almost no visible difference */
-  filter: blur(60px);
-  z-index:-2;
+  /* physical sides on purpose: the band keeps the same silhouette in both writing
+     directions rather than flipping with the layout */
+  /* this one runs the opposite way to the bottom band: it starts 50px in from the
+     dashboard's end edge and runs out 20px short of the far end of that top edge */
+  right:50px;
+  left:20px;
+  top:-18px;
+  /* 18px clear the dashboard; the remaining 6px are the hidden base the taper runs
+     out against, so the band fades instead of ending on a hard edge */
+  height:24px;
+  background:#a8e6cf;
+  /* the short top-right radius lifts the band to full depth right after it starts,
+     and the long top-left one thins it out steadily to nothing at its end */
+  border-radius:86% 14% 0 0 / 100% 100% 0 0;
+  z-index:-1;
   pointer-events:none;
 }
 
-.floorShadow{
+/* the matching band under the dashboard's bottom edge, built as a pseudo-element so
+   it needs no extra markup. It starts 50px in from the start edge — the opposite side
+   to the top band — and tapers away 5px past the midpoint. */
+.demoMockup::after{
+  content:'';
   position:absolute;
-  left:2%;
-  right:2%;
-  bottom:-14%;
-  height:36%;
-  border-radius:50%;
-  background: radial-gradient(ellipse at center, rgba(0,0,0,.5), transparent 72%);
-  filter: blur(40px);
-  z-index:-3;
+  left:50px;
+  right:calc(50% - 5px);
+  bottom:-14px;
+  /* 14px show below the dashboard; the remaining 6px are the hidden base the taper
+     runs out against */
+  height:20px;
+  background:#a8e6cf;
+  /* the bottom-right radius spans the whole width, so the band thins out steadily
+     from its start to nothing at its end */
+  border-radius:0 0 86% 14% / 0 0 100% 100%;
+  z-index:-1;
   pointer-events:none;
 }
 
@@ -265,21 +257,24 @@
 @media (max-width: 991px){
   .demoMockup{
     margin-inline:auto;
-    max-width:100%;
-    perspective:none;
+    /* the backdrop shape needs a sliver of room on each side, which an
+       edge-to-edge mockup does not leave */
+    max-width:92%;
   }
-  .demoFrame{ transform:none; }
-  .demoFrame:hover{ transform:none; }
-  .floorShadow{ display:none; }
-  /* a 120px blur over a full-width box is the most expensive paint on the page and
-     is barely visible once the mockup is flat, so drop it on phones and tablets */
-  .demoMockup::after{ display:none; }
+  /* both bands scale with the smaller mockup so they stay hairline accents; the
+     bottom one also has to clear the 56px of padding the mockup carries below the
+     frame on this breakpoint */
+  .demoBlob{
+    top:-12px;
+    height:18px;
+  }
+  .demoMockup::after{
+    bottom:46px;
+    height:16px;
+  }
   .demoFrame{
     border-radius:16px;
-    box-shadow:
-      0 0 14px 3px rgba(168,230,207,.35),
-      0 24px 48px -18px rgba(0,0,0,.5),
-      0 0 0 1px rgba(255,255,255,.06) inset;
+    box-shadow:0 20px 44px -22px rgba(0,0,0,.45);
   }
   .demoIframeWrap{ border-radius:15px; }
   /* the fullscreen button hangs below the frame; hero padding alone isn't enough
@@ -297,7 +292,7 @@
 }
 
 @media (prefers-reduced-motion: reduce){
-  .demoFrame{ transform:none; transition:none; }
+  .demoFrame{ transition:none; }
 }
 
 .spin{

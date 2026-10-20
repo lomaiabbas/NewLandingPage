@@ -1,4 +1,9 @@
 .headerLayout {
+  /* always fixed, never gated behind the scroll-state JS: that state only attaches its
+     listener after hydration, and on a real deployment (slower JS/network than local dev)
+     the user can scroll before it attaches — leaving the header position:absolute, so it
+     scrolls away with the page instead of staying pinned, until the listener catches up. */
+  position: fixed;
   top: 34px;
   left: 50%;
   transform: translateX(-50%);
@@ -6,9 +11,20 @@
   max-width: calc(100vw - 24px);
   transition: top 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.headerLayout:global(.fixed) {
+.headerLayout.scrolled {
   top: 20px;
 }
+
+/* above the breakpoint where the full nav (links + CTA) shows, stretch the pill to the exact
+   same width ceiling the page's section containers use (see landing-page.module.css), so their
+   left/right edges line up exactly instead of the pill floating narrower than them */
+@media (min-width: 1101px) {
+  .headerLayout {
+    width: calc(100% - 24px);
+    max-width: min(calc(100vw - 24px), 1200px);
+  }
+}
+
 @media (max-width: 1100px) {
   .headerLayout {
     top: 12px;

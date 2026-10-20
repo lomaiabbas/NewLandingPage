@@ -123,7 +123,7 @@ export default function Hero({ lng }: { lng: string }) {
           </Col>
           <Col xs={24} lg={14} className='relative z-10 min-w-0'>
             <div className={styles.demoMockup} data-aos="fade-up" data-aos-delay="300">
-              <div className={styles.floorShadow} aria-hidden="true"></div>
+              <div className={styles.demoBlob} aria-hidden="true"></div>
               <div ref={frameRef} className={`${styles.demoFrame} ${isFullscreen ? styles.demoFrameFullscreen : ''}`}>
                 <div ref={demoWrapRef} className={styles.demoIframeWrap}>
                   <iframe

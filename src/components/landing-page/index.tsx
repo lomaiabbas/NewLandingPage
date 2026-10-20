@@ -9,11 +9,12 @@ import ContactUs from './contact-us';
 import Footer from './footer';
 import OurClients from './our-clients';
 import SocialProof from './social-proof';
+import styles from './landing-page.module.css';
 
 export default function LandingPage({lng}:{lng:string}) {
     return (
         <PublicLayout>
-            <div className='relative'>
+            <div className={`relative ${styles.landingPage}`}>
 
                 <Navbar lng={lng} />
                 <Hero lng={lng} />
