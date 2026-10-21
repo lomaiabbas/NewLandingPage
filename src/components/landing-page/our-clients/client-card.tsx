@@ -1,5 +1,6 @@
 import { ClientDto } from '@/lib/services/landing-page'
 import { twMerge } from 'tailwind-merge'
+import styles from './our-clients.module.css'
 
 interface ClientCardProps {
   client: ClientDto
@@ -7,19 +8,14 @@ interface ClientCardProps {
 }
 
 export default function ClientCard({ client, isLarge = false }: ClientCardProps) {
-  const accent = client.primaryColor || 'var(--primary-color)'
-
   const content = (
     <div
       className={twMerge(
         isLarge
           ? 'w-20 h-20 sm:w-[104px] sm:h-[104px] md:w-[140px] md:h-[140px] p-1.5'
           : 'w-[88px] h-[88px] max-md:w-16 max-md:h-16 max-sm:w-[56px] max-sm:h-[56px] p-1',
-        'rounded-full border bg-[var(--surface)] shadow-[var(--shadow)] backdrop-blur-md flex items-center justify-center transition-all duration-400 relative overflow-hidden group-hover:scale-105',
-        `border-[rgb(from_${accent}_r_g_b/0.12)]`,
-        `group-hover:border-[rgb(from_${accent}_r_g_b/0.35)]`,
-        `group-hover:shadow-[0_4px_24px_rgb(from_${accent}_r_g_b/0.15)]`,
-        `before:absolute before:inset-0 before:bg-[linear-gradient(135deg,rgb(from_${accent}_r_g_b/0.12),transparent_60%)] before:opacity-0 before:transition-opacity before:duration-300 before:rounded-full group-hover:before:opacity-100`
+        styles.logoRing,
+        'rounded-full shadow-[var(--shadow)] flex items-center justify-center transition-all duration-400 relative overflow-hidden group-hover:scale-105'
       )}
     >
       <img

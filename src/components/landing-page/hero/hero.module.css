@@ -47,6 +47,15 @@
   background:linear-gradient(135deg, #12c98a 0%, #0f6b4e 100%);
 }
 
+/* padding alone sized the hero to its content, so on taller screens it ended mid-viewport
+   and the next section's top padding showed through as an empty band; fill the screen instead */
+@media (min-width: 992px){
+  .hero{
+    min-height:100vh;
+    min-height:100svh;
+  }
+}
+
 .hero > :global(.container){
   width:100%;
 }
@@ -116,10 +125,11 @@
   margin-top: 0;
 }
 
-@media (min-width: 1200px){
+/* in the split layout a fixed cap left the dashboard floating small inside its column on wide
+   screens, so it fills the column out to the container edge and balances the copy opposite */
+@media (min-width: 992px){
   .demoMockup{
-    max-width: 620px;
-    margin-top: 1.5rem;
+    max-width: none;
   }
 }
 
@@ -148,10 +158,10 @@
      dashboard's end edge and runs out 20px short of the far end of that top edge */
   right:50px;
   left:20px;
-  top:-18px;
-  /* 18px clear the dashboard; the remaining 6px are the hidden base the taper runs
+  top:-13px;
+  /* 13px clear the dashboard; the remaining 6px are the hidden base the taper runs
      out against, so the band fades instead of ending on a hard edge */
-  height:24px;
+  height:19px;
   background:#a8e6cf;
   /* the short top-right radius lifts the band to full depth right after it starts,
      and the long top-left one thins it out steadily to nothing at its end */
@@ -265,8 +275,8 @@
      bottom one also has to clear the 56px of padding the mockup carries below the
      frame on this breakpoint */
   .demoBlob{
-    top:-12px;
-    height:18px;
+    top:-9px;
+    height:15px;
   }
   .demoMockup::after{
     bottom:46px;
