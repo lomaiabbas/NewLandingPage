@@ -8,7 +8,7 @@ export default async function Features({ lng }: { lng: string }) {
     const { t } = await getTranslation(lng);
 
     return (
-        <div className={`position-relative pt-[96px] pb-16 md:pt-[128px] md:pb-24 ${styles.bandSection}`} id="key-features">
+        <div className={`position-relative pt-10 pb-16 md:pt-14 md:pb-24 ${styles.bandSection}`} id="key-features">
 
             <div className="container">
                 <div>

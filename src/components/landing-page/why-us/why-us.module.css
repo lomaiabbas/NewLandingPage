@@ -242,22 +242,6 @@
   position: relative;
   padding-inline-start: 42px;
 }
-.steps::before{
-  content: '';
-  position: absolute;
-  inset-inline-start: 16px;
-  top: 8px;
-  bottom: 8px;
-  width: 2px;
-  border-radius: 2px;
-  background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.02),
-    rgba(255, 255, 255, 0.22) 12%,
-    rgba(255, 255, 255, 0.22) 88%,
-    rgba(255, 255, 255, 0.02)
-  );
-}
 
 .bgImg{
   position: absolute;
@@ -342,20 +326,26 @@
   outline-offset: 4px;
 }
 
-.stepsFill{
+/* one connector per gap, running from this marker's bottom edge to the next marker's top,
+   so the line never shows through the translucent circles */
+.step:not(:last-child)::after{
+  content: '';
   position: absolute;
-  inset-inline-start: 16px;
-  top: 8px;
+  inset-inline-start: -26px;
+  top: 37px;
+  bottom: 7px;
   width: 2px;
-  height: 0;
   border-radius: 2px;
+  background: rgba(255, 255, 255, 0.22);
+  transition: background 0.4s ease, box-shadow 0.4s ease;
+}
+.step.stepDone::after{
   background: linear-gradient(
     to bottom,
     var(--accent-soft),
     color-mix(in srgb, var(--accent-soft) 65%, white)
   );
   box-shadow: 0 0 10px color-mix(in srgb, var(--accent-soft) 65%, transparent);
-  transition: height 0.4s ease;
 }
 
 .stepNum{
@@ -508,9 +498,9 @@
   .steps{
     padding-inline-start: 34px;
   }
-  .steps::before,
-  .stepsFill{
-    inset-inline-start: 13px;
+  .step:not(:last-child)::after{
+    inset-inline-start: -21px;
+    top: 31px;
   }
   .stepNum{
     inset-inline-start: -34px;

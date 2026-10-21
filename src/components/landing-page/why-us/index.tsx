@@ -13,8 +13,6 @@ export default function WhyUs({ lng }: { lng: string }) {
   const [tabIndex, setTabIndex] = useState(0);
   const [stepIndex, setStepIndex] = useState(0);
 
-  const [fillHeight, setFillHeight] = useState(0);
-
   /* Tabs hold different amounts of copy, so the stage grew and shrank on every switch — very
      visible on mobile, where .stage drops its 560px min-height. Reserve the tallest measured
      step list instead of hard-coding a number that any translation change would invalidate. */
@@ -27,7 +25,6 @@ export default function WhyUs({ lng }: { lng: string }) {
   });
 
   const stepsRef = useRef<HTMLDivElement | null>(null);
-  const numRefs = useRef<Array<HTMLDivElement | null>>([]);
   const tabsRef = useRef<HTMLDivElement | null>(null);
   const tabBtnRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const lastImgRef = useRef<string | null>(null);
@@ -76,16 +73,6 @@ export default function WhyUs({ lng }: { lng: string }) {
     const img = new window.Image();
     img.src = next;
   }, [tabIndex, stepIndex, steps]);
-
-  useLayoutEffect(() => {
-    const container = stepsRef.current;
-    const numEl = numRefs.current[stepIndex];
-    if (!container || !numEl) return;
-
-    const containerTop = container.getBoundingClientRect().top;
-    const numRect = numEl.getBoundingClientRect();
-    setFillHeight(numRect.top - containerTop + numRect.height / 2 - 6);
-  }, [tabIndex, stepIndex]);
 
   useLayoutEffect(() => {
     const el = stepsRef.current;
@@ -226,8 +213,6 @@ export default function WhyUs({ lng }: { lng: string }) {
               style={stepsMinHeight ? { minHeight: stepsMinHeight } : undefined}
             >
               <div className={styles.steps} ref={stepsRef}>
-                <div className={styles.stepsFill} style={{ height: fillHeight }} />
-
                 {steps.map((step, i) => (
                   <div
                     key={step.titleKey}
@@ -249,12 +234,7 @@ export default function WhyUs({ lng }: { lng: string }) {
                       }
                     }}
                   >
-                    <div
-                      className={styles.stepNum}
-                      ref={(el) => {
-                        numRefs.current[i] = el;
-                      }}
-                    >
+                    <div className={styles.stepNum}>
                       {i < stepIndex ? (
                         <span className={styles.stepCheck}>
                           <Check size={16} strokeWidth={3} />
