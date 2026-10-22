@@ -32,12 +32,36 @@ export default function WhyUs({ lng }: { lng: string }) {
 
   const [isFullscreen, setIsFullscreen] = useState(false);
 
+  /* the walkthrough only advances on its own while someone could be watching it: it holds while
+     the pointer is over the stage or the stage is off screen, stops for good once the visitor
+     picks a step or tab themselves, and never starts for reduced-motion users */
+  const [isHovered, setIsHovered] = useState(false);
+  const [isInView, setIsInView] = useState(false);
+  const [userTookOver, setUserTookOver] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
+  const isAutoplaying = !isHovered && isInView && !userTookOver && !reducedMotion;
+
   const tab = WHY_US_TABS[tabIndex];
   const steps = tab.steps;
   const currentStep = steps[stepIndex];
   const hasImage = Boolean(currentStep?.img);
 
   useEffect(() => {
+    setReducedMotion(window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }, []);
+
+  useEffect(() => {
+    const el = stageRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(([entry]) => setIsInView(entry.isIntersecting), {
+      threshold: 0.25,
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!isAutoplaying) return;
     const isLastStep = stepIndex >= steps.length - 1;
 
     const timer = setTimeout(() => {
@@ -50,7 +74,7 @@ export default function WhyUs({ lng }: { lng: string }) {
     }, WHY_US_STEP_MS);
 
     return () => clearTimeout(timer);
-  }, [tabIndex, stepIndex, steps.length]);
+  }, [tabIndex, stepIndex, steps.length, isAutoplaying]);
 
   useEffect(() => {
     const url = currentStep?.img || null;
@@ -111,10 +135,12 @@ export default function WhyUs({ lng }: { lng: string }) {
   function selectTab(index: number) {
     setTabIndex(index);
     setStepIndex(0);
+    setUserTookOver(true);
   }
 
   function selectStep(index: number) {
     setStepIndex(index);
+    setUserTookOver(true);
   }
 
   function toggleFullscreen() {
@@ -151,6 +177,8 @@ export default function WhyUs({ lng }: { lng: string }) {
           data-aos="fade-up"
           data-aos-delay="200"
           ref={stageRef}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
         >
           <div
             className={`${styles.bgImg} ${bg.showA ? styles.show : ''}`}
@@ -192,10 +220,10 @@ export default function WhyUs({ lng }: { lng: string }) {
                     <ArrowRight size={14} />
                   </span>{' '}
                   {t(tabItem.labelKey)}
-                  {isActive && (
+                  {isActive && !userTookOver && !reducedMotion && (
                     <span
                       key={tabIndex}
-                      className={styles.tabProgress}
+                      className={`${styles.tabProgress} ${isAutoplaying ? '' : styles.tabProgressPaused}`}
                       style={{ '--dur': tabDuration } as CSSProperties}
                     />
                   )}
@@ -205,6 +233,18 @@ export default function WhyUs({ lng }: { lng: string }) {
           </div>
 
           <div className={styles.body}>
+            {/* below desktop the tint has to cover the backdrop for the copy to read, so the step's
+                screenshot gets its own card above the steps instead of disappearing */}
+            {currentStep?.img && (
+              <div className={styles.shot}>
+                <img
+                  key={currentStep.img}
+                  src={currentStep.img}
+                  alt={t(currentStep.titleKey)}
+                  className={styles.shotImg}
+                />
+              </div>
+            )}
             <div
               className={styles.panel}
               id={`why-us-panel-${tab.id}`}

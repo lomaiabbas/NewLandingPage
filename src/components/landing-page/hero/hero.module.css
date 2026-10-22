@@ -36,23 +36,39 @@
   left:-1px
 }
 
+/* the hero sits above the next section and draws the diagonal cut itself, on its background
+   layer, so the dashboard can hang down across the cut into the section below */
 .hero{
   position:relative;
+  z-index:1;
   isolation:isolate;
-  overflow:hidden;
+  /* only the sides are clipped: the dashboard and scroll hint may run past the bottom edge */
+  overflow-x:clip;
   display:flex;
   align-items:center;
   /* bottom padding leaves the scroll hint its own band below the mockup */
   padding:120px 0 130px;
-  background:linear-gradient(135deg, #12c98a 0%, #0f6b4e 100%);
 }
 
-/* padding alone sized the hero to its content, so on taller screens it ended mid-viewport
-   and the next section's top padding showed through as an empty band; fill the screen instead */
+.hero::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  background:var(--hero-grad);
+  /* the same line the next section's top follows, so the two meet edge to edge */
+  clip-path:polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - var(--hero-slant)));
+}
+
+/* sized to its content: a viewport-height floor left wide bands of empty green above and below,
+   which pulled the copy and dashboard away from the navbar. The top clears the 112px navbar plus
+   the corner the tilted backdrop lifts above the dashboard, with room to spare; the bottom clears
+   the next section's slant and the scroll hint. */
 @media (min-width: 992px){
   .hero{
-    min-height:100vh;
-    min-height:100svh;
+    /* the cut is at most --hero-slant above the hero's bottom, so this keeps the dashboard and
+       the corner its backdrop drops below it fully on the green, just above the cut */
+    padding:150px 0 calc(var(--hero-slant) + 24px);
   }
 }
 
@@ -75,7 +91,20 @@
     max-width:none;
     text-align:start;
     margin-inline:0;
-    padding-inline-end:clamp(1rem, 2.4vw, 2.5rem);
+  }
+}
+
+/* the copy column used to carry an inner end padding; it now gives up exactly that width
+   (the copy box stays the same size, so the headline still fits on one line) and the
+   dashboard column takes it */
+@media (min-width: 992px){
+  .hero :global(.ant-row) > .copyCol{
+    flex:0 0 calc(41.667% - clamp(1rem, 2.4vw, 2.5rem));
+    max-width:calc(41.667% - clamp(1rem, 2.4vw, 2.5rem));
+  }
+  .hero :global(.ant-row) > .demoCol{
+    flex:1 1 0;
+    max-width:none;
   }
 }
 
@@ -86,10 +115,12 @@
   text-wrap:balance;
 }
 
-/* --primary-color is the same green as the hero gradient, so the
-   highlighted word needs a pale tint to stay readable */
+/* --primary-color is the same green as the hero gradient, so the highlighted word needs a
+   lighter mint to stay readable; #d3ffee was so close to white the word didn't read as accented.
+   This one holds ~4.8:1 on --accent and >3.3:1 at the lightest point it can sit on, above the
+   3:1 minimum for headline-size text. */
 .heroHighlight{
-  color:#d3ffee;
+  color:#86f2c6;
 }
 
 .heroDesc{
@@ -104,13 +135,13 @@
 
 @media (max-width: 991px){
   .hero{
-    padding:108px 0 64px
+    padding:108px 0 calc(36px + var(--hero-slant))
   }
 }
 
 @media (max-width: 575px){
   .hero{
-    padding:95px 0 56px
+    padding:95px 0 calc(28px + var(--hero-slant))
   }
 }
 
@@ -129,7 +160,11 @@
    screens, so it fills the column out to the container edge and balances the copy opposite */
 @media (min-width: 992px){
   .demoMockup{
-    max-width: none;
+    /* on short screens the dashboard also gives way to the screen height, so the whole hero, the
+       cut and the scroll hint on the light band below it all fit the first screen. The height
+       left over after the hero's top padding, the cut and the hint, times the 16:10 frame ratio */
+    max-width: calc((100vh - 246px - var(--hero-slant) / 2) * 1.6);
+    max-width: calc((100svh - 246px - var(--hero-slant) / 2) * 1.6);
   }
 }
 
@@ -146,47 +181,17 @@
   box-shadow: 0 40px 80px -28px rgba(0,0,0,.5);
 }
 
-/* the solid backdrop that replaces the old blurred glow: one flat band in the same mint
-   the glow used, riding along the dashboard's top edge only. The elliptical top radii
-   make it swell past the middle and taper back down at both ends, and the rest of its
-   height stays hidden behind the dashboard. */
+/* a card tilted behind the dashboard: it matches the frame's height and rounding but
+   is pulled in from the sides, so only its rotated corners peek out above and below
+   the frame, in a mint gradient that sits on the green hero */
 .demoBlob{
   position:absolute;
-  /* physical sides on purpose: the band keeps the same silhouette in both writing
-     directions rather than flipping with the layout */
-  /* this one runs the opposite way to the bottom band: it starts 50px in from the
-     dashboard's end edge and runs out 20px short of the far end of that top edge */
-  right:50px;
-  left:20px;
-  top:-13px;
-  /* 13px clear the dashboard; the remaining 6px are the hidden base the taper runs
-     out against, so the band fades instead of ending on a hard edge */
-  height:19px;
-  background:#a8e6cf;
-  /* the short top-right radius lifts the band to full depth right after it starts,
-     and the long top-left one thins it out steadily to nothing at its end */
-  border-radius:86% 14% 0 0 / 100% 100% 0 0;
+  inset:0 6%;
   z-index:-1;
-  pointer-events:none;
-}
-
-/* the matching band under the dashboard's bottom edge, built as a pseudo-element so
-   it needs no extra markup. It starts 50px in from the start edge — the opposite side
-   to the top band — and tapers away 5px past the midpoint. */
-.demoMockup::after{
-  content:'';
-  position:absolute;
-  left:50px;
-  right:calc(50% - 5px);
-  bottom:-14px;
-  /* 14px show below the dashboard; the remaining 6px are the hidden base the taper
-     runs out against */
-  height:20px;
-  background:#a8e6cf;
-  /* the bottom-right radius spans the whole width, so the band thins out steadily
-     from its start to nothing at its end */
-  border-radius:0 0 86% 14% / 0 0 100% 100%;
-  z-index:-1;
+  border-radius:22px;
+  background:linear-gradient(135deg, #d3ffee, #8fdcbe);
+  transform:rotate(-3deg);
+  box-shadow:0 34px 80px rgba(0, 40, 28, .22);
   pointer-events:none;
 }
 
@@ -200,7 +205,7 @@
   position:absolute;
   top:0;
   left:0;
-  width:1600px;
+  width:1280px;
   height:800px;
   transform-origin:top left;
   border:0;
@@ -218,6 +223,22 @@
   border-radius: 0;
   transform: none;
   background: #F4F5F7;
+}
+
+/* the CSS stand-in for the Fullscreen API on iPhone. The AOS transform on the mockup would make it
+   the containing block of a fixed child, and the hero's z-index would keep it under the navbar,
+   so both are lifted while it is open. dvh tracks Safari's collapsing toolbars. */
+.demoFrame.demoFrameFullscreen{
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  height: 100dvh;
+}
+:global(body.demo-pseudo-fullscreen) .hero{
+  z-index: 2147483000;
+}
+:global(body.demo-pseudo-fullscreen) .demoMockup{
+  transform: none !important;
 }
 
 .demoFrame:fullscreen .demoIframeWrap,
@@ -249,7 +270,7 @@
 
 .demoFrame:fullscreen .fullscreenBtn,
 .demoFrame.demoFrameFullscreen .fullscreenBtn{
-  bottom: env(safe-area-inset-bottom, 18px);
+  bottom: max(18px, env(safe-area-inset-bottom, 18px));
   inset-inline-end: max(18px, env(safe-area-inset-right, 18px));
   width: 46px;
   height: 46px;
@@ -271,25 +292,15 @@
        edge-to-edge mockup does not leave */
     max-width:92%;
   }
-  /* both bands scale with the smaller mockup so they stay hairline accents; the
-     bottom one also has to clear the 56px of padding the mockup carries below the
-     frame on this breakpoint */
   .demoBlob{
-    top:-9px;
-    height:15px;
-  }
-  .demoMockup::after{
-    bottom:46px;
-    height:16px;
+    inset:0 4%;
+    border-radius:18px;
   }
   .demoFrame{
     border-radius:16px;
     box-shadow:0 20px 44px -22px rgba(0,0,0,.45);
   }
   .demoIframeWrap{ border-radius:15px; }
-  /* the fullscreen button hangs below the frame; hero padding alone isn't enough
-     room for it once it shrinks on mobile, and .hero clips the overflow */
-  .demoMockup{ padding-bottom:56px; }
 }
 
 /* the fullscreen toggle is the only way to read the demo on a phone, so give it a real tap target
@@ -361,11 +372,17 @@
 .mouse{
 	width: 30px;
 	height: 50px;
-	border: 2px solid #fff;
+	/* it can land on the green hero or the light band below it, so a pale fill keeps the
+	   dark green outline readable on both */
+	border: 2px solid #0f6b4e;
 	border-radius: 50px;
+	background: #d3ece0;
 	position: absolute;
   left: 50%;
-  bottom: 16px;
+  /* sits on the light band just under the diagonal cut, which crosses the centre half its depth
+     above the hero's bottom: the highest spot that keeps it off the green, so it shows on load
+     on as many screens as possible. The navbar hides it once the page scrolls */
+  top: calc(100% - var(--hero-slant) / 2 + 14px);
   z-index: 9;
   transform: translateX(-50%);
 }
@@ -377,16 +394,17 @@
 		top: 10px;
 		left: 50%;
 		transform: translateX(-50%);
-		background-color: #fff;
+		background-color: #0f6b4e;
 		border-radius: 50%;
 		opacity: 1;
 		animation: wheel 2s infinite;
 		-webkit-animation: wheel 2s infinite;
 	}
 
+  /* !important: the navbar's scroll handler toggles an inline display on this element */
   @media(max-width:600px) {
     .mouse{
-      display:none;
+      display:none !important;
     }
   }
 @keyframes wheel {

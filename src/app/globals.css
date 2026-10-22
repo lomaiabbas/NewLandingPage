@@ -21,7 +21,9 @@
   --border: rgba(24, 38, 32, 0.12);
   --on-accent: #ffffff;
 
-  --hero-grad: linear-gradient(135deg, #12c98a 0%, #0f6b4e 55%, #0a5c46 100%);
+  /* the far corner was #0a5c46, which read as heavy; it now settles just past --accent. The mid
+     stop moved in from 55% so the copy that sits over the second half keeps >= 6.5:1 with white */
+  --hero-grad: linear-gradient(135deg, #12c98a 0%, #108760 10%, #0f6b4e 45%, #0d6449 100%);
 
   --shadow: 0 18px 40px -24px rgba(11, 46, 36, 0.35);
 
@@ -37,6 +39,13 @@
 @media (min-width: 768px) {
   :root {
     --h2-fs: 32px;
+  }
+}
+
+/* section titles read small against full-width desktop sections at 32px */
+@media (min-width: 1024px) {
+  :root {
+    --h2-fs: 38px;
   }
 }
 
@@ -589,11 +598,13 @@ html[dir='ltr'] .landing-drawer {
   border-bottom: 1px solid rgba(233, 228, 217, 0.18) !important;
 }
 
+/* white fields with a firmer edge: --surface-2 sat within a shade of the --band section
+   background, so the fields' outlines all but disappeared */
 .contact-form input,
 .contact-form textarea,
 .contact-form .ant-select-selector {
-  background: var(--surface-2) !important;
-  border-color: var(--border) !important;
+  background: var(--surface) !important;
+  border-color: rgba(24, 38, 32, 0.18) !important;
   color: var(--text) !important;
 }
 
@@ -2127,4 +2138,9 @@ html[dir='ltr'] .coming-soon-ribbon.details div div span {
   width: 45px !important;
   height: 45px !important;
   opacity: 0.5 !important;
+}
+
+/* locks the page behind the hero demo's CSS fullscreen on iPhone (see hero.module.css) */
+body.demo-pseudo-fullscreen {
+  overflow: hidden;
 }

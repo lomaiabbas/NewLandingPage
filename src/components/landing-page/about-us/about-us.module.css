@@ -2,8 +2,8 @@
   position: relative;
   isolation: isolate;
   background: var(--hero-grad);
-  margin-top: -32px;
-  clip-path: polygon(0 0, 100% 32px, 100% 100%, 0 100%);
+  margin-top: calc(-1 * var(--section-slant));
+  clip-path: polygon(0 0, 100% var(--section-slant), 100% 100%, 0 100%);
 }
 
 .titleArea{

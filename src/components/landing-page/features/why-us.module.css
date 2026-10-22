@@ -1,7 +1,14 @@
 .bandSection{
+  /* this band sits directly under the hero, so it takes the deeper hero cut */
+  --section-slant: var(--hero-slant);
   position: relative;
   isolation: isolate;
   background: var(--band);
+  margin-top: calc(-1 * var(--section-slant));
+  /* the hero's scroll hint hangs into the top of this band, just under the cut, so the title
+     starts below it */
+  padding-top: calc(var(--section-slant) + 40px);
+  clip-path: polygon(0 0, 100% var(--section-slant), 100% 100%, 0 100%);
 }
 
 .titleArea{
@@ -50,10 +57,10 @@
   color: var(--text);
   background: transparent;
   border: none;
-  margin-bottom: 25px;
+  margin-bottom: 16px;
   padding: 22px;
   border-radius: 14px;
-  min-height: 150px;
+  /* no fixed floor: the copy is ~60px tall, so a 150px minimum left each card mostly empty */
   transition: transform .2s ease, border-color .2s ease;
 }
 
@@ -86,6 +93,13 @@
   color: var(--muted);
 }
 
+@media (min-width: 992px){
+  .featureCard .boxTextOneLine{
+    white-space: nowrap;
+    font-size: 14px;
+  }
+}
+
 .featureCard .boxIcon{
   min-width:70px;
   height:130px;
@@ -113,9 +127,7 @@
     margin-bottom: 40px;
   }
 
-  /* the fixed 150px floor left a lot of dead space once the cards go full width */
   .featureCard{
-    min-height: 0;
     padding: 18px;
     gap: 12px;
     margin-bottom: 16px;

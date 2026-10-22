@@ -8,7 +8,7 @@ export default async function Features({ lng }: { lng: string }) {
     const { t } = await getTranslation(lng);
 
     return (
-        <div className={`position-relative pt-10 pb-16 md:pt-14 md:pb-24 ${styles.bandSection}`} id="key-features">
+        <div className={`position-relative pb-16 md:pb-24 ${styles.bandSection}`} id="key-features">
 
             <div className="container">
                 <div>
@@ -20,7 +20,7 @@ export default async function Features({ lng }: { lng: string }) {
                         </div>
                     </div>
                 </div>
-                <Row gutter={20} className='mx-0' justify="center" align="middle">
+                <Row gutter={20} className='mx-0' justify="center" align="top">
                     <Col xs={24} md={12} lg={8}>
                         <div className={styles.featureCard} data-aos="fade-up" data-aos-delay="200">
                             <div>
@@ -64,7 +64,7 @@ export default async function Features({ lng }: { lng: string }) {
                             </div>
                             <div className='flex flex-col gap-2 text-start'>
                                 <h3 className={styles.boxTitle}>{t("KeyFeature04Title")}</h3>
-                                <p className={styles.boxText}>{t("KeyFeature04Desc")}</p>
+                                <p className={`${styles.boxText} ${styles.boxTextOneLine}`}>{t("KeyFeature04Desc")}</p>
                             </div>
                             
                         </div>

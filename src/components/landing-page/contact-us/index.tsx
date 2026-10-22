@@ -59,9 +59,10 @@ export default function ContactUs({ lng }: { lng: string }) {
         </div>
       </div>
 
-      <div className="container relative my-12 md:my-24">
+      <div className="container relative mt-10 md:mt-14 mb-12 md:mb-0">
         <Row gutter={[24, 40]}>
-          <Col xs={24} md={8}>
+          {/* on phones the form comes first; the address block would otherwise push it a screen down */}
+          <Col xs={{ span: 24, order: 2 }} md={{ span: 8, order: 1 }}>
             <div>
               <div className="flex flex-col gap-2 mb-6 border-b-2 border-gray-500 w-fit pb-3 text-start">
                 <h3 className="text-lg mb-2" data-aos="fade-up" data-aos-delay="400">
@@ -90,7 +91,7 @@ export default function ContactUs({ lng }: { lng: string }) {
               </div>
             </div>
           </Col>
-          <Col xs={24} md={16}>
+          <Col xs={{ span: 24, order: 1 }} md={{ span: 16, order: 2 }}>
             <div>
               <form
                 action=""
@@ -204,7 +205,7 @@ export default function ContactUs({ lng }: { lng: string }) {
                     ></Input.TextArea>
                     {errors.content && <span className="error-msg">{errors.content}</span>}
                   </Col>
-                  <Col xs={24}>
+                  <Col xs={24} className="text-start">
                     <button className={styles.btn}>{t('SendYourMassage')}</button>
                   </Col>
                 </Row>
