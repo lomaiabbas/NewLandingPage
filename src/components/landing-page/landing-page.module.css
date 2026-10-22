@@ -17,16 +17,22 @@
   --hero-slant: clamp(48px, 6vw, 115px);
 }
 
-/* The layout is designed around a ~1440px laptop screen with a 1200px content column. On larger
-   screens that column left wide empty bands on both sides (a third of the width on 4K), so the
-   whole page is scaled up instead, keeping the same proportions as on a laptop. Starts above
-   1536px so a 1920 laptop at Windows' 125% scaling keeps its native size. */
-@media (min-width: 1680px) { .landingPage { zoom: 1.15; } }
-@media (min-width: 1880px) { .landingPage { zoom: 1.25; } }
-@media (min-width: 2200px) { .landingPage { zoom: 1.45; } }
-@media (min-width: 2500px) { .landingPage { zoom: 1.65; } }
-@media (min-width: 3000px) { .landingPage { zoom: 2; } }
-@media (min-width: 3600px) { .landingPage { zoom: 2.45; } }
+/* below the split layout the dashboard spans the width, so at 6vw the cut would only nick its
+   corner; a steeper one runs clearly across its lower part, as on desktop */
+@media (max-width: 991px) {
+  .landingPage {
+    --hero-slant: clamp(64px, 16vw, 120px);
+  }
+}
+
+/* The layout is designed around a 1366px laptop screen with a 1200px content column. On larger
+   screens that column left wide empty bands on every side (two thirds of the width on 4K), so the
+   whole page is scaled up by the screen's ratio to that laptop instead, keeping the same margins
+   left, right, above and below. --landing-zoom is set before first paint by the inline script in
+   index.tsx. */
+.landingPage {
+  zoom: var(--landing-zoom, 1);
+}
 
 /* a fullscreen demo sizes itself to the real screen, which the zoom would throw off */
 .landingPage:has(:fullscreen) {

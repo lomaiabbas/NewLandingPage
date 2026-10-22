@@ -156,6 +156,7 @@
 
 .navLinks {
   flex: 1;
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -181,9 +182,44 @@
   color: #0b2e24;
   background: rgba(7, 198, 146, 0.1);
 }
+/* the sliding indicator already marks the active link, so no hover tint on top of it; and the
+   weight stays the same as the other links — bolding it would reflow its neighbours mid-slide */
 .navLink[aria-current='page'] {
   color: #0b2e24;
-  font-weight: 700;
+  background: transparent;
+}
+
+/* an underline that glides between links: transform + width only, so it never triggers layout.
+   The box spans the whole link; the line itself is inset by the link's horizontal padding so it
+   sits under the label text only. */
+.navIndicator {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 38px;
+  margin-top: -19px;
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    width 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.2s ease;
+}
+.navIndicator[data-visible='true'] {
+  opacity: 1;
+}
+.navIndicator[data-instant='true'] {
+  transition: opacity 0.2s ease;
+}
+.navIndicator::after {
+  content: '';
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 2px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--primary-color, #07c692);
 }
 .langLink {
   margin-inline-start: 6px;
@@ -282,6 +318,7 @@
   .headerLayout,
   .nav,
   .navLink,
+  .navIndicator,
   .navCta {
     transition: none !important;
   }

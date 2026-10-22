@@ -25,6 +25,9 @@ export default function Hero({ lng }: { lng: string }) {
     AOS.init({
       duration: 1000,
       easing: 'ease-in-out',
+      // the default 120px left the next section's heading hidden when it sat at the very bottom
+      // of the first screen, which read as an empty band under the scroll hint
+      offset: 20,
     });
   }, []);
 

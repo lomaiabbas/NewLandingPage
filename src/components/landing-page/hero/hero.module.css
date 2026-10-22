@@ -66,9 +66,9 @@
    the next section's slant and the scroll hint. */
 @media (min-width: 992px){
   .hero{
-    /* the cut is at most --hero-slant above the hero's bottom, so this keeps the dashboard and
-       the corner its backdrop drops below it fully on the green, just above the cut */
-    padding:150px 0 calc(var(--hero-slant) + 24px);
+    /* a short bottom, well under the cut's depth, so the cut runs across the lower part of the
+       dashboard and the corner its backdrop drops shows on the light band below */
+    padding:180px 0 40px;
   }
 }
 
@@ -133,15 +133,17 @@
   }
 }
 
+/* as on desktop, the bottom stays well under the cut's depth so the cut runs across the
+   dashboard's lower part */
 @media (max-width: 991px){
   .hero{
-    padding:108px 0 calc(36px + var(--hero-slant))
+    padding:108px 0 40px
   }
 }
 
 @media (max-width: 575px){
   .hero{
-    padding:95px 0 calc(28px + var(--hero-slant))
+    padding:95px 0 20px
   }
 }
 
@@ -161,10 +163,10 @@
 @media (min-width: 992px){
   .demoMockup{
     /* on short screens the dashboard also gives way to the screen height, so the whole hero, the
-       cut and the scroll hint on the light band below it all fit the first screen. The height
-       left over after the hero's top padding, the cut and the hint, times the 16:10 frame ratio */
-    max-width: calc((100vh - 246px - var(--hero-slant) / 2) * 1.6);
-    max-width: calc((100svh - 246px - var(--hero-slant) / 2) * 1.6);
+       cut and the scroll hint just under the dashboard all fit the first screen. The height left
+       over after the hero's top padding and the hint, times the 16:10 frame ratio */
+    max-width: calc((100vh - 258px) * 1.6);
+    max-width: calc((100svh - 258px) * 1.6);
   }
 }
 
@@ -183,13 +185,15 @@
 
 /* a card tilted behind the dashboard: it matches the frame's height and rounding but
    is pulled in from the sides, so only its rotated corners peek out above and below
-   the frame, in a mint gradient that sits on the green hero */
+   the frame. The top corner sits on the dark green and the bottom one on the light band
+   below the cut. One solid green sits midway in lightness between the two, a shade under the
+   brand green, so it holds about the same contrast (~2.3:1) against both */
 .demoBlob{
   position:absolute;
   inset:0 6%;
   z-index:-1;
   border-radius:22px;
-  background:linear-gradient(135deg, #d3ffee, #8fdcbe);
+  background:#0fae7e;
   transform:rotate(-3deg);
   box-shadow:0 34px 80px rgba(0, 40, 28, .22);
   pointer-events:none;
@@ -385,6 +389,14 @@
   top: calc(100% - var(--hero-slant) / 2 + 14px);
   z-index: 9;
   transform: translateX(-50%);
+}
+
+/* the dashboard hangs across the cut and covers the centre, so the hint sits just under the
+   dashboard (which ends 40px above the hero's bottom), already past the cut. Phones hide it. */
+@media (min-width: 601px){
+  .mouse{
+    top: calc(100% - 20px);
+  }
 }
 .mouse::before {
 		content: '';

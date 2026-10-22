@@ -7,7 +7,7 @@
   margin-top: calc(-1 * var(--section-slant));
   /* the hero's scroll hint hangs into the top of this band, just under the cut, so the title
      starts below it */
-  padding-top: calc(var(--section-slant) + 40px);
+  padding-top: calc(var(--section-slant) + 64px);
   clip-path: polygon(0 0, 100% var(--section-slant), 100% 100%, 0 100%);
 }
 
