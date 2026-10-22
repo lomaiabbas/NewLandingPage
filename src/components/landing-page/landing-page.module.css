@@ -5,3 +5,30 @@
 .landingPage :global(.container) {
   max-width: min(calc(100vw - 24px), 1200px);
 }
+
+/* depth of the diagonal cut at the top of each band section; one value so every
+   divider on the page shares the same angle. Scales with width so phones stay gentle. */
+.landingPage {
+  /* gentler than the earlier clamp(40px, 5vw, 72px): six identical steep cuts in a row made
+     the page feel templated */
+  --section-slant: clamp(28px, 3.5vw, 52px);
+  /* the cut under the hero alone runs deeper, so the step from the green hero into the
+     page reads clearly while the dividers further down stay gentle */
+  --hero-slant: clamp(48px, 6vw, 115px);
+}
+
+/* The layout is designed around a ~1440px laptop screen with a 1200px content column. On larger
+   screens that column left wide empty bands on both sides (a third of the width on 4K), so the
+   whole page is scaled up instead, keeping the same proportions as on a laptop. Starts above
+   1536px so a 1920 laptop at Windows' 125% scaling keeps its native size. */
+@media (min-width: 1680px) { .landingPage { zoom: 1.15; } }
+@media (min-width: 1880px) { .landingPage { zoom: 1.25; } }
+@media (min-width: 2200px) { .landingPage { zoom: 1.45; } }
+@media (min-width: 2500px) { .landingPage { zoom: 1.65; } }
+@media (min-width: 3000px) { .landingPage { zoom: 2; } }
+@media (min-width: 3600px) { .landingPage { zoom: 2.45; } }
+
+/* a fullscreen demo sizes itself to the real screen, which the zoom would throw off */
+.landingPage:has(:fullscreen) {
+  zoom: 1 !important;
+}

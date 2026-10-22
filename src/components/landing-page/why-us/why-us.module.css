@@ -2,8 +2,8 @@
   position: relative;
   isolation: isolate;
   background: var(--band);
-  margin-top: -32px;
-  clip-path: polygon(0 0, 100% 32px, 100% 100%, 0 100%);
+  margin-top: calc(-1 * var(--section-slant));
+  clip-path: polygon(0 0, 100% var(--section-slant), 100% 100%, 0 100%);
 }
 
 .titleArea{
@@ -48,7 +48,13 @@
 .stage{
   position: relative;
   isolation: isolate;
-  background: var(--hero-grad);
+  /* what shows before a step's screenshot has loaded (the tint leaves its far side clear): the
+     same deep tone as the no-image state, so it reads as intentional rather than an empty box */
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--accent-2) 96%, black) 0%,
+    color-mix(in srgb, var(--accent-2) 88%, var(--accent)) 100%
+  );
   border-radius: 20px;
   padding: 38px;
   min-height: 560px;
@@ -68,10 +74,35 @@
   pointer-events: none;
 }
 
+/* desktop: the step screenshots are 16:9, so match them instead of cropping ~15-28% of their
+   height under a 2:1 box, and centre the steps in the space under the tabs */
+@media (min-width: 992px){
+  .stage{
+    aspect-ratio: 16 / 9;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .body{
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+  .panel{
+    width: 100%;
+  }
+}
+
+/* below desktop the tint hides the screenshot, so a fixed height only adds an empty band */
+@media (max-width: 991px){
+  .stage{
+    min-height: 0;
+  }
+}
+
 @media (max-width: 760px){
   .stage{
     padding: 24px;
-    min-height: 0;
   }
 }
 
@@ -221,6 +252,10 @@
   background: #fff;
   animation: whyUsFill var(--dur, 5s) linear forwards;
 }
+/* held while the walkthrough is paused (hovered or scrolled away) */
+.tabProgressPaused::after{
+  animation-play-state: paused;
+}
 @keyframes whyUsFill{
   from{ width: 0%; }
   to{ width: 100%; }
@@ -258,15 +293,17 @@
   opacity: 1;
 }
 
+/* desktop: the copy sits in the first ~39% of the stage, so the tint fades out right after it and
+   leaves the screenshot — the point of this section — clear instead of dimmed across the middle */
 .bgTint{
   position: absolute;
   inset: 0;
   background: linear-gradient(
     100deg,
     color-mix(in srgb, var(--accent-2) 78%, black) 0%,
-    color-mix(in srgb, var(--accent-2) 55%, transparent) 42%,
-    color-mix(in srgb, var(--accent-2) 15%, transparent) 68%,
-    transparent 100%
+    color-mix(in srgb, var(--accent-2) 55%, transparent) 34%,
+    color-mix(in srgb, var(--accent-2) 12%, transparent) 50%,
+    transparent 66%
   );
   transition: background 0.5s ease;
   z-index: 1;
@@ -275,9 +312,9 @@
   background: linear-gradient(
     260deg,
     color-mix(in srgb, var(--accent-2) 78%, black) 0%,
-    color-mix(in srgb, var(--accent-2) 55%, transparent) 42%,
-    color-mix(in srgb, var(--accent-2) 15%, transparent) 68%,
-    transparent 100%
+    color-mix(in srgb, var(--accent-2) 55%, transparent) 34%,
+    color-mix(in srgb, var(--accent-2) 12%, transparent) 50%,
+    transparent 66%
   );
 }
 
@@ -556,5 +593,50 @@
     inset-inline-start: 10px;
     inset-inline-end: 10px;
     bottom: 5px;
+  }
+}
+
+/* ---------- step screenshot card (below desktop) ---------- */
+
+.shot{
+  display: none;
+}
+
+@media (max-width: 991px){
+  /* the backdrop sits under a near-opaque tint at this size, so it adds nothing but download weight;
+     the screenshot moves into a card above the steps instead */
+  .bgImg{
+    display: none;
+  }
+
+  .shot{
+    display: block;
+    position: relative;
+    aspect-ratio: 16 / 9;
+    margin-bottom: 24px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 14px 30px -18px rgba(0, 0, 0, 0.6);
+  }
+
+  .shotImg{
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    animation: whyUsShotIn 0.4s ease;
+  }
+}
+
+@keyframes whyUsShotIn{
+  from{ opacity: 0; }
+  to{ opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .shotImg{
+    animation: none;
   }
 }

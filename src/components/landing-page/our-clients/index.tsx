@@ -90,7 +90,6 @@ export default async function OurClients({ lng }: { lng: string }) {
       )}
 
       <StatsBar
-        clientCount={clients.length}
         labels={{
           support: t('Support'),
           companies: t('ActiveCompanies'),

@@ -32,7 +32,7 @@ export default async function AboutUs({ lng }: { lng: string }) {
               <p className={`${styles.secText} text-start`} data-aos="fade-up" data-aos-delay="400">{t("AboutUsDesc")}</p>
             </div>
           </Col>
-          <Col xs={24} lg={8} data-aos="fade-up" data-aos-delay="600">
+          <Col xs={24} lg={10} data-aos="fade-up" data-aos-delay="600">
             <Collapse items={items} accordion className="custom-accordion text-start" defaultActiveKey={['1']} />
           </Col>
         </Row>

@@ -3,7 +3,8 @@
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  background: linear-gradient(90deg, #073b2e 0%, #0a5c46 55%, #0f6b4e 100%);
+  /* still a step darker than the section behind it so the panel separates, without the near-black start */
+  background: linear-gradient(90deg, #0a4f3c 0%, #0d5d47 55%, #0f6b4e 100%);
   padding: 16px 40px;
   display: flex;
   justify-content: space-between;

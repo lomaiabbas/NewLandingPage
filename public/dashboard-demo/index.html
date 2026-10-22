@@ -52,6 +52,8 @@
 
 *{box-sizing:border-box}
 html,body{height:100%}
+/* iOS Safari inflates text in landscape, which overflowed the fixed 1280×800 demo frame */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 body{
   margin:0;
   font-family:'Cairo',system-ui,-apple-system,'Segoe UI',sans-serif;
@@ -1021,7 +1023,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
     <div class="content" id="content">
 
       <!-- ============ شاشة: التحليلات ============ -->
-      <section class="screen active" data-screen="analytics">
+      <section class="screen" data-screen="analytics">
         <div class="grid" style="gap:14px">
 
           <!-- إحصائيات عامة -->
@@ -1060,7 +1062,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
       </section>
 
       <!-- ============ شاشة: المحادثات ============ -->
-      <section class="screen" data-screen="chats">
+      <section class="screen active" data-screen="chats">
         <div class="chat-shell">
 
           <div class="chat-list-col">
@@ -1770,9 +1772,9 @@ function go(el){
   document.getElementById('content').scrollTop = 0;
 }
 
-/* تفعيل التاب الافتراضي عند الفتح — بدون فتح أي مجموعة */
-const first = sbNav.querySelector('[data-screen="analytics"]');
-if(first){ first.classList.add('active'); }
+/* تفعيل التاب الافتراضي عند الفتح — المحادثات أول ما يشوفه الزائر لأنها أسهل شاشة يتعرّف عليها */
+const first = sbNav.querySelector('[data-screen="chats"]');
+if(first){ go(first); }
 
 sbNav.addEventListener('click', e=>{
   const groupBtn = e.target.closest('[data-group]');
@@ -2598,10 +2600,11 @@ document.getElementById('detBack').addEventListener('click', ()=> showScreen('se
   const ICON_PAUSE = '<path d="M7 4h4v16H7zM13 4h4v16h-4z"/>';
 
   /* ---------- مسار العرض ---------- */
+  /* يبدأ وينتهي بالمحادثات وتاخذ أطول وقت — هي أول ما يشوفه الزائر في الصفحة الرئيسية */
   const TOUR = [
+    { t:'المحادثات',                 nav:'chats',          hold:1800 },
+    { t:'فتح محادثة عميل',           click:'.chat-item:nth-child(3)', hold:2600 },
     { t:'لوحة التحليلات',            nav:'analytics',      hold:1500 },
-    { t:'المحادثات',                 nav:'chats',          hold:1100 },
-    { t:'فتح محادثة عميل',           click:'.chat-item:nth-child(3)', hold:1300 },
     { t:'مكتبة القوالب',             nav:'templates',      hold:1300 },
     { t:'تصفّح أنواع القوالب',       scroll:760,           hold:1300 },
     { t:'العودة لأعلى القائمة',      scroll:0,             hold:600 },
@@ -2614,7 +2617,7 @@ document.getElementById('detBack').addEventListener('click', ()=> showScreen('se
     { t:'تاب المدعوّين',             pre:()=>content.scrollTo({top:0,behavior:'smooth'}),
                                      clickText:['#detTabs button, #detTabs .dtab','المدع'], hold:1700 },
     { t:'المناسبات',                 nav:'events',         hold:1500 },
-    { t:'العودة للتحليلات',          nav:'analytics',      hold:900 },
+    { t:'العودة للمحادثات',          nav:'chats',          hold:900 },
   ];
 
   let idx = 0, playing = false, timer = null, abort = false;

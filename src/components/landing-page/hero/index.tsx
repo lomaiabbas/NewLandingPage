@@ -7,13 +7,12 @@ import React, { useEffect, useRef, useState } from 'react'
 import styles from './hero.module.css';
 import AOS from 'aos';
 
-const DEMO_DESIGN_WIDTH = 1600;
+/* 16:10 rather than 2:1 — the wide strip rendered the dashboard as a short band at ~0.42 scale,
+   leaving its text unreadable and most of the hero empty. 1280 rather than 1440 wide so the same
+   frame shows the UI ~12% larger; the demo's own breakpoints start at 1250px, so its desktop
+   layout is unchanged. Keep the iframe size in hero.module.css in sync. */
+const DEMO_DESIGN_WIDTH = 1280;
 const DEMO_DESIGN_HEIGHT = 800;
-/* Fitting all 1600px into a phone leaves the dashboard at ~0.22 scale — an unreadable smudge.
-   Below this width we zoom into the top-start corner instead and crop to a 4:3-ish window. */
-const DEMO_CROP_MAX_WIDTH = 768;
-const DEMO_CROP_VIEWPORT = 900;
-const DEMO_CROP_RATIO = 0.78;
 
 export default function Hero({ lng }: { lng: string }) {
   const { t } = getClientTranslation(lng);
@@ -45,22 +44,13 @@ export default function Hero({ lng }: { lng: string }) {
         return;
       }
 
-      // narrow screens: map a 900px slice of the design onto the frame so type stays legible,
-      // and crop the height rather than letter-boxing the rest of the dashboard
-      const isCropped = window.innerWidth <= DEMO_CROP_MAX_WIDTH;
-      const sourceWidth = isCropped ? DEMO_CROP_VIEWPORT : DEMO_DESIGN_WIDTH;
-      const scale = width / sourceWidth;
-
-      // in RTL the dashboard chrome lives on the right, so anchor the crop to that edge instead
-      const isRtl = document.documentElement.dir === 'rtl';
-      const offsetX = isCropped && isRtl ? -(DEMO_DESIGN_WIDTH - sourceWidth) * scale : 0;
-
+      // the whole dashboard is shown at every width — on phones it is small, and the
+      // fullscreen button is there for a closer look
+      const scale = width / DEMO_DESIGN_WIDTH;
       iframe.style.transform = `scale(${scale})`;
-      iframe.style.left = `${offsetX}px`;
+      iframe.style.left = '0px';
       iframe.style.top = '0px';
-      wrap.style.height = isCropped
-        ? `${width * DEMO_CROP_RATIO}px`
-        : `${DEMO_DESIGN_HEIGHT * scale}px`;
+      wrap.style.height = `${DEMO_DESIGN_HEIGHT * scale}px`;
     };
 
     const rect = wrap.getBoundingClientRect();
@@ -86,11 +76,29 @@ export default function Hero({ lng }: { lng: string }) {
     };
   }, []);
 
+  // iPhone Safari has no Fullscreen API for anything but <video>, so there the frame is
+  // pinned over the page with CSS instead; the body class lifts the hero above the navbar
+  const isNativeFullscreen = () =>
+    !!(document.fullscreenElement || (document as any).webkitFullscreenElement);
+
+  useEffect(() => {
+    if (!isFullscreen || isNativeFullscreen()) return;
+    document.body.classList.add('demo-pseudo-fullscreen');
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsFullscreen(false);
+    };
+    document.addEventListener('keydown', handleKey);
+    return () => {
+      document.body.classList.remove('demo-pseudo-fullscreen');
+      document.removeEventListener('keydown', handleKey);
+    };
+  }, [isFullscreen]);
+
   const handleFullscreen = () => {
     const frame = frameRef.current as any;
     if (!frame) return;
 
-    if (document.fullscreenElement || (document as any).webkitFullscreenElement) {
+    if (isNativeFullscreen()) {
       if (document.exitFullscreen) {
         document.exitFullscreen();
       } else if ((document as any).webkitExitFullscreen) {
@@ -99,10 +107,18 @@ export default function Hero({ lng }: { lng: string }) {
       return;
     }
 
-    if (frame.requestFullscreen) {
-      frame.requestFullscreen();
-    } else if (frame.webkitRequestFullscreen) {
+    if (isFullscreen) {
+      setIsFullscreen(false);
+      return;
+    }
+
+    const canFullscreen = document.fullscreenEnabled || (document as any).webkitFullscreenEnabled;
+    if (canFullscreen && frame.requestFullscreen) {
+      frame.requestFullscreen().catch(() => setIsFullscreen(true));
+    } else if (canFullscreen && frame.webkitRequestFullscreen) {
       frame.webkitRequestFullscreen();
+    } else {
+      setIsFullscreen(true);
     }
   };
 
@@ -110,8 +126,8 @@ export default function Hero({ lng }: { lng: string }) {
     <div className={styles.hero} id="hero">
       <div className="container">
         <Row align="middle" justify="space-between" gutter={[32, 48]}>
-          <Col xs={24} lg={10} className='min-w-0'>
-            <div className={`${styles.heroContent} gap-5 flex flex-col`}>
+          <Col xs={24} lg={10} className={`min-w-0 ${styles.copyCol}`}>
+            <div className={`${styles.heroContent} gap-3 flex flex-col`}>
               <h1 className={`${styles.heroTitle} text-white font-extrabold`}>
                 <span className={styles.heroHighlight}>{t("HeroTitle1")}</span>
                 {t("HeroTitle2")}
@@ -121,7 +137,7 @@ export default function Hero({ lng }: { lng: string }) {
                 {t("HeroDesc1")}{t("HeroDesc2")}{t("HeroDesc3")}</p>
             </div>
           </Col>
-          <Col xs={24} lg={14} className='relative z-10 min-w-0'>
+          <Col xs={24} lg={14} className={`relative z-10 min-w-0 ${styles.demoCol}`}>
             <div className={styles.demoMockup} data-aos="fade-up" data-aos-delay="300">
               <div className={styles.demoBlob} aria-hidden="true"></div>
               <div ref={frameRef} className={`${styles.demoFrame} ${isFullscreen ? styles.demoFrameFullscreen : ''}`}>
