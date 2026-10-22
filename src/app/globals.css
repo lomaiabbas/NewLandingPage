@@ -23,7 +23,7 @@
 
   /* the far corner was #0a5c46, which read as heavy; it now settles just past --accent. The mid
      stop moved in from 55% so the copy that sits over the second half keeps >= 6.5:1 with white */
-  --hero-grad: linear-gradient(135deg, #12c98a 0%, #108760 10%, #0f6b4e 45%, #0d6449 100%);
+  --hero-grad: linear-gradient(135deg, #0e9e6d 0%, #108760 10%, #0f6b4e 45%, #0d6449 100%);
 
   --shadow: 0 18px 40px -24px rgba(11, 46, 36, 0.35);
 

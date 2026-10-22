@@ -6,7 +6,7 @@ import AtrasLinkLogo from '@/lib/icons/logo'
 import { Drawer } from 'antd'
 import Link from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import styles from './navbar.module.css'
 
 const NAV_LINKS = [
@@ -24,6 +24,8 @@ export default function Navbar({ lng }: { lng: string }) {
   const [isScrolled, setIsScrolled] = useState(false)
   const [openDrawer, setOpenDrawer] = useState(false)
   const [activeHash, setActiveHash] = useState<string | null>(null)
+  const linkRefs = useRef<Record<string, HTMLAnchorElement | null>>({})
+  const [indicator, setIndicator] = useState({ x: 0, w: 0, visible: false, instant: true })
 
   const handleChange = (newLocale: string) => {
     const days = 30
@@ -120,6 +122,34 @@ export default function Navbar({ lng }: { lng: string }) {
   }, [])
 
   useEffect(() => {
+    /* The sliding pill behind the active link: measured from the link itself so it follows
+       any width (Arabic/English labels, font swap, resize). When it appears from hidden it
+       snaps into place and only fades in, instead of sliding over from wherever it last was. */
+    let raf = 0
+    const measure = () => {
+      const el = activeHash ? linkRefs.current[activeHash] : null
+      setIndicator((prev) => {
+        if (!el) return prev.visible ? { ...prev, visible: false } : prev
+        const next = { x: el.offsetLeft, w: el.offsetWidth, visible: true, instant: !prev.visible }
+        return next.x === prev.x && next.w === prev.w && next.visible === prev.visible ? prev : next
+      })
+      raf = requestAnimationFrame(() =>
+        setIndicator((prev) => (prev.instant ? { ...prev, instant: false } : prev))
+      )
+    }
+
+    measure()
+    const container = activeHash ? linkRefs.current[activeHash]?.parentElement : null
+    const resizeObserver = container ? new ResizeObserver(measure) : null
+    if (container) resizeObserver?.observe(container)
+    document.fonts?.ready.then(measure)
+    return () => {
+      resizeObserver?.disconnect()
+      cancelAnimationFrame(raf)
+    }
+  }, [activeHash, lng])
+
+  useEffect(() => {
     /* Loading the page with a section hash already in the URL (a refresh, or a shared/
        bookmarked link) makes the browser jump to that section before the hero mockup,
        stats counters and fonts finish loading and growing the page's height — so it lands
@@ -163,9 +193,19 @@ export default function Navbar({ lng }: { lng: string }) {
           {/* plain anchors, not next/link: these point at sections of the page that is already
               rendered, and a Link would run a full App Router navigation (RSC fetch + middleware)
               just to jump to a hash */}
+          <span
+            aria-hidden
+            className={styles.navIndicator}
+            data-visible={indicator.visible}
+            data-instant={indicator.instant}
+            style={{ width: indicator.w, transform: `translateX(${indicator.x}px)` }}
+          />
           {NAV_LINKS.map((link) => (
             <a
               key={link.hash}
+              ref={(el) => {
+                linkRefs.current[link.hash] = el
+              }}
               href={`#${link.hash}`}
               className={styles.navLink}
               aria-current={activeHash === link.hash ? 'page' : undefined}
