@@ -9,6 +9,7 @@ import ContactUs from './contact-us';
 import Footer from './footer';
 import OurClients from './our-clients';
 import SocialProof from './social-proof';
+import RegisterModalProvider from './register-modal/register-modal-provider';
 import styles from './landing-page.module.css';
 
 /* Scales the page with the screen relative to a 1366×650 laptop viewport shown at 90%, i.e. as if
@@ -32,6 +33,10 @@ export default function LandingPage({lng}:{lng:string}) {
         <PublicLayout>
             <script dangerouslySetInnerHTML={{ __html: LANDING_ZOOM_SCRIPT }} />
             <div className={`relative ${styles.landingPage}`}>
+                {/* The sign-up modal: links to /register on this page open it instead of the page.
+                    To go back to the /register page, comment out <RegisterModalProvider lng={lng}>
+                    and </RegisterModalProvider> below; nothing else changed. */}
+                <RegisterModalProvider lng={lng}>
 
                 <Navbar lng={lng} />
                 <Hero lng={lng} />
@@ -42,6 +47,7 @@ export default function LandingPage({lng}:{lng:string}) {
                 <ContactUs lng={lng} />
                 <Footer lng={lng} />
                 <SocialProof lng={lng} />
+                </RegisterModalProvider>
             </div>
 
         </PublicLayout>

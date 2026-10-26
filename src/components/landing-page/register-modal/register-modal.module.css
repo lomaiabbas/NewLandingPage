@@ -1,0 +1,616 @@
+/* The register modal (register-modal-provider.tsx opens it over the landing page). Every tint is
+   mixed from the brand tokens on :root in globals.css. The one literal colour is the error red,
+   which :root has no token for: it's the red the global .error-msg already uses. */
+.overlay {
+  --rm-green: color-mix(in srgb, var(--primary-color) 50%, var(--accent));
+  --rm-mint: color-mix(in srgb, var(--rm-green) 9%, var(--surface));
+  --rm-mint-soft: color-mix(in srgb, var(--rm-green) 6%, var(--surface));
+  --rm-mint-deep: color-mix(in srgb, var(--rm-green) 22%, var(--surface));
+  --rm-placeholder: color-mix(in srgb, var(--muted) 72%, var(--surface));
+  --rm-error: #d50000;
+  /* The landing page is scaled with the screen (landing-page.module.css). The modal sits outside it,
+     in a portal, so it takes the same zoom to keep its size relative to the page. Inside a zoomed
+     element vw/vh are zoomed as well; these are the true viewport units. */
+  --rm-zoom: var(--landing-zoom, 1);
+  --rm-vw: calc(1vw / var(--rm-zoom));
+  --rm-vh: calc(1dvh / var(--rm-zoom));
+
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  background: color-mix(in srgb, var(--accent-2) 50%, transparent);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+/* the global rule sets every element's font with !important; the modal uses the navbar's */
+.overlay,
+.overlay *,
+.overlay ::placeholder {
+  font-family: 'IBM Plex Sans Arabic', var(--font-sans), sans-serif !important;
+}
+
+.overlay[data-state='open'] {
+  animation: rmFadeIn 0.2s ease-out;
+}
+.overlay[data-state='open'] .panel {
+  animation: rmPanelIn 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.overlay[data-state='closed'] {
+  pointer-events: none;
+  animation: rmFadeOut 0.16s ease-in forwards;
+}
+.overlay[data-state='closed'] .panel {
+  animation: rmPanelOut 0.16s ease-in forwards;
+}
+
+@keyframes rmFadeIn {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes rmFadeOut {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes rmPanelIn {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+@keyframes rmPanelOut {
+  to {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+
+.panel {
+  zoom: var(--rm-zoom);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(900px, calc(100 * var(--rm-vw) - 32px));
+  max-height: calc(100 * var(--rm-vh) - 48px);
+  overflow: hidden;
+  border-radius: 24px;
+  background: var(--rm-mint);
+  color: var(--text);
+  box-shadow:
+    0 36px 80px -28px color-mix(in srgb, var(--accent-2) 60%, transparent),
+    0 14px 30px -18px color-mix(in srgb, var(--accent-2) 35%, transparent);
+}
+
+/* --- header --------------------------------------------------------------------------------- */
+
+.header {
+  position: relative;
+  isolation: isolate;
+  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: auto auto 1fr auto auto auto;
+  grid-template-areas: 'logo title . status divider close';
+  align-items: center;
+  column-gap: 12px;
+  height: 84px;
+  padding-inline: 30px 20px;
+}
+
+/* a soft cloud behind the status line */
+.blobs {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.blobs span {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(16px);
+}
+.blobs span:nth-child(1) {
+  inset-inline-end: 140px;
+  top: 8px;
+  width: 260px;
+  height: 70px;
+  background: var(--rm-mint-deep);
+}
+.blobs span:nth-child(2) {
+  inset-inline-end: 360px;
+  top: 30px;
+  width: 190px;
+  height: 56px;
+  background: color-mix(in srgb, var(--rm-green) 14%, var(--surface));
+}
+.blobs span:nth-child(3) {
+  inset-inline-end: 30px;
+  top: 34px;
+  width: 170px;
+  height: 58px;
+  background: color-mix(in srgb, var(--rm-green) 17%, var(--surface));
+}
+
+.logo {
+  grid-area: logo;
+  display: grid;
+  place-items: center;
+}
+.logo svg {
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 0 !important;
+  background-color: transparent !important;
+}
+
+.title {
+  grid-area: title;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.3;
+  white-space: nowrap;
+  color: var(--text);
+}
+
+.status {
+  grid-area: status;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--accent);
+}
+/* one colour for the whole line; the emphasised half used to be the text colour */
+.status strong {
+  font-weight: 700;
+  /* color: var(--text); */
+}
+
+.dot {
+  position: relative;
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--rm-green);
+}
+.dot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: inherit;
+  animation: rmPing 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+@keyframes rmPing {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  75%,
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+.divider {
+  grid-area: divider;
+  width: 1px;
+  height: 24px;
+  margin-inline: 6px;
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+.close {
+  grid-area: close;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+.close:hover {
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+.close:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* --- the white sheet ------------------------------------------------------------------------ */
+
+.sheet {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  border-radius: 22px 22px 0 0;
+  background: var(--surface);
+  box-shadow:
+    0 -1px 0 color-mix(in srgb, var(--accent) 6%, transparent),
+    0 -12px 28px -20px color-mix(in srgb, var(--accent-2) 35%, transparent);
+}
+
+/* scrolls on a short screen; the button below it stays in view */
+.body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 32px 36px 6px;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--accent) 30%, transparent) transparent;
+}
+
+.footer {
+  flex-shrink: 0;
+  padding: 18px 36px 34px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 20px 18px;
+}
+.wide {
+  grid-column: span 3;
+}
+.third,
+.pair {
+  grid-column: span 2;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  min-width: 0;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--text);
+}
+
+/* the bordered box; holds the input and whatever sits beside it (suffix, prefix, eye, check) */
+.control {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  height: 48px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+.control:hover {
+  border-color: color-mix(in srgb, var(--text) 26%, transparent);
+}
+.control:focus-within {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary-color) 16%, transparent);
+}
+.control[data-invalid='true'] {
+  border-color: var(--rm-error);
+}
+.control[data-invalid='true']:focus-within {
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--rm-error) 12%, transparent);
+}
+.control[data-disabled='true'] {
+  background: color-mix(in srgb, var(--surface-2) 35%, var(--surface));
+}
+
+.input,
+.select {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 100%;
+  padding-inline: 14px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: 14.5px;
+}
+.input::placeholder {
+  color: var(--rm-placeholder);
+  opacity: 1;
+}
+/* ltr text (a shown password) lined up with the page, as the rest of the fields are */
+:global(html[dir='rtl']) .pageAligned {
+  text-align: right;
+}
+
+.select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-inline-end: 38px;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+.select:disabled {
+  cursor: default;
+}
+.select[data-empty='true'] {
+  color: var(--rm-placeholder);
+}
+.select option {
+  color: var(--text);
+}
+.chevron {
+  position: absolute;
+  inset-inline-end: 14px;
+  top: 50%;
+  translate: 0 -50%;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+/* .atraslink.com and the phone's country code */
+.addon {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-inline: 13px;
+  background: var(--rm-mint-soft);
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.addonChevron {
+  color: color-mix(in srgb, var(--accent) 70%, transparent);
+}
+/* invisible, on top of the prefix: tapping the prefix opens the platform's own picker */
+.addonSelect {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  opacity: 0;
+  font-size: 16px;
+  cursor: pointer;
+}
+.addonSelect:disabled {
+  cursor: default;
+}
+
+.iconButton {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+.iconButton:hover {
+  color: var(--text);
+}
+.iconButton:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: -7px;
+  border-radius: 12px;
+}
+
+.match {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  color: var(--rm-green);
+}
+.match:empty {
+  width: 0;
+}
+
+.error {
+  margin-top: -3px;
+  font-size: 12.5px;
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--rm-error);
+}
+
+.formError {
+  margin-bottom: 14px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--rm-error) 7%, var(--surface));
+  color: var(--rm-error);
+  font-size: 13.5px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  height: 54px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 12px 24px -14px color-mix(in srgb, var(--accent) 85%, transparent);
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
+}
+.submit:hover {
+  color: var(--on-accent);
+  background: color-mix(in srgb, var(--accent) 82%, var(--accent-2));
+  box-shadow: 0 16px 28px -14px color-mix(in srgb, var(--accent) 95%, transparent);
+}
+.submit:active {
+  transform: translateY(1px);
+}
+.submit:disabled {
+  cursor: progress;
+  opacity: 0.85;
+  transform: none;
+}
+.submit:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 3px;
+}
+
+.spinner {
+  animation: rmSpin 0.8s linear infinite;
+}
+@keyframes rmSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* --- after a successful submit -------------------------------------------------------------- */
+
+.success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 44px;
+  text-align: center;
+}
+.successIcon {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  margin-bottom: 22px;
+  border-radius: 50%;
+  background: var(--rm-mint);
+  color: var(--accent);
+  box-shadow: 0 0 0 8px var(--rm-mint-soft);
+}
+.successTitle {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--text);
+  outline: none;
+}
+.successText {
+  max-width: 420px;
+  margin-top: 8px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.successFooter .submit {
+  max-width: 360px;
+  margin-inline: auto;
+}
+
+/* --- phones: full screen, one column, the button pinned to the bottom ------------------------ */
+
+@media (max-width: 767px) {
+  .overlay {
+    padding: 0;
+  }
+
+  .panel {
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    border-radius: 0;
+  }
+
+  .header {
+    height: auto;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      'logo title close'
+      '. status status';
+    column-gap: 10px;
+    row-gap: 2px;
+    padding-block: 16px;
+    padding-inline: 20px 12px;
+  }
+  .status {
+    gap: 8px;
+    font-size: 12.5px;
+  }
+  .divider {
+    display: none;
+  }
+  .blobs span:nth-child(2) {
+    display: none;
+  }
+
+  .body {
+    padding: 26px 20px 12px;
+  }
+  .footer {
+    padding: 14px 20px calc(14px + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 12px;
+  }
+  .wide,
+  .third {
+    grid-column: span 2;
+  }
+  .pair {
+    grid-column: span 1;
+  }
+
+  /* iOS Safari zooms the page into a focused field whose text is under 16px */
+  .input,
+  .select {
+    font-size: 16px;
+  }
+
+  .successFooter .submit {
+    max-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay[data-state],
+  .overlay[data-state] .panel,
+  .dot::after {
+    animation: none;
+  }
+  .control,
+  .close,
+  .submit,
+  .iconButton {
+    transition: none;
+  }
+}
