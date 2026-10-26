@@ -11,14 +11,16 @@ import OurClients from './our-clients';
 import SocialProof from './social-proof';
 import styles from './landing-page.module.css';
 
-/* Scales the page with the screen relative to a 1366×650 laptop viewport (see landing-page.module.css).
-   The smaller of the two ratios wins, so a wide but short screen doesn't push the hero past the fold.
-   Inline and parsed before the page so a large screen never paints the unscaled layout first. */
+/* Scales the page with the screen relative to a 1366×650 laptop viewport shown at 90%, i.e. as if
+   the browser were zoomed out to 90% (see landing-page.module.css). The smaller of the two ratios
+   wins, so a wide but short screen doesn't push the hero past the fold. Below the split layout
+   (phones, tablets) the page is left at 1. Inline and parsed before the page so a large screen
+   never paints the unscaled layout first. */
 const LANDING_ZOOM_SCRIPT = `(function(){
   var s = document.getElementById('landing-zoom');
   if (!s) { s = document.createElement('style'); s.id = 'landing-zoom'; document.head.appendChild(s); }
   function update(){
-    var z = Math.max(1, Math.min(innerWidth / 1366, innerHeight / 650));
+    var z = innerWidth < 992 ? 1 : Math.max(0.9, Math.min(innerWidth / 1518, innerHeight / 722));
     s.textContent = ':root{--landing-zoom:' + z.toFixed(3) + '}';
   }
   update();

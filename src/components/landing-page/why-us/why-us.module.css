@@ -76,12 +76,40 @@
 
 /* desktop: the step screenshots are 16:9, so match them instead of cropping ~15-28% of their
    height under a 2:1 box, and centre the steps in the space under the tabs */
+/* Desktop: the whole section (title + stage) has to be on screen when a visitor lands on it from
+   the navbar, so the stage takes the height the screen has left instead of a fixed 16:9 box,
+   which stood ~675px tall and pushed its lower half below the fold on a laptop.
+   --u-vh is 1vh divided by the landing zoom (see landing-page.module.css): inside the zoomed
+   page a plain 100vh is multiplied by the zoom too.
+   --why-chrome is everything above and below the stage: the navbar clearance, the title block,
+   the gap between them and a little air under the stage. */
 @media (min-width: 992px){
+  :global(#why-us).bandSection{
+    --why-chrome: 252px;
+    --why-h: min(680px, max(410px, calc(100 * var(--u-vh, 1vh) - var(--why-chrome))));
+    padding-top: 28px;
+    /* the next band's slanted top rides up over the end of this section by --section-slant, so the
+       bottom padding must clear that or the cut runs across the stage */
+    padding-bottom: calc(var(--section-slant) + 20px);
+  }
+  :global(#why-us).bandSection .titleArea{
+    margin-bottom: 20px;
+  }
   .stage{
-    aspect-ratio: 16 / 9;
+    height: var(--why-h);
+    /* a short stage crops its 16:9 backdrop, so it also narrows rather than stretch past ~2.2:1 */
+    max-width: calc(var(--why-h) * 2.22);
+    margin-inline: auto;
     min-height: 0;
     display: flex;
     flex-direction: column;
+    /* the tabs and four steps must fit the short stage, so the vertical padding gives way */
+    padding-block: 28px;
+  }
+  /* a fixed-height flex column would otherwise squash the (overflow-hidden) tab bar to a sliver */
+  .stage .tabs{
+    flex: none;
+    margin-bottom: 18px;
   }
   .body{
     flex: 1;
@@ -111,6 +139,8 @@
   width: 100%;
   height: 100vh;
   min-height: 100vh;
+  max-width: none;
+  margin-inline: 0;
   border-radius: 0;
   overflow-y: auto;
   background: var(--accent-2);
