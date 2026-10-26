@@ -18,11 +18,16 @@ export interface SignupDto {
     commercialNumber: string;
     commercialNumberIssuanceDate: Date;
     enName: string;
-    latitude: number;
-    link: string;
-    longitude: number;
+    // latitude: number;
+    // link: string;
+    // longitude: number;
+    latitude: number | null;
+    link: string | null;
+    longitude: number | null;
+    bankInfo_RegularLicensingDocUrl?: string | null;
     managerInfo: {
         name: string;
+        lastName?: string;
         countryCode: string;
         phoneNumber: string;
         email: string;

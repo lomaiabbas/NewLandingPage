@@ -1,10 +1,18 @@
+import { AxiosRequestConfig } from 'axios';
 import http from '../httpService';
 import { SignupDto } from './dto';
 
 class CompaniesForManagerService {
-      
-    public async signup(input: SignupDto): Promise<any> {
-        let result = await http.post('api/app/application-requests-for-manager/sign-up', input);
+
+    // public async signup(input: SignupDto): Promise<any> {
+    //     let result = await http.post('api/app/application-requests-for-manager/sign-up', input);
+    //     return result.data;
+    // }
+
+    // the same request; `config` lets a caller (the landing page's register modal) pass
+    // skipErrorHandler and show the error itself instead of httpService's global popup
+    public async signup(input: SignupDto, config?: AxiosRequestConfig & { skipErrorHandler?: boolean }): Promise<any> {
+        let result = await http.post('api/app/application-requests-for-manager/sign-up', input, config);
         return result.data;
     }
 
