@@ -3,7 +3,7 @@
    .container used elsewhere in the app) so both share the exact same width ceiling as the
    navbar (navbar/navbar.module.css). */
 .landingPage :global(.container) {
-  max-width: min(calc(100vw - 24px), 1200px);
+  max-width: min(calc(100 * var(--u-vw, 1vw) - 24px), 1200px);
 }
 
 /* depth of the diagonal cut at the top of each band section; one value so every
@@ -11,10 +11,10 @@
 .landingPage {
   /* gentler than the earlier clamp(40px, 5vw, 72px): six identical steep cuts in a row made
      the page feel templated */
-  --section-slant: clamp(28px, 3.5vw, 52px);
+  --section-slant: clamp(28px, calc(3.5 * var(--u-vw, 1vw)), 52px);
   /* the cut under the hero alone runs deeper, so the step from the green hero into the
      page reads clearly while the dividers further down stay gentle */
-  --hero-slant: clamp(48px, 6vw, 115px);
+  --hero-slant: clamp(48px, calc(6 * var(--u-vw, 1vw)), 115px);
 }
 
 /* below the split layout the dashboard spans the width, so at 6vw the cut would only nick its
@@ -25,13 +25,19 @@
   }
 }
 
-/* The layout is designed around a 1366px laptop screen with a 1200px content column. On larger
+/* The layout is designed around a 1366px laptop screen viewed at 90% zoom, with a 1200px content
+   column (the zoom is the 0.9 floor in the script in index.tsx). On larger
    screens that column left wide empty bands on every side (two thirds of the width on 4K), so the
    whole page is scaled up by the screen's ratio to that laptop instead, keeping the same margins
    left, right, above and below. --landing-zoom is set before first paint by the inline script in
    index.tsx. */
 .landingPage {
   zoom: var(--landing-zoom, 1);
+  /* inside a zoomed element 1vw / 1vh are multiplied by the zoom as well, which would make every
+     vw/vh rule read a viewport that is the wrong size. These are the true units of the zoomed
+     layout, so the page lays out exactly as it would in a browser zoomed to the same level. */
+  --u-vw: calc(1vw / var(--landing-zoom, 1));
+  --u-vh: calc(1vh / var(--landing-zoom, 1));
 }
 
 /* a fullscreen demo sizes itself to the real screen, which the zoom would throw off */

@@ -8,7 +8,7 @@
   left: 50%;
   transform: translateX(-50%);
   width: max-content;
-  max-width: calc(100vw - 24px);
+  max-width: calc(100 * var(--u-vw, 1vw) - 24px);
   transition: top 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .headerLayout.scrolled {
@@ -21,7 +21,7 @@
 @media (min-width: 1101px) {
   .headerLayout {
     width: calc(100% - 24px);
-    max-width: min(calc(100vw - 24px), 1200px);
+    max-width: min(calc(100 * var(--u-vw, 1vw) - 24px), 1200px);
   }
 }
 
