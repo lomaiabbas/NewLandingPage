@@ -12,7 +12,7 @@ export type WhyUsTab = {
 };
 
 /* long enough to read a step title and its description before it moves on */
-export const WHY_US_STEP_MS = 5200;
+export const WHY_US_STEP_MS = 3000;
 
 export const WHY_US_TABS: WhyUsTab[] = [
   {

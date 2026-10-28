@@ -74,55 +74,11 @@
   pointer-events: none;
 }
 
-/* desktop: the step screenshots are 16:9, so match them instead of cropping ~15-28% of their
-   height under a 2:1 box, and centre the steps in the space under the tabs */
-/* Desktop: the whole section (title + stage) has to be on screen when a visitor lands on it from
-   the navbar, so the stage takes the height the screen has left instead of a fixed 16:9 box,
-   which stood ~675px tall and pushed its lower half below the fold on a laptop.
-   --u-vh is 1vh divided by the landing zoom (see landing-page.module.css): inside the zoomed
-   page a plain 100vh is multiplied by the zoom too.
-   --why-chrome is everything above and below the stage: the navbar clearance, the title block,
-   the gap between them and a little air under the stage. */
-@media (min-width: 992px){
-  :global(#why-us).bandSection{
-    --why-chrome: 252px;
-    --why-h: min(680px, max(410px, calc(100 * var(--u-vh, 1vh) - var(--why-chrome))));
-    padding-top: 28px;
-    /* the next band's slanted top rides up over the end of this section by --section-slant, so the
-       bottom padding must clear that or the cut runs across the stage */
-    padding-bottom: calc(var(--section-slant) + 20px);
-  }
-  :global(#why-us).bandSection .titleArea{
-    margin-bottom: 20px;
-  }
-  .stage{
-    height: var(--why-h);
-    /* a short stage crops its 16:9 backdrop, so it also narrows rather than stretch past ~2.2:1 */
-    max-width: calc(var(--why-h) * 2.22);
-    margin-inline: auto;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
-    /* the tabs and four steps must fit the short stage, so the vertical padding gives way */
-    padding-block: 28px;
-  }
-  /* a fixed-height flex column would otherwise squash the (overflow-hidden) tab bar to a sliver */
-  .stage .tabs{
-    flex: none;
-    margin-bottom: 18px;
-  }
-  .body{
-    flex: 1;
-    display: flex;
-    align-items: center;
-  }
-  .panel{
-    width: 100%;
-  }
-}
+/* Desktop (≥1200px) is the two-column split layout at the END of this file: it has to come after
+   the base .tabs / .panel / .bgImg / .bgTint rules to override them. */
 
-/* below desktop the tint hides the screenshot, so a fixed height only adds an empty band */
-@media (max-width: 991px){
+/* below the split layout the tint hides the screenshot, so a fixed height only adds an empty band */
+@media (max-width: 1199px){
   .stage{
     min-height: 0;
   }
@@ -140,6 +96,8 @@
   height: 100vh;
   min-height: 100vh;
   max-width: none;
+  /* the desktop stage keeps its shape with aspect-ratio; fullscreen takes the whole screen */
+  aspect-ratio: auto;
   margin-inline: 0;
   border-radius: 0;
   overflow-y: auto;
@@ -149,6 +107,23 @@
 .stage:fullscreen .panel,
 .stage.fullscreen .panel{
   max-width: 560px;
+}
+
+/* the CSS stand-in for the Fullscreen API on iPhone (see toggleFullscreen). The section's clip-path
+   would cut a fixed child down to the section's own shape, and its stacking context (isolation)
+   would keep it under the navbar, so both are lifted while it is open. dvh tracks Safari's
+   collapsing toolbars. */
+:global(body.why-us-pseudo-fullscreen) .bandSection{
+  z-index: 2147483000;
+  clip-path: none;
+}
+:global(body.why-us-pseudo-fullscreen) .stage.fullscreen{
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  height: 100dvh;
+  min-height: 100dvh;
+  transform: none !important;
 }
 
 .fullscreenBtn{
@@ -217,7 +192,10 @@
   background: transparent;
   font-size: 14px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.6);
+  /* the strip sits over the middle of the stage, where the screenshot shows through the tint,
+     so the inactive labels need the extra contrast and a soft shadow to stay readable on it */
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
   cursor: pointer;
   white-space: nowrap;
   scroll-snap-align: center;
@@ -243,6 +221,7 @@
 }
 .tabBtn.active{
   color: #fff;
+  text-shadow: none;
   background: linear-gradient(120deg, var(--primary-color, #07c692), var(--accent-soft));
   box-shadow: 0 4px 14px -4px color-mix(in srgb, var(--accent-soft) 70%, transparent);
 }
@@ -303,9 +282,24 @@
   align-items: center;
 }
 
+/* every tab's steps share one cell with the inactive ones hidden, so the stage is as tall as the
+   longest tab from the start instead of growing when the walkthrough reaches it */
+.panels{
+  display: grid;
+  width: 100%;
+}
+.panels > .panel{
+  grid-area: 1 / 1;
+}
+.panelHidden{
+  visibility: hidden;
+}
+
 .steps{
   position: relative;
   padding-inline-start: 42px;
+  /* the page's .container centers its text (globals.css); the step copy reads from the start edge */
+  text-align: start;
 }
 
 .bgImg{
@@ -512,7 +506,7 @@
    occupies the first 420px and the screenshot shows through on the other side. On a phone the
    panel is the full width, so the end of the copy sat on top of a bright screenshot. Below
    tablet, tint top-to-bottom instead and keep the copy fully covered. */
-@media (max-width: 991px){
+@media (max-width: 1199px){
   .bgTint{
     background: linear-gradient(
       180deg,
@@ -530,8 +524,11 @@
     );
   }
 
+  /* a shorter tab keeps its steps right under the screenshot; the room reserved for the longest
+     tab (see .panels) stays at the bottom instead of opening a gap above them */
   .panel{
     max-width: none;
+    align-items: start;
   }
 
   /* the tab strip spans the full stage below desktop, so leave a row for the
@@ -598,7 +595,9 @@
     overflow: visible;
     border-radius: 18px;
     gap: 4px;
-    margin-top: 34px;
+    /* the strip spans the full width here, so it has to clear the expand button above it
+       (12px + 40px) with a gap its shadow doesn't bridge */
+    margin-top: 44px;
     margin-bottom: 26px;
   }
 
@@ -632,7 +631,7 @@
   display: none;
 }
 
-@media (max-width: 991px){
+@media (max-width: 1199px){
   /* the backdrop sits under a near-opaque tint at this size, so it adds nothing but download weight;
      the screenshot moves into a card above the steps instead */
   .bgImg{
@@ -668,5 +667,390 @@
 @media (prefers-reduced-motion: reduce){
   .shotImg{
     animation: none;
+  }
+}
+
+/* ---------- desktop split layout (≥1200px) ----------
+
+   Before: the screenshot covered the whole stage (background-size: cover) and the tabs and steps
+   were laid on top of it. The stage's height came from the screen height (--why-h) and its width
+   from the container, so its shape (~2.2:1) never matched the 16:9 screenshots. Every screen size
+   cropped them differently, and the tabs/steps landed on a different part of the picture each time.
+
+   Now the stage is a two-column grid: the copy (tabs + steps) gets its own track at the inline
+   start (right in Arabic), and the screenshot gets its own track at the inline end.
+   The stage's shape comes from its width, not the screen height: the screenshot track is 7/12 of
+   the width at 16:10, so height = width × 7/12 ÷ 1.6, i.e. aspect-ratio 96 / 35.
+   16:9 shots lose ~10% of their width, the two 3:2 shots ~6% of their height.
+   If a tab's copy ever needs more height, aspect-ratio lets the stage grow to fit it (min-height
+   stays auto), so nothing gets clipped. */
+@media (min-width: 1200px){
+  :global(#why-us).bandSection{
+    /* land the badge just under the floating navbar (it still clears it by ~25px) so the whole
+       section, the longest tab included, fits a 1366×650 laptop screen */
+    scroll-margin-top: -10px;
+    /* the next band's slanted top rides up over the end of this section by --section-slant */
+    padding-bottom: calc(var(--section-slant) + 48px);
+  }
+  :global(#why-us).bandSection .titleArea{
+    margin-bottom: 20px;
+  }
+
+  .stage{
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-rows: auto 1fr;
+    aspect-ratio: 96 / 35;
+    /* min-height: auto + overflow: clip (not hidden) is what lets an aspect-ratio box grow to fit
+       taller copy; overflow: hidden makes it a scroll container and the copy would be cut off */
+    min-height: auto;
+    overflow: clip;
+    padding: 0;
+    border-radius: 24px;
+  }
+
+  /* tabs: the header of the copy column, one equal column per tab, on the solid background */
+  .stage .tabs{
+    grid-column: 1;
+    grid-row: 1;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: auto;
+    max-width: none;
+    margin: 36px 40px 0;
+    overflow: visible;
+  }
+  .stage .tabBtn{
+    justify-content: center;
+    text-shadow: none;
+  }
+
+  .body{
+    grid-column: 1;
+    grid-row: 2;
+    display: flex;
+    align-items: center;
+    padding: 28px 40px 36px;
+  }
+  .panel{
+    width: 100%;
+    max-width: none;
+  }
+
+  /* the screenshot layers fill only the second column (an absolutely positioned child of a grid
+     can be placed in a grid area, which then becomes its containing block) */
+  .bgImg,
+  .bgTint{
+    grid-column: 2;
+    grid-row: 1 / -1;
+    inset: 0;
+  }
+
+  /* the copy no longer sits on the picture, so the tint is just a soft seam where the
+     screenshot meets the copy column */
+  .bgTint{
+    background: linear-gradient(
+      to right,
+      color-mix(in srgb, var(--accent-2) 92%, black) 0,
+      transparent 96px
+    );
+  }
+  :global(html[dir='rtl']) .bgTint{
+    background: linear-gradient(
+      to left,
+      color-mix(in srgb, var(--accent-2) 92%, black) 0,
+      transparent 96px
+    );
+  }
+  /* no screenshot for this step: keep the solid fill */
+  .bgTint.bgTintSolid,
+  :global(html[dir='rtl']) .bgTint.bgTintSolid{
+    background: linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--accent-2) 96%, black) 0%,
+      color-mix(in srgb, var(--accent-2) 88%, black) 55%,
+      color-mix(in srgb, var(--accent-2) 78%, black) 100%
+    );
+  }
+
+  /* the expand button sits on the screenshot's top corner */
+  .fullscreenBtn{
+    width: 40px;
+    height: 40px;
+    top: 20px;
+    inset-inline-end: 20px;
+  }
+}
+
+/* =====================================================================
+   Light theme ("A5"): only the colours already used on the landing page
+   ---------------------------------------------------------------------
+   #192D25  ink (the "أتراس لينك" wordmark)      #37664E → #477F60  hero green
+   #6AC396  mint (CTA button)                      #AAEFC9  light mint ("نَدور")
+   #DFF2E7  pale mint (dashboard sidebar)          #D4E8DD / #CBE6D7  hairlines
+   This block sits last so it overrides the dark stage above without
+   touching its sizing/layout rules.
+   ===================================================================== */
+.bandSection{
+  --why-ink: #192D25;
+  --why-green: #37664E;
+  --why-green-2: #477F60;
+  --why-mint: #6AC396;
+  --why-mint-light: #AAEFC9;
+  --why-mint-bg: #DFF2E7;
+  --why-line: #D4E8DD;
+  --why-line-2: #CBE6D7;
+}
+
+/* badge + title */
+.titleArea .subTitle{
+  color: var(--why-green);
+  background: var(--why-mint-bg);
+  border: 1px solid var(--why-line);
+  border-radius: 999px;
+  padding: 6px 16px;
+}
+.titleArea .subTitle::after{
+  display: none;
+}
+.titleArea .secTitle{
+  color: var(--why-ink);
+}
+
+/* the stage turns white; no glow blob */
+.stage{
+  background: #FFFFFF;
+  box-shadow: 0 1px 2px rgba(25, 45, 37, 0.05), 0 36px 70px -36px rgba(25, 45, 37, 0.3);
+}
+.stage::after{
+  display: none;
+}
+.stage:fullscreen,
+.stage.fullscreen{
+  background: #FFFFFF;
+}
+
+/* the dark tint is gone everywhere (below 1200px it used to cover the whole stage) */
+.bgTint,
+.bgTint.bgTintSolid,
+:global(html[dir='rtl']) .bgTint,
+:global(html[dir='rtl']) .bgTint.bgTintSolid{
+  background: none;
+}
+
+/* expand button: white chip */
+.fullscreenBtn{
+  border: 1px solid var(--why-line);
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: none;
+  color: var(--why-green);
+  box-shadow: 0 6px 16px rgba(25, 45, 37, 0.2);
+}
+.fullscreenBtn:hover,
+.fullscreenBtn:focus-visible{
+  background: #FFFFFF;
+  border-color: var(--why-mint);
+}
+
+/* tabs: white track with a lifted shadow, active tab in the hero green */
+.tabs{
+  background: #FFFFFF;
+  border: 1px solid var(--why-line);
+  border-radius: 14px;
+  padding: 4px;
+  box-shadow: 0 2px 6px rgba(25, 45, 37, 0.08), 0 16px 32px -12px rgba(25, 45, 37, 0.38);
+}
+.tabBtn{
+  border-radius: 11px;
+  color: var(--why-green);
+  text-shadow: none;
+}
+.tabBtn:not(.active):hover{
+  color: var(--why-ink);
+  background: #F4FAF7;
+}
+.tabBtn.active{
+  color: #FFFFFF;
+  background: linear-gradient(90deg, var(--why-green), var(--why-green-2));
+  box-shadow: 0 6px 14px -6px rgba(55, 102, 78, 0.6);
+}
+/* the arrow becomes a small light-mint dot on the active tab */
+.tabArrow svg{
+  display: none;
+}
+.tabBtn.active .tabArrow{
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--why-mint-light);
+}
+
+/* steps: no connector lines; each step is a row, the current one is a white card */
+.steps{
+  padding-inline-start: 0;
+}
+.steps .step{
+  opacity: 1;
+  padding: 12px 14px;
+  padding-inline-start: 60px;
+  margin-bottom: 6px;
+  border: 1px solid transparent;
+  border-radius: 16px;
+}
+.steps .step:last-child{
+  margin-bottom: 0;
+}
+.steps .step:hover{
+  opacity: 1;
+  background: #F4FAF7;
+}
+.steps .step::after{
+  display: none;
+}
+.steps .step.stepActive{
+  padding-block: 14px;
+  background: #FFFFFF;
+  border-color: var(--why-line-2);
+  box-shadow: 0 10px 24px -14px rgba(55, 102, 78, 0.45);
+}
+
+.steps .stepNum{
+  inset-inline-start: 14px;
+  top: 12px;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  backdrop-filter: none;
+  border: 1.5px solid #9DC4AF;
+  color: #4E6A5B;
+  font-size: 15px;
+}
+.steps .step.stepDone .stepNum{
+  background: var(--why-green);
+  border-color: transparent;
+  color: #FFFFFF;
+  box-shadow: none;
+}
+.steps .step.stepActive .stepNum{
+  top: 14px;
+  background: var(--why-mint);
+  border-color: transparent;
+  color: var(--why-ink);
+  transform: none;
+  animation: none;
+  box-shadow: 0 0 0 5px rgba(106, 195, 150, 0.25);
+}
+
+.steps .step h4{
+  font-size: 17px;
+  line-height: 26px;
+  font-weight: 600;
+  margin: 0;
+  padding-top: 3px;
+  color: #4E6A5B;
+  text-shadow: none;
+}
+.steps .step p{
+  font-size: 14.5px;
+  line-height: 22px;
+  font-weight: 400;
+  color: #556E61;
+  text-shadow: none;
+}
+.steps .step.stepDone h4{ color: var(--why-ink); }
+.steps .step.stepDone p{ color: #44594E; }
+.steps .step.stepActive h4{ color: var(--why-ink); font-weight: 700; }
+.steps .step.stepActive p{ color: var(--why-green); }
+
+.tag{
+  background: var(--why-mint-bg);
+  border-color: var(--why-line);
+  color: var(--why-green);
+  backdrop-filter: none;
+}
+
+/* below 1200px: the step screenshot card above the steps */
+@media (max-width: 1199px){
+  .shot{
+    background: var(--why-mint-bg);
+    border: 1px solid var(--why-line);
+    box-shadow: 0 14px 30px -20px rgba(25, 45, 37, 0.45);
+  }
+}
+
+/* phones: slightly smaller step rows */
+@media (max-width: 575px){
+  .steps .step{
+    padding: 10px 12px;
+    padding-inline-start: 52px;
+  }
+  .steps .step.stepActive{
+    padding-block: 12px;
+  }
+  .steps .stepNum{
+    inset-inline-start: 12px;
+    top: 10px;
+    width: 28px;
+    height: 28px;
+    font-size: 13px;
+  }
+  .steps .step.stepActive .stepNum{
+    top: 12px;
+  }
+  .steps .step h4{
+    font-size: 15.5px;
+    line-height: 24px;
+    padding-top: 2px;
+  }
+  .steps .step p{
+    font-size: 13.5px;
+  }
+  .tabs{
+    border-radius: 14px;
+  }
+}
+
+/* desktop split layout: copy column white, screenshot fills the other column edge to edge,
+   separated by a thin mint line */
+@media (min-width: 1200px){
+  .stage .tabs{
+    margin: 32px 32px 0;
+  }
+  /* the stage takes the longest tab's height (مشرف الدخول, where two lines also wrap in English),
+     which has to fit a 1366×650 laptop screen too, so the copy column's padding and the step rows
+     are a little tighter here; the numbers move up with the rows */
+  .body{
+    padding: 20px 32px 22px;
+  }
+  .steps .step{
+    padding-block: 9px;
+  }
+  .steps .step.stepActive{
+    padding-block: 11px;
+  }
+  .steps .stepNum{
+    top: 9px;
+  }
+  .steps .step.stepActive .stepNum{
+    top: 11px;
+  }
+  .stage{
+    border-radius: 28px;
+  }
+  .bgTint{
+    background: linear-gradient(to right, rgba(106, 195, 150, 0.6) 0 2px, transparent 2px);
+  }
+  :global(html[dir='rtl']) .bgTint{
+    background: linear-gradient(to left, rgba(106, 195, 150, 0.6) 0 2px, transparent 2px);
+  }
+  .bgTint.bgTintSolid,
+  :global(html[dir='rtl']) .bgTint.bgTintSolid{
+    background: var(--why-mint-bg);
+  }
+  .fullscreenBtn{
+    width: 44px;
+    height: 44px;
+    top: 16px;
+    inset-inline-end: 16px;
   }
 }

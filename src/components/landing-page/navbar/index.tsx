@@ -32,7 +32,8 @@ export default function Navbar({ lng }: { lng: string }) {
     const date = new Date()
     date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000)
     const expires = '; expires=' + date.toUTCString()
-    document.cookie = `NEXT_LOCALE=${newLocale};expires=${expires};path=/`
+    // `expires` already carries its own "; expires=" (the old string doubled it)
+    document.cookie = `NEXT_LOCALE=${newLocale}${expires}; path=/`
 
     if (lng === i18nConfig.defaultLocale && !i18nConfig.prefixDefault) {
       router.replace('/' + newLocale + currentPathname)
@@ -225,7 +226,10 @@ export default function Navbar({ lng }: { lng: string }) {
           </a>
         </div>
 
-        <Link href={`/${lng}/register`} className={styles.navCta}>
+        {/* <Link href={`/${lng}/register`} className={styles.navCta}> */}
+        {/* ?register=1 opens the sign-up modal; the old link went to the /register page, which is
+            where a click landed before the page had finished loading */}
+        <Link href={`/${lng}?register=1`} className={styles.navCta}>
           {t('Register')}
         </Link>
 
@@ -285,7 +289,8 @@ export default function Navbar({ lng }: { lng: string }) {
         </div>
         <div className={styles.drawerCta}>
           <Link
-            href={`/${lng}/register`}
+            // href={`/${lng}/register`}
+            href={`/${lng}?register=1`}
             className={styles.drawerCtaBtn}
             onClick={() => setOpenDrawer(false)}
           >

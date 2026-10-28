@@ -5,7 +5,7 @@ import { Col, Row } from 'antd';
 import { Maximize2, Minimize2 } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react'
 import styles from './hero.module.css';
-import AOS from 'aos';
+import { initScrollReveal } from '../scroll-reveal';
 
 /* 16:10 rather than 2:1 — the wide strip rendered the dashboard as a short band at ~0.42 scale,
    leaving its text unreadable and most of the hero empty. 1280 rather than 1440 wide so the same
@@ -21,15 +21,8 @@ export default function Hero({ lng }: { lng: string }) {
   const demoIframeRef = useRef<HTMLIFrameElement>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  useEffect(() => {
-    AOS.init({
-      duration: 1000,
-      easing: 'ease-in-out',
-      // the default 120px left the next section's heading hidden when it sat at the very bottom
-      // of the first screen, which read as an empty band under the scroll hint
-      offset: 20,
-    });
-  }, []);
+  // the page's data-aos fade-ins (see scroll-reveal.ts for why AOS's own trigger isn't used)
+  useEffect(() => initScrollReveal({ duration: 1000, easing: 'ease-in-out' }), []);
 
   useEffect(() => {
     const wrap = demoWrapRef.current;

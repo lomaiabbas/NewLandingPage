@@ -100,10 +100,14 @@ export default async function RootLayout({
         {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_TRACKING_ID && (
           <GoogleAnalytics trackingId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_TRACKING_ID} />
         )} */}
+        {/* Not loaded any more: nothing in the app uses the Google Maps JS API (the maps are
+            Mapbox, and the chat's location message embeds a google.com/maps iframe, which doesn't
+            need it), so every page, the landing page first, downloaded it for nothing.
         <script
           src={`https://maps.googleapis.com/maps/api/js?key=AIzaSyCVPMNg4kqpqdYgDEbWxRDK-P7lx1N7wJQ&language=${lng === 'ar' ? 'ar' : 'en'}&libraries=places&loading=async`}
           defer
         ></script>
+        */}
       </head>
       <body
         style={

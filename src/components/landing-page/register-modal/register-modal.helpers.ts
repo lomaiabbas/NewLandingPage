@@ -3,6 +3,8 @@ import { validateEmail, validatePhone } from '@/lib/rules'
 import { SignupDto } from '@/lib/services/companies-for-manager/dto'
 import { CountryCodeDto } from '@/lib/services/countries-codes/dto'
 import {
+  getCountries,
+  getCountryCallingCode,
   getExampleNumber,
   parsePhoneNumberFromString,
   validatePhoneNumberLength,
@@ -10,7 +12,10 @@ import {
 } from 'libphonenumber-js'
 import examples from 'libphonenumber-js/mobile/examples'
 import {
+  DIAL_COUNTRIES,
+  FALLBACK_DIAL_ISOS,
   PRIORITY_DIAL_ISOS,
+  SIGNUP_DEFAULT_LOCATION,
   SIGNUP_ERROR_FIELDS,
   SIGNUP_PLACEHOLDERS,
   SUBDOMAIN_MAX_LENGTH,
@@ -88,10 +93,18 @@ export function validateRegisterField(
 ): FieldIssue | undefined {
   const value = values[field]
   // the city list only fills in once a country is picked
-  if (field === 'cityId' && !values.countryId) return { key: 'RegisterModalCountryFirst' }
+  // if (field === 'cityId' && !values.countryId) return { key: 'RegisterModalCountryFirst' }
   if (!value.trim()) return { key: 'ThisFieldIsMandatory' }
 
   switch (field) {
+    case 'fullName': {
+      // the backend keeps a first and a last name, as the /register page asks for both
+      const { name, lastName } = splitFullName(value)
+      if (!lastName) return { key: 'RegisterModalFullNameTwoParts' }
+      // ...each at most 64 characters, the /register page's two fields' limit
+      if (name.length > 64 || lastName.length > 64) return { key: 'RegisterModalFullNameTooLong' }
+      return undefined
+    }
     case 'subdomain':
       if (value.length < SUBDOMAIN_MIN_LENGTH) return { key: 'RegisterModalDomainTooShort' }
       if (value.startsWith('-') || value.endsWith('-')) {
@@ -112,6 +125,43 @@ export function validateRegisterField(
       return undefined
   }
 }
+
+/* "محمد بن سعد العتيبي" → name "محمد", lastName "بن سعد العتيبي" */
+export function splitFullName(fullName: string) {
+  const [name = '', ...rest] = fullName.trim().split(/\s+/)
+  return { name, lastName: rest.join(' ') }
+}
+
+/* Every country libphonenumber knows, named in the page's language: the phone code list to fall
+   back on when the backend's list can't be loaded (as the /register page's allCountries mode does) */
+export const allCountryCodes = (lng: string): CountryCodeDto[] =>
+  getCountries()
+    .filter((iso) => !['AC', 'TA'].includes(iso))
+    .map((iso, index) => ({
+      id: -(index + 1),
+      name: regionName(lng, iso) || iso,
+      arName: regionName('ar', iso),
+      enName: regionName('en', iso),
+      iso2Code: iso,
+      dialCode: `+${getCountryCallingCode(iso)}`,
+      isActive: true,
+    }))
+
+/* DIAL_COUNTRIES in the shape of the backend's country-code list, named in the page's language */
+export const dialCountries = (lng: string): CountryCodeDto[] =>
+  DIAL_COUNTRIES.map((country, index) => ({
+    id: index + 1,
+    name: lng === 'ar' ? country.ar : country.en,
+    arName: country.ar,
+    enName: country.en,
+    iso2Code: country.iso,
+    dialCode: country.dialCode,
+    isActive: true,
+  }))
+
+/* the /register page's countries, for when the backend's list can't be loaded */
+export const fallbackCountryCodes = (lng: string) =>
+  allCountryCodes(lng).filter((code) => FALLBACK_DIAL_ISOS.includes(code.iso2Code))
 
 export const sortCountryCodes = (codes: CountryCodeDto[]) =>
   [...codes].sort((a, b) => {
@@ -183,6 +233,12 @@ export function findCountryCode(countryName: string, codes: CountryCodeDto[]) {
   )?.code
 }
 
+/* the shape of the country's mobile numbers rather than a number: "51 234 5678" → "5X XXX XXXX" */
+export function phoneMask(iso2: string) {
+  const example = phoneExample(iso2)
+  return example.replace(/\d/g, 'X').replace('X', example.match(/\d/)?.[0] ?? '')
+}
+
 /* the country's example mobile number without its code: "+966 51 234 5678" → "51 234 5678" */
 export function phoneExample(iso2: string) {
   try {
@@ -196,17 +252,18 @@ export function phoneExample(iso2: string) {
 export function buildSignupPayload({
   values,
   dialCode,
-  countryName,
-  cityName,
+  // countryName,
+  // cityName,
   lng,
 }: {
   values: RegisterValues
   dialCode: string
-  countryName: string
-  cityName: string
+  // countryName: string
+  // cityName: string
   lng: string
 }): SignupDto {
   const companyName = values.companyName.trim()
+  const { name, lastName } = splitFullName(values.fullName)
 
   // today, from the start of the day: the backend rejects an issuance date in the future, and the
   // exact "now" of a device whose clock runs a little ahead of the server's would already be one
@@ -219,12 +276,16 @@ export function buildSignupPayload({
     arName: companyName,
     enName: companyName,
     subDomainName: values.subdomain,
-    cityId: Number(values.cityId),
-    address: [cityName, countryName].filter(Boolean).join(lng === 'ar' ? '، ' : ', '),
+    // cityId: Number(values.cityId),
+    // address: [cityName, countryName].filter(Boolean).join(lng === 'ar' ? '، ' : ', '),
+    cityId: SIGNUP_DEFAULT_LOCATION.cityId,
+    address: SIGNUP_DEFAULT_LOCATION.address[lng === 'ar' ? 'ar' : 'en'],
     commercialNumberIssuanceDate: issuanceDate,
     managerInfo: {
-      name: values.firstName.trim(),
-      lastName: values.lastName.trim(),
+      // name: values.firstName.trim(),
+      // lastName: values.lastName.trim(),
+      name,
+      lastName,
       countryCode: dialCode,
       phoneNumber: toNationalNumber(dialCode, values.phone),
       email: values.email.trim(),

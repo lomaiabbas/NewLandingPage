@@ -25,7 +25,9 @@ export const SOCIAL_PROOF_TOASTS: SocialProofToast[] = [
     icon: 'qrcode',
     titleKey: 'SocialProofToast2Title',
     ctaKey: 'SocialProofToast2Cta',
-    href: (lng) => `/${lng}/register`,
+    // href: (lng) => `/${lng}/register`,
+    // opens the sign-up modal on the landing page
+    href: (lng) => `/${lng}?register=1`,
   },
   {
     id: 'ditch-spreadsheets',
