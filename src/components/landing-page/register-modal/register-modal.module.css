@@ -11,7 +11,9 @@
   /* The landing page is scaled with the screen (landing-page.module.css). The modal sits outside it,
      in a portal, so it takes the same zoom to keep its size relative to the page. Inside a zoomed
      element vw/vh are zoomed as well; these are the true viewport units. */
-  --rm-zoom: var(--landing-zoom, 1);
+  /* scaled down further when the form wouldn't fit the screen (--rm-fit, set in index.tsx) */
+  /* --rm-zoom: var(--landing-zoom, 1); */
+  --rm-zoom: calc(var(--landing-zoom, 1) * var(--rm-fit, 1));
   --rm-vw: calc(1vw / var(--rm-zoom));
   --rm-vh: calc(1dvh / var(--rm-zoom));
 
@@ -21,7 +23,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px 16px;
+  /* padding: 24px 16px; */
+  padding: 16px;
   background: color-mix(in srgb, var(--accent-2) 50%, transparent);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
@@ -76,8 +79,10 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  width: min(900px, calc(100 * var(--rm-vw) - 32px));
-  max-height: calc(100 * var(--rm-vh) - 48px);
+  /* width: min(900px, calc(100 * var(--rm-vw) - 32px)); — the three-column layout */
+  width: min(580px, calc(100 * var(--rm-vw) - 32px));
+  /* max-height: calc(100 * var(--rm-vh) - 48px); */
+  max-height: calc(100 * var(--rm-vh) - 32px);
   overflow: hidden;
   border-radius: 24px;
   background: var(--rm-mint);
@@ -98,8 +103,10 @@
   grid-template-areas: 'logo title . status divider close';
   align-items: center;
   column-gap: 12px;
-  height: 84px;
-  padding-inline: 30px 20px;
+  /* height: 84px; */
+  height: 72px;
+  /* padding-inline: 30px 20px; */
+  padding-inline: 26px 16px;
 }
 
 /* a soft cloud behind the status line */
@@ -115,25 +122,27 @@
   border-radius: 50%;
   filter: blur(16px);
 }
+/* (for the 900px-wide modal they sat at 140px / 360px / 30px from the end, 260px / 190px / 170px
+   wide) */
 .blobs span:nth-child(1) {
-  inset-inline-end: 140px;
+  inset-inline-end: 110px;
   top: 8px;
-  width: 260px;
-  height: 70px;
+  width: 200px;
+  height: 66px;
   background: var(--rm-mint-deep);
 }
 .blobs span:nth-child(2) {
-  inset-inline-end: 360px;
-  top: 30px;
-  width: 190px;
-  height: 56px;
+  inset-inline-end: 250px;
+  top: 32px;
+  width: 130px;
+  height: 52px;
   background: color-mix(in srgb, var(--rm-green) 14%, var(--surface));
 }
 .blobs span:nth-child(3) {
-  inset-inline-end: 30px;
+  inset-inline-end: 16px;
   top: 34px;
-  width: 170px;
-  height: 58px;
+  width: 140px;
+  height: 56px;
   background: color-mix(in srgb, var(--rm-green) 17%, var(--surface));
 }
 
@@ -162,8 +171,9 @@
   grid-area: status;
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 13.5px;
+  gap: 8px;
+  /* font-size: 13.5px; — the 900px-wide header had room for it */
+  font-size: 12.5px;
   font-weight: 500;
   line-height: 1.5;
   color: var(--accent);
@@ -251,16 +261,21 @@
   min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: 32px 36px 6px;
+  /* padding: 32px 36px 6px; */
+  /* padding: 26px 28px 6px; */
+  padding: 20px 28px 4px;
   scrollbar-width: thin;
   scrollbar-color: color-mix(in srgb, var(--accent) 30%, transparent) transparent;
 }
 
 .footer {
   flex-shrink: 0;
-  padding: 18px 36px 34px;
+  /* padding: 18px 36px 34px; */
+  /* padding: 18px 28px 28px; */
+  padding: 14px 28px 22px;
 }
 
+/* the three-column layout:
 .grid {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
@@ -273,17 +288,68 @@
 .pair {
   grid-column: span 2;
 }
+*/
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* gap: 16px 14px; */
+  gap: 12px 14px;
+}
+.wide {
+  grid-column: 1 / -1;
+}
+.half {
+  grid-column: span 1;
+}
+
+/* "company details" / "account owner" */
+.section + .section {
+  /* margin-top: 22px; */
+  margin-top: 16px;
+}
+.sectionDivided {
+  /* padding-top: 22px; */
+  padding-top: 16px;
+  border-top: 1px dashed color-mix(in srgb, var(--accent) 16%, transparent);
+}
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  /* margin-bottom: 16px; */
+  margin-bottom: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--text);
+}
+.sectionIcon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  /* width: 32px; */
+  width: 28px;
+  /* height: 32px; */
+  height: 28px;
+  border-radius: 9px;
+  background: var(--rm-mint);
+  color: var(--accent);
+}
 
 .field {
   display: flex;
   flex-direction: column;
-  gap: 9px;
+  /* gap: 9px; */
+  gap: 6px;
   min-width: 0;
 }
 
 .label {
-  font-size: 14px;
-  font-weight: 700;
+  /* font-size: 14px;
+  font-weight: 700; */
+  font-size: 13.5px;
+  font-weight: 500;
   line-height: 1.35;
   color: var(--text);
 }
@@ -293,7 +359,8 @@
   position: relative;
   display: flex;
   align-items: stretch;
-  height: 48px;
+  /* height: 48px; */
+  height: 44px;
   overflow: hidden;
   border: 1px solid var(--border);
   border-radius: 12px;
@@ -382,6 +449,125 @@
 .addonChevron {
   color: color-mix(in srgb, var(--accent) 70%, transparent);
 }
+/* the phone's country code: a small button and the code, divided off from the number */
+.dialCode {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  /* gap: 9px; */
+  /* gap: 8px; */
+  gap: 7px;
+  /* padding-inline: 7px 12px; — with the green button at the start */
+  padding-inline: 12px 10px;
+  /* a <button> now (DialCodePicker), so the browser's own button look goes */
+  border: 0;
+  border-inline-end: 1px solid var(--border);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.dialCode:disabled {
+  cursor: default;
+}
+.dialCode:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: -4px;
+  border-radius: 10px;
+}
+
+/* the flag files have no edge of their own; white flags would vanish on white */
+.flag {
+  flex-shrink: 0;
+  width: 22px;
+  height: 16px;
+  border-radius: 3px;
+  object-fit: cover;
+  box-shadow: 0 0 0 1px var(--border);
+}
+
+.flagLarge {
+  width: 28px;
+  height: 20px;
+  border-radius: 4px;
+}
+.dialChevron {
+  flex-shrink: 0;
+  color: var(--muted);
+  transition: transform 0.15s ease;
+}
+.dialCode[aria-expanded='true'] .dialChevron {
+  transform: rotate(180deg);
+}
+
+/* the list DialCodePicker opens, portaled to the overlay so the panel doesn't clip it */
+.dialList {
+  position: fixed;
+  z-index: 1;
+  width: 250px;
+  max-height: 264px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 6px;
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: 0 18px 40px -16px color-mix(in srgb, var(--accent-2) 45%, transparent);
+  scrollbar-width: thin;
+}
+.dialOption {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--text);
+  cursor: pointer;
+}
+.dialOption[data-active='true'] {
+  background: var(--rm-mint-soft);
+}
+.dialOption[aria-selected='true'] {
+  font-weight: 700;
+  color: var(--accent);
+}
+.dialOptionName {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dialOptionCode {
+  color: var(--muted);
+  font-size: 13px;
+}
+.dialButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 40px;
+  height: 30px;
+  border-radius: 9px;
+  background: var(--accent);
+}
+.dialButton span {
+  width: 16px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--on-accent);
+}
+.dialValue {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
 /* invisible, on top of the prefix: tapping the prefix opens the platform's own picker */
 .addonSelect {
   position: absolute;
@@ -434,6 +620,14 @@
   color: var(--rm-error);
 }
 
+/* sits where .error would, in a quieter tone */
+.hint {
+  margin-top: -3px;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
 .formError {
   margin-bottom: 14px;
   padding: 10px 14px;
@@ -451,7 +645,8 @@
   justify-content: center;
   gap: 10px;
   width: 100%;
-  height: 54px;
+  /* height: 54px; */
+  height: 50px;
   border: 0;
   border-radius: 12px;
   background: var(--accent);
@@ -578,6 +773,7 @@
     background: var(--surface);
   }
 
+  /* the three-column layout's phone version:
   .grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 18px 12px;
@@ -588,6 +784,13 @@
   }
   .pair {
     grid-column: span 1;
+  }
+  */
+  .grid {
+    gap: 16px 12px;
+  }
+  .half {
+    grid-column: 1 / -1;
   }
 
   /* iOS Safari zooms the page into a focused field whose text is under 16px */

@@ -48,7 +48,8 @@ export default async function Footer({ lng }: { lng: string }) {
                     <Link href="#about">{t('AboutUs')}</Link>
                   </li>
                   <li>
-                    <Link href="#services">{t('OurServices')}</Link>
+                    {/* there's no #services section; the services are the key features */}
+                    <Link href="#key-features">{t('OurServices')}</Link>
                   </li>
                   <li>
                     <Link href="#contact">{t('Contact')}</Link>
@@ -85,7 +86,12 @@ export default async function Footer({ lng }: { lng: string }) {
 
                 <ul className={styles.footerSocialLink}>
                   <li>
-                    <a href="https://x.com/LinkAtras" target="_blank">
+                    <a
+                      href="https://x.com/LinkAtras"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="X"
+                    >
                       <svg
                         version="1.1"
                         className={styles.twitter}
@@ -103,7 +109,12 @@ export default async function Footer({ lng }: { lng: string }) {
                     </a>
                   </li>
                   <li>
-                    <a href="https://www.instagram.com/atraslink/" target="_blank">
+                    <a
+                      href="https://www.instagram.com/atraslink/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Instagram"
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="ion-icon"

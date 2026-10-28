@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
 import { getClientTranslation } from '@/app/i18n/client';
 import { ArrowRight, Check, Maximize2, Minimize2 } from 'lucide-react';
@@ -13,18 +13,12 @@ export default function WhyUs({ lng }: { lng: string }) {
   const [tabIndex, setTabIndex] = useState(0);
   const [stepIndex, setStepIndex] = useState(0);
 
-  /* Tabs hold different amounts of copy, so the stage grew and shrank on every switch — very
-     visible on mobile, where .stage drops its 560px min-height. Reserve the tallest measured
-     step list instead of hard-coding a number that any translation change would invalidate. */
-  const [stepsMinHeight, setStepsMinHeight] = useState(0);
-
   const [bg, setBg] = useState<{ a: string | null; b: string | null; showA: boolean }>({
     a: null,
     b: null,
     showA: true,
   });
 
-  const stepsRef = useRef<HTMLDivElement | null>(null);
   const tabsRef = useRef<HTMLDivElement | null>(null);
   const tabBtnRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const lastImgRef = useRef<string | null>(null);
@@ -40,6 +34,9 @@ export default function WhyUs({ lng }: { lng: string }) {
   const [userTookOver, setUserTookOver] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
   const isAutoplaying = !isHovered && isInView && !userTookOver && !reducedMotion;
+  /* how far into the current step the walkthrough got before a pause: it resumes from there, as
+     the tab's progress bar does, instead of starting the step over and falling behind the bar */
+  const stepElapsedRef = useRef({ step: '', ms: 0 });
 
   const tab = WHY_US_TABS[tabIndex];
   const steps = tab.steps;
@@ -64,6 +61,10 @@ export default function WhyUs({ lng }: { lng: string }) {
     if (!isAutoplaying) return;
     const isLastStep = stepIndex >= steps.length - 1;
 
+    const step = `${tabIndex}:${stepIndex}`;
+    if (stepElapsedRef.current.step !== step) stepElapsedRef.current = { step, ms: 0 };
+    const startedAt = performance.now();
+
     const timer = setTimeout(() => {
       if (isLastStep) {
         setTabIndex((i) => (i + 1) % WHY_US_TABS.length);
@@ -71,9 +72,12 @@ export default function WhyUs({ lng }: { lng: string }) {
       } else {
         setStepIndex((s) => s + 1);
       }
-    }, WHY_US_STEP_MS);
+    }, Math.max(0, WHY_US_STEP_MS - stepElapsedRef.current.ms));
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      stepElapsedRef.current.ms += performance.now() - startedAt;
+    };
   }, [tabIndex, stepIndex, steps.length, isAutoplaying]);
 
   useEffect(() => {
@@ -98,28 +102,36 @@ export default function WhyUs({ lng }: { lng: string }) {
     img.src = next;
   }, [tabIndex, stepIndex, steps]);
 
-  useLayoutEffect(() => {
-    const el = stepsRef.current;
-    if (!el) return;
-    // the reservation sits on .panel, so this stays the tab's true content height
-    setStepsMinHeight((prev) => Math.max(prev, el.offsetHeight));
-  }, [tabIndex]);
-
-  useEffect(() => {
-    // line lengths change with the viewport, so re-seed from the current tab and let the
-    // effect above grow it back to the tallest one as the tabs cycle
-    const handleResize = () => setStepsMinHeight(stepsRef.current?.offsetHeight ?? 0);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
   useEffect(() => {
     const handleChange = () => {
-      setIsFullscreen(document.fullscreenElement === stageRef.current);
+      const element = document.fullscreenElement ?? (document as any).webkitFullscreenElement;
+      setIsFullscreen(element === stageRef.current);
     };
     document.addEventListener('fullscreenchange', handleChange);
-    return () => document.removeEventListener('fullscreenchange', handleChange);
+    document.addEventListener('webkitfullscreenchange', handleChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleChange);
+      document.removeEventListener('webkitfullscreenchange', handleChange);
+    };
   }, []);
+
+  // iPhone Safari has no Fullscreen API for anything but <video>, so there the stage is pinned over
+  // the page with CSS instead, as the hero's demo is; the body class lifts the section above the navbar
+  const isNativeFullscreen = () =>
+    !!(document.fullscreenElement || (document as any).webkitFullscreenElement);
+
+  useEffect(() => {
+    if (!isFullscreen || isNativeFullscreen()) return;
+    document.body.classList.add('why-us-pseudo-fullscreen');
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsFullscreen(false);
+    };
+    document.addEventListener('keydown', handleKey);
+    return () => {
+      document.body.classList.remove('why-us-pseudo-fullscreen');
+      document.removeEventListener('keydown', handleKey);
+    };
+  }, [isFullscreen]);
 
   useEffect(() => {
     const container = tabsRef.current;
@@ -144,13 +156,30 @@ export default function WhyUs({ lng }: { lng: string }) {
   }
 
   function toggleFullscreen() {
-    const el = stageRef.current;
+    const el = stageRef.current as any;
     if (!el) return;
 
-    if (document.fullscreenElement) {
-      document.exitFullscreen();
+    if (isNativeFullscreen()) {
+      if (document.exitFullscreen) {
+        document.exitFullscreen().catch(() => {});
+      } else if ((document as any).webkitExitFullscreen) {
+        (document as any).webkitExitFullscreen();
+      }
+      return;
+    }
+
+    if (isFullscreen) {
+      setIsFullscreen(false);
+      return;
+    }
+
+    const canFullscreen = document.fullscreenEnabled || (document as any).webkitFullscreenEnabled;
+    if (canFullscreen && el.requestFullscreen) {
+      el.requestFullscreen().catch(() => setIsFullscreen(true));
+    } else if (canFullscreen && el.webkitRequestFullscreen) {
+      el.webkitRequestFullscreen();
     } else {
-      el.requestFullscreen?.();
+      setIsFullscreen(true);
     }
   }
 
@@ -245,58 +274,71 @@ export default function WhyUs({ lng }: { lng: string }) {
                 />
               </div>
             )}
-            <div
-              className={styles.panel}
-              id={`why-us-panel-${tab.id}`}
-              role="tabpanel"
-              aria-label={t(tab.labelKey)}
-              style={stepsMinHeight ? { minHeight: stepsMinHeight } : undefined}
-            >
-              <div className={styles.steps} ref={stepsRef}>
-                {steps.map((step, i) => (
+            {/* Tabs hold different amounts of copy, so rendering only the current one made the
+                stage grow when the walkthrough reached a longer tab. All of them are rendered in
+                one grid cell (see .panels) with the inactive ones hidden, so the stage takes the
+                longest tab's height from the start, at any width and in either language. */}
+            <div className={styles.panels}>
+              {WHY_US_TABS.map((tabItem, ti) => {
+                const isActive = ti === tabIndex;
+                // a hidden tab is laid out the way it opens, on its first step
+                const current = isActive ? stepIndex : 0;
+                return (
                   <div
-                    key={step.titleKey}
-                    className={[
-                      styles.step,
-                      i === stepIndex ? styles.stepActive : '',
-                      i < stepIndex ? styles.stepDone : '',
-                    ]
-                      .filter(Boolean)
-                      .join(' ')}
-                    role="button"
-                    tabIndex={0}
-                    aria-current={i === stepIndex}
-                    onClick={() => selectStep(i)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        selectStep(i);
-                      }
-                    }}
+                    key={tabItem.id}
+                    className={`${styles.panel} ${isActive ? '' : styles.panelHidden}`}
+                    id={`why-us-panel-${tabItem.id}`}
+                    role="tabpanel"
+                    aria-label={t(tabItem.labelKey)}
                   >
-                    <div className={styles.stepNum}>
-                      {i < stepIndex ? (
-                        <span className={styles.stepCheck}>
-                          <Check size={16} strokeWidth={3} />
-                        </span>
-                      ) : (
-                        i + 1
-                      )}
+                    <div className={styles.steps}>
+                      {tabItem.steps.map((step, i) => (
+                        <div
+                          key={step.titleKey}
+                          className={[
+                            styles.step,
+                            i === current ? styles.stepActive : '',
+                            i < current ? styles.stepDone : '',
+                          ]
+                            .filter(Boolean)
+                            .join(' ')}
+                          role="button"
+                          tabIndex={0}
+                          aria-current={i === current}
+                          onClick={() => selectStep(i)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              e.preventDefault();
+                              selectStep(i);
+                            }
+                          }}
+                        >
+                          <div className={styles.stepNum}>
+                            {i < current ? (
+                              <span className={styles.stepCheck}>
+                                <Check size={16} strokeWidth={3} />
+                              </span>
+                            ) : (
+                              i + 1
+                            )}
+                          </div>
+                          <h4>{t(step.titleKey)}</h4>
+                          {step.bodyKey && <p>{t(step.bodyKey)}</p>}
+                          {step.tagKeys && (
+                            <div className={styles.tags}>
+                              {step.tagKeys.map((tagKey) => (
+                                <span key={tagKey} className={styles.tag}>
+                                  {t(tagKey)}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ))}
                     </div>
-                    <h4>{t(step.titleKey)}</h4>
-                    {step.bodyKey && <p>{t(step.bodyKey)}</p>}
-                    {step.tagKeys && (
-                      <div className={styles.tags}>
-                        {step.tagKeys.map((tagKey) => (
-                          <span key={tagKey} className={styles.tag}>
-                            {t(tagKey)}
-                          </span>
-                        ))}
-                      </div>
-                    )}
                   </div>
-                ))}
-              </div>
+                );
+              })}
             </div>
           </div>
         </div>

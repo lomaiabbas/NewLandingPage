@@ -79,21 +79,24 @@
   background: rgba(255, 255, 255, 0.18);
 }
 .isScrolled .navWord,
-.isScrolled .navLink:hover,
-.isScrolled .navLink[aria-current='page'],
-.isScrolled .langLink:hover {
+.isScrolled .navLink[aria-current='page'] {
   color: #fff;
 }
 .isScrolled .navLink,
 .isScrolled .langLink {
   color: rgba(255, 255, 255, 0.82);
 }
-.isScrolled .navLink:hover,
-.isScrolled .langLink:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
 .isScrolled .langLink {
   border-color: rgba(255, 255, 255, 0.2);
+}
+.isScrolled .navLink:not([aria-current='page']):hover {
+  color: #fff;
+  background: rgba(7, 198, 146, 0.22);
+  box-shadow: inset 0 0 0 1px rgba(7, 198, 146, 0.55);
+}
+.isScrolled .navLink.langLink:hover {
+  border-color: rgba(7, 198, 146, 0.6);
+  box-shadow: none;
 }
 .isScrolled .navBurger span {
   background: #fff;
@@ -176,17 +179,21 @@
   position: relative;
   transition:
     color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
-    background 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    background 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.navLink:hover {
+/* a filled pill with a green rim: a plain 10% tint all but vanished against the nav's own
+   green-tinted gradient. The sliding indicator already marks the active link, so it gets no
+   hover pill on top of it. */
+.navLink:not([aria-current='page']):hover {
   color: #0b2e24;
-  background: rgba(7, 198, 146, 0.1);
+  background: rgba(7, 198, 146, 0.16);
+  box-shadow: inset 0 0 0 1px rgba(7, 198, 146, 0.4);
 }
-/* the sliding indicator already marks the active link, so no hover tint on top of it; and the
-   weight stays the same as the other links — bolding it would reflow its neighbours mid-slide */
+/* the weight stays the same as the other links — bolding it would reflow its neighbours mid-slide */
 .navLink[aria-current='page'] {
   color: #0b2e24;
-  background: transparent;
 }
 
 /* an underline that glides between links: transform + width only, so it never triggers layout.
@@ -227,9 +234,10 @@
   color: #2b6753;
   border: 1px solid rgba(11, 46, 36, 0.16);
 }
-.langLink:hover {
-  color: #0b2e24;
-  background: rgba(7, 198, 146, 0.08);
+/* the language switch already has a border, so it lights that up instead of adding a second rim */
+.navLink.langLink:hover {
+  border-color: rgba(7, 198, 146, 0.55);
+  box-shadow: none;
 }
 
 @media (max-width: 1100px) {

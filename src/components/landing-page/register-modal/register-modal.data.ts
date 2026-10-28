@@ -18,12 +18,14 @@ export const isRegisterHref = (href: string) => {
 export const EMPTY_REGISTER_VALUES = {
   companyName: '',
   subdomain: '',
-  countryId: '',
-  cityId: '',
-  phone: '',
-  firstName: '',
-  lastName: '',
+  // countryId: '',
+  // cityId: '',
+  // phone: '',
+  // firstName: '',
+  // lastName: '',
+  fullName: '',
   email: '',
+  phone: '',
   password: '',
   confirmPassword: '',
 }
@@ -36,6 +38,20 @@ export const REGISTER_FIELDS = Object.keys(EMPTY_REGISTER_VALUES) as RegisterFie
 /* the phone prefix before the country-code list loads, as on the /register page */
 export const DEFAULT_DIAL_ISO = 'SA'
 export const DEFAULT_DIAL_CODE = '+966'
+
+/* The only countries the phone code list offers, in this order. Set here rather than loaded from
+   the backend's country-code list, which offers others. */
+export const DIAL_COUNTRIES = [
+  { iso: 'SA', dialCode: '+966', ar: 'السعودية', en: 'Saudi Arabia' },
+  { iso: 'AE', dialCode: '+971', ar: 'الإمارات العربية المتحدة', en: 'United Arab Emirates' },
+  { iso: 'KW', dialCode: '+965', ar: 'الكويت', en: 'Kuwait' },
+  { iso: 'NL', dialCode: '+31', ar: 'هولندا', en: 'Netherlands' },
+]
+
+/* The phone codes the /register page offers: the backend's active country-code list as it stood on
+   2026-10-26. Only used when that list can't be loaded, so the dropdown never offers more than the
+   /register page did. */
+export const FALLBACK_DIAL_ISOS = ['SA', 'AE', 'JO', 'SY', 'NL', 'LB', 'ES', 'GB', 'DE', 'CA', 'DZ']
 
 /* the order the /register page's phone dropdown puts these first in (components/panel/phone-input.tsx) */
 export const PRIORITY_DIAL_ISOS = ['sa', 'ae', 'kw', 'qa', 'bh', 'om', 'nl']
@@ -59,6 +75,13 @@ export const SIGNUP_PLACEHOLDERS = {
   longitude: null,
 }
 
+/* The modal no longer asks for the country and the city: every sign-up goes in as Riyadh, Saudi
+   Arabia. 6 is Riyadh in the backend's location list (a city of country 1, Saudi Arabia). */
+export const SIGNUP_DEFAULT_LOCATION = {
+  cityId: 6,
+  address: { ar: 'الرياض، المملكة العربية السعودية', en: 'Riyadh, Saudi Arabia' },
+}
+
 /* Backend error codes (and the members of validation errors) → the field the error belongs under.
    First match wins. Where a translation key is given it replaces the backend's own message. */
 export const SIGNUP_ERROR_FIELDS: { match: RegExp; field: RegisterField; messageKey?: string }[] = [
@@ -70,7 +93,9 @@ export const SIGNUP_ERROR_FIELDS: { match: RegExp; field: RegisterField; message
   { match: /Phone|CountryCode/i, field: 'phone' },
   { match: /Password/i, field: 'password' },
   { match: /ArName|EnName/i, field: 'companyName' },
-  { match: /SureName|LastName/i, field: 'lastName' },
-  { match: /(^|[:.])Name/i, field: 'firstName' },
-  { match: /City/i, field: 'cityId' },
+  // { match: /SureName|LastName/i, field: 'lastName' },
+  // { match: /(^|[:.])Name/i, field: 'firstName' },
+  // { match: /City/i, field: 'cityId' },
+  // first and last name are one field now
+  { match: /SureName|LastName|(^|[:.])Name/i, field: 'fullName' },
 ]

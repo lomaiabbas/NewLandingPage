@@ -1,12 +1,29 @@
+import { AxiosRequestConfig } from 'axios';
 import { LiteEntityDto, PagedResultDto } from '../dto';
 import http from '../httpService';
 import { GetAllPayload, CountryCodeDto } from './dto';
 
 class CountriesCodesService {
    
-    public async getAll(input: GetAllPayload): Promise<PagedResultDto<CountryCodeDto>> {
+    // public async getAll(input: GetAllPayload): Promise<PagedResultDto<CountryCodeDto>> {
+    //     let result = await http.get('api/app/country-code', {
+    //         params: {
+    //             skipCount: input.skipCount,
+    //             maxResultCount: input.maxResultCount,
+    //             name: input.name,
+    //             isActive: input.isActive
+    //         }
+    //     });
+    //     return result.data;
+    // }
+
+    // the same request; `config` lets a caller (the landing page's register modal) pass
+    // skipErrorHandler and handle a failure itself instead of httpService's global popup
+    public async getAll(input: GetAllPayload, config?: AxiosRequestConfig & { skipErrorHandler?: boolean }): Promise<PagedResultDto<CountryCodeDto>> {
         let result = await http.get('api/app/country-code', {
+            ...config,
             params: {
+                ...config?.params,
                 skipCount: input.skipCount,
                 maxResultCount: input.maxResultCount,
                 name: input.name,

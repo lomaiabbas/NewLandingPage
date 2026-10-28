@@ -2140,7 +2140,9 @@ html[dir='ltr'] .coming-soon-ribbon.details div div span {
   opacity: 0.5 !important;
 }
 
-/* locks the page behind the hero demo's CSS fullscreen on iPhone (see hero.module.css) */
-body.demo-pseudo-fullscreen {
+/* locks the page behind the hero demo's and the why-us stage's CSS fullscreen on iPhone (see
+   hero.module.css, why-us.module.css) */
+body.demo-pseudo-fullscreen,
+body.why-us-pseudo-fullscreen {
   overflow: hidden;
 }
