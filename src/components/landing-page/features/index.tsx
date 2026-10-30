@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './why-us.module.css';
 import { Col, Row} from 'antd';
-import { BarChart3, Gift, Megaphone, MessageSquareMore, Users, UsersRound } from 'lucide-react';
+import { BarChart3, Megaphone, MessageSquareMore, QrCode, Users, UsersRound } from 'lucide-react';
 import { getTranslation } from '@/app/i18n';
 
 export default async function Features({ lng }: { lng: string }) {
@@ -48,7 +48,7 @@ export default async function Features({ lng }: { lng: string }) {
                     <Col xs={24} md={12} lg={8} data-aos="fade-up" data-aos-delay="600">
                         <div className={styles.featureCard}>
                             <div>
-                                <Gift size={26} />
+                                <Megaphone size={26} />
                             </div>
                             <div className='flex flex-col gap-2 text-start'>
                                 <h3 className={styles.boxTitle}>{t("KeyFeature03Title")}</h3>
@@ -60,11 +60,11 @@ export default async function Features({ lng }: { lng: string }) {
                     <Col xs={24} md={12} lg={8} data-aos="fade-up" data-aos-delay="800">
                         <div className={styles.featureCard}>
                             <div>
-                                <Megaphone size={26} />
+                                <QrCode size={26} />
                             </div>
                             <div className='flex flex-col gap-2 text-start'>
                                 <h3 className={styles.boxTitle}>{t("KeyFeature04Title")}</h3>
-                                <p className={`${styles.boxText} ${styles.boxTextOneLine}`}>{t("KeyFeature04Desc")}</p>
+                                <p className={styles.boxText}>{t("KeyFeature04Desc")}</p>
                             </div>
                             
                         </div>

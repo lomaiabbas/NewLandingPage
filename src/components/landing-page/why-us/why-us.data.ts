@@ -26,6 +26,7 @@ export const WHY_US_TABS: WhyUsTab[] = [
       },
       {
         titleKey: 'WhyUsOrgStep2Title',
+        bodyKey: 'WhyUsOrgStep2Desc',
         img: '/images/why-us/organizer-02-create-request.webp',
       },
       {
