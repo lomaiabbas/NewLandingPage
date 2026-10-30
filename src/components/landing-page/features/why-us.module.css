@@ -93,13 +93,6 @@
   color: var(--muted);
 }
 
-@media (min-width: 992px){
-  .featureCard .boxTextOneLine{
-    white-space: nowrap;
-    font-size: 14px;
-  }
-}
-
 .featureCard .boxIcon{
   min-width:70px;
   height:130px;
