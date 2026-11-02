@@ -231,7 +231,7 @@ export default function Navbar({ lng }: { lng: string }) {
         {/* <Link href={`/${lng}/register`} className={styles.navCta}> */}
         {/* ?register=1 opens the sign-up modal; the old link went to the /register page, which is
             where a click landed before the page had finished loading */}
-        <Link href={`/${lng}?register=1`} className={styles.navCta}>
+        <Link href={`/${lng}/signup`} className={styles.navCta}>
           {t('Register')}
         </Link>
 
@@ -292,7 +292,7 @@ export default function Navbar({ lng }: { lng: string }) {
         <div className={styles.drawerCta}>
           <Link
             // href={`/${lng}/register`}
-            href={`/${lng}?register=1`}
+            href={`/${lng}/signup`}
             className={styles.drawerCtaBtn}
             onClick={() => setOpenDrawer(false)}
           >
