@@ -5,6 +5,7 @@ import Hero from './hero';
 import Solutions from './solutions';
 import Integrations from './integrations';
 import GetStarted from './get-started';
+import WhyUs from './why-us';
 import ContactUs from './contact-us';
 import Footer from './footer';
 import OurClients from './our-clients';
@@ -40,10 +41,13 @@ export default function LandingPage({lng}:{lng:string}) {
 
                 <Navbar lng={lng} />
                 <Hero lng={lng} />
+                {/* the order and band colours follow the leader's page (atraslink-brand-beacon):
+                    dark hero, light, dark, light, dark, then light to the end */}
                 <Solutions lng={lng} />
-                <Integrations lng={lng} />
-                <OurClients lng={lng} />
                 <GetStarted lng={lng} />
+                <WhyUs lng={lng} />
+                <OurClients lng={lng} />
+                <Integrations lng={lng} />
                 <ContactUs lng={lng} />
                 <Footer lng={lng} />
                 <SocialProof lng={lng} />

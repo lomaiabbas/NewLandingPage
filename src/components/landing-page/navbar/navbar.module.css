@@ -4,7 +4,7 @@
      the user can scroll before it attaches — leaving the header position:absolute, so it
      scrolls away with the page instead of staying pinned, until the listener catches up. */
   position: fixed;
-  top: 34px;
+  top: 24px;
   left: 50%;
   transform: translateX(-50%);
   width: max-content;
@@ -12,7 +12,7 @@
   transition: top 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .headerLayout.scrolled {
-  top: 20px;
+  top: 14px;
 }
 
 /* above the breakpoint where the full nav (links + CTA) shows, stretch the pill to the exact
@@ -36,7 +36,7 @@
   display: flex;
   align-items: center;
   gap: 22px;
-  padding: 14px 22px;
+  padding: 8px 20px;
   border-radius: 999px;
   background: linear-gradient(
     135deg,
@@ -50,9 +50,9 @@
   border: 1px solid rgba(255, 255, 255, 0.6);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.85),
-    0 0 20px 3px rgba(83, 255, 184, 0.25),
-    0 18px 40px -20px rgba(7, 198, 146, 0.4),
-    0 10px 24px -16px rgba(4, 32, 23, 0.38);
+    0 0 10px 1px rgba(83, 255, 184, 0.1),
+    0 12px 28px -20px rgba(7, 198, 146, 0.2),
+    0 8px 18px -16px rgba(4, 32, 23, 0.3);
   transition:
     padding 0.2s cubic-bezier(0.4, 0, 0.2, 1),
     background 0.3s cubic-bezier(0.4, 0, 0.2, 1),
@@ -65,7 +65,7 @@
 }
 
 .isScrolled {
-  padding: 11px 22px;
+  padding: 6px 20px;
   /* once scrolled: dark smoked glass with a green neon rim, like the live atraslink.com navbar */
   background: rgba(40, 40, 40, 0.72);
   -webkit-backdrop-filter: blur(24px) saturate(160%);
@@ -73,7 +73,7 @@
   border-color: rgba(7, 198, 146, 0.3);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 5px 20px 0 rgba(7, 198, 146, 0.3);
+    0 3px 12px 0 rgba(7, 198, 146, 0.14);
 }
 .isScrolled .navBrand::after {
   background: rgba(255, 255, 255, 0.18);
@@ -104,11 +104,11 @@
 
 @media (max-width: 1100px) {
   .nav {
-    padding: 10px 14px;
+    padding: 6px 12px;
     gap: 14px;
   }
   .isScrolled {
-    padding: 10px 14px;
+    padding: 5px 12px;
   }
 }
 
@@ -123,8 +123,8 @@
 .navBrand::after {
   content: '';
   width: 1px;
-  height: 26px;
-  margin-inline-start: 26px;
+  height: 22px;
+  margin-inline-start: 22px;
   background: rgba(11, 46, 36, 0.16);
 }
 .navMark {
@@ -133,8 +133,8 @@
   flex-shrink: 0;
 }
 .navMark :global(svg) {
-  width: 48px !important;
-  height: 48px !important;
+  width: 38px !important;
+  height: 38px !important;
   border-radius: 0 !important;
   background-color: transparent !important;
 }
@@ -168,12 +168,12 @@
 .navLink {
   font-family: 'IBM Plex Sans Arabic', var(--font-sans), sans-serif !important;
   font-weight: 500;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.4;
   color: #2b6753;
   white-space: nowrap;
   cursor: pointer;
-  padding: 9px 16px;
+  padding: 6px 14px;
   border-radius: 999px;
   text-decoration: none;
   position: relative;
@@ -203,8 +203,8 @@
   position: absolute;
   top: 50%;
   left: 0;
-  height: 38px;
-  margin-top: -19px;
+  height: 32px;
+  margin-top: -16px;
   pointer-events: none;
   opacity: 0;
   transition:
@@ -230,7 +230,7 @@
 }
 .langLink {
   margin-inline-start: 6px;
-  padding: 8px 14px;
+  padding: 5px 12px;
   color: #2b6753;
   border: 1px solid rgba(11, 46, 36, 0.16);
 }
@@ -249,18 +249,18 @@
 .navCta {
   font-family: 'IBM Plex Sans Arabic', var(--font-sans), sans-serif !important;
   font-weight: 700;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1;
   color: #fff !important;
   background: var(--primary-color, #07c692) !important;
   border: 0;
   border-radius: 999px;
-  padding: 13px 24px;
+  padding: 10px 22px;
   white-space: nowrap;
   cursor: pointer;
   display: inline-block;
   flex-shrink: 0;
-  box-shadow: 0 10px 22px -10px rgba(7, 198, 146, 0.7);
+  box-shadow: 0 8px 16px -10px rgba(7, 198, 146, 0.45);
   text-decoration: none;
   transition:
     filter 0.15s cubic-bezier(0.4, 0, 0.2, 1),
@@ -286,8 +286,8 @@
 
 .navBurger {
   display: none;
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   border: 0;
   background: transparent;
   cursor: pointer;

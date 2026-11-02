@@ -1,7 +1,8 @@
 .section{
   position: relative;
   isolation: isolate;
-  background: var(--band);
+  /* the leader's steps gradient (atraslink-brand-beacon --gradient-steps) */
+  background: linear-gradient(225deg, #0b2e24 0%, #0f6b4e 38%, #0e9e6d 100%);
   margin-top: calc(-1 * var(--section-slant));
   clip-path: polygon(0 0, 100% var(--section-slant), 100% 100%, 0 100%);
 }

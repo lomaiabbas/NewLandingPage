@@ -41,7 +41,7 @@ export default function ClientCard({ client, isLarge = false }: ClientCardProps)
       ) : (
         content
       )}
-      <span className="text-[11px] sm:text-[12px] md:text-[14px] text-[#182620]/70 font-medium max-w-20 sm:max-w-[104px] md:max-w-[140px] text-center whitespace-nowrap overflow-hidden text-ellipsis transition-colors duration-300 group-hover:text-[var(--accent)]">
+      <span className="text-[11px] sm:text-[12px] md:text-[14px] text-white/75 font-medium max-w-20 sm:max-w-[104px] md:max-w-[140px] text-center whitespace-nowrap overflow-hidden text-ellipsis transition-colors duration-300 group-hover:text-white">
         {client.name}
       </span>
     </div>

@@ -55,7 +55,8 @@
   position:absolute;
   inset:0;
   z-index:-1;
-  background:var(--hero-grad);
+  /* the leader's steps gradient (atraslink-brand-beacon --gradient-steps) */
+  background:linear-gradient(225deg, #0b2e24 0%, #0f6b4e 38%, #0e9e6d 100%);
   /* the same line the next section's top follows, so the two meet edge to edge */
   clip-path:polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - var(--hero-slant)));
 }
@@ -68,7 +69,7 @@
   .hero{
     /* a short bottom, well under the cut's depth, so the cut runs across the lower part of the
        dashboard and the corner its backdrop drops shows on the light band below */
-    padding:180px 0 40px;
+    padding:150px 0 0;
   }
 }
 
@@ -89,7 +90,8 @@
 @media (min-width: 992px){
   .heroContent{
     max-width:none;
-    text-align:start;
+    /* headline, paragraph and button share one centre line */
+    text-align:center;
     margin-inline:0;
   }
 }
@@ -108,11 +110,18 @@
   }
 }
 
+/* sized so the headline holds one line in the copy column on desktop (it scales with the width the
+   column does); on phones it wraps and balances */
 .heroTitle{
   font-size:clamp(2rem, calc(2.2 * var(--u-vw, 1vw)) + 0.85rem, 3rem);
-  line-height:1.14;
+  line-height:1.2;
   letter-spacing:-0.015em;
   text-wrap:balance;
+}
+@media (min-width: 992px){
+  .heroTitle{
+    white-space:nowrap;
+  }
 }
 
 /* --primary-color is the same green as the hero gradient, so the highlighted word needs a
@@ -124,7 +133,15 @@
 }
 
 .heroDesc{
+  font-size:16px;
   max-width:500px;
+  /* centred over the demo button, which sits in the middle of the column */
+  text-align:center;
+  margin-inline:auto;
+}
+
+@media (min-width: 768px){
+  .heroDesc{ font-size:18px; }
 }
 
 .heroActions{
@@ -136,18 +153,20 @@
 .heroActions .demoBtn{
   display:inline-flex;
   align-items:center;
-  padding:13px 30px;
+  justify-content:center;
+  gap:8px;
+  padding:14px 28px;
   border-radius:999px;
-  font-weight:700;
+  font-weight:600;
   font-size:16px;
-  color:var(--accent-2);
-  background:var(--band);
-  box-shadow:0 8px 24px rgba(0,0,0,.18);
-  transition:transform .2s ease, background-color .2s ease;
+  color:#0f6b4e;
+  background:#fff;
+  box-shadow:0 1px 2px rgba(11,46,36,.04), 0 8px 24px -12px rgba(11,46,36,.12);
+  transition:transform .2s ease;
 }
 
 .heroActions .demoBtn:hover{
-  background:#f4f2ea;
+  color:#0f6b4e;
   transform:translateY(-2px);
 }
 
@@ -157,10 +176,6 @@
 }
 
 @media (min-width: 992px){
-  .heroActions .demoBtn{
-    margin-inline-end:64px;
-  }
-
   .heroDesc{
     max-width:none;
   }
@@ -195,11 +210,14 @@
    screens, so it fills the column out to the container edge and balances the copy opposite */
 @media (min-width: 992px){
   .demoMockup{
+    /* runs out over the column's end padding to the container edge, a little more width to scale up */
+    width: calc(100% + 16px);
+    margin-inline: auto -16px;
     /* on short screens the dashboard also gives way to the screen height, so the whole hero, the
        cut and the scroll hint just under the dashboard all fit the first screen. The height left
-       over after the hero's top padding and the hint, times the 16:10 frame ratio */
-    max-width: calc((100 * var(--u-vh, 1vh) - 258px) * 1.6);
-    max-width: calc((100 * var(--u-vh, 1svh) - 258px) * 1.6);
+       over after the hero's top padding and the hint, times the 4:3 frame ratio */
+    max-width: calc((100 * var(--u-vh, 1vh) - 224px) * 1.3333);
+    max-width: calc((100 * var(--u-vh, 1svh) - 224px) * 1.3333);
   }
 }
 
@@ -258,8 +276,8 @@
   position:absolute;
   top:0;
   left:0;
-  width:1280px;
-  height:800px;
+  width:1200px;
+  height:900px;
   transform-origin:top left;
   border:0;
   background:#fff;
@@ -446,10 +464,10 @@
 }
 
 /* the dashboard hangs across the cut and covers the centre, so the hint sits just under the
-   dashboard (which ends 40px above the hero's bottom), already past the cut. Phones hide it. */
+   dashboard (which ends at the hero's bottom on desktop), already past the cut. Phones hide it. */
 @media (min-width: 601px){
   .mouse{
-    top: calc(100% - 20px);
+    top: calc(100% + 44px);
   }
 }
 .mouse::before {

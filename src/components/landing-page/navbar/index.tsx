@@ -12,9 +12,9 @@ import styles from './navbar.module.css'
 // in the order the sections appear on the page
 const NAV_LINKS = [
   { key: 'Solutions', hash: 'solutions' },
-  { key: 'IntegrationsEyebrow', hash: 'integrations' },
-  { key: 'NavClients', hash: 'our-clients' },
   { key: 'AboutUs', hash: 'about' },
+  { key: 'NavClients', hash: 'our-clients' },
+  { key: 'IntegrationsEyebrow', hash: 'integrations' },
   { key: 'Contact', hash: 'contact' },
 ] as const
 

@@ -40,6 +40,18 @@
   --u-vh: calc(1vh / var(--landing-zoom, 1));
 }
 
+/* section headings at the leader's sizes (30px, 2.6rem from 768px); overrides the app-wide
+   --h2-fs for the landing page only */
+.landingPage {
+  --h2-fs: 30px;
+  --h2-line: 1.25;
+}
+@media (min-width: 768px) {
+  .landingPage {
+    --h2-fs: 2.6rem;
+  }
+}
+
 /* a fullscreen demo sizes itself to the real screen, which the zoom would throw off */
 .landingPage:has(:fullscreen) {
   zoom: 1 !important;

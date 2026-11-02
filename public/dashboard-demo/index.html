@@ -268,13 +268,13 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .tbl-wrap{overflow-x:auto}
 .tbl-wrap::-webkit-scrollbar{height:8px}
 .tbl-wrap::-webkit-scrollbar-thumb{background:#D6D9E0;border-radius:99px}
-.tbl{width:100%;min-width:1060px;border-collapse:collapse}
+.tbl{width:100%;min-width:900px;border-collapse:collapse}
 .tbl th{
-  font-size:14px;font-weight:700;color:var(--ink-2);padding:14px 10px;
+  font-size:14px;font-weight:700;color:var(--ink-2);padding:14px 6px;
   border-bottom:1px solid var(--line);white-space:nowrap;position:relative;text-align:center;
 }
 .tbl th+th::after{content:'';position:absolute;inset-inline-start:0;top:12px;bottom:12px;width:1px;background:var(--line)}
-.tbl td{font-size:14px;color:var(--ink-2);padding:12px 10px;border-bottom:1px solid var(--line-2);text-align:center;vertical-align:middle}
+.tbl td{font-size:14px;color:var(--ink-2);padding:12px 6px;border-bottom:1px solid var(--line-2);text-align:center;vertical-align:middle}
 .tbl tbody tr:last-child td{border-bottom:none}
 .tbl tbody tr:hover{background:#FAFBFC}
 
@@ -1120,6 +1120,15 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .x-tars-p{bottom:150px;left:22px;display:grid;gap:8px}
 .x-tars-p .a{background:var(--teal-050);border-radius:10px;padding:9px 11px;font-size:13.5px;white-space:pre-line}
 .x-tars-p .q{display:block;width:100%;text-align:start;font-size:13.5px;padding:6px 9px;border:1px solid var(--line);border-radius:8px;margin-top:4px}
+/* داخل الهيرو (?demo=1) الإطار 1200px فقط: نضيّق الأعمدة الجانبية ليأخذ عمود المحادثة مساحة كافية دون قص */
+html.demo{--sidebar-w:230px}
+html.demo .chat-list-col{width:330px;flex:0 0 330px}
+html.demo .chat-det{width:240px;flex:0 0 240px}
+html.demo .chat-tabs{flex-wrap:wrap;overflow-x:visible}
+html.demo .topbar{padding:0 12px}
+html.demo .tb-group{gap:6px;min-width:0}
+html.demo .tb-chip{padding:0 8px;font-size:13px;white-space:nowrap}
+html.demo .tb-chips .tb-chip:first-child:not(:last-child){display:none}
 @media (max-width:1180px){
   .chat-shell{flex-wrap:wrap;height:auto}
   .chat-thread-col{flex:1 1 360px;min-height:520px}
@@ -1143,6 +1152,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 }
 </style>
 </head>
+<script>if(/[?&]demo=1\b/.test(location.search))document.documentElement.classList.add('demo')</script>
 <body>
 
 <div class="app">

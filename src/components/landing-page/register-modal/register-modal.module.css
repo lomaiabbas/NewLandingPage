@@ -728,6 +728,96 @@
   margin-inline: auto;
 }
 
+/* --- the phone sign-up's steps (phone-signup.tsx) ------------------------------------------- */
+
+.stepText {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.stepFields {
+  margin-top: 16px;
+}
+.stepIntro {
+  margin-bottom: 18px;
+  text-align: center;
+}
+.stepTitle {
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--text);
+  outline: none;
+}
+.stepIntro .stepText {
+  margin-top: 6px;
+}
+.stepPhone {
+  margin-top: 4px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.codeControl {
+  height: 56px;
+}
+.codeInput {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.5em;
+  /* the spacing after the last digit, so the six still sit in the middle */
+  padding-inline-start: calc(14px + 0.5em);
+}
+
+.stepLinks {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+}
+.textButton {
+  padding: 4px 2px;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font-size: 13.5px;
+  cursor: pointer;
+}
+.textButton:hover {
+  color: var(--text);
+}
+.textButtonStrong {
+  font-weight: 700;
+  color: var(--accent);
+}
+.textButtonStrong:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.reviewNote {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--muted);
+  text-align: center;
+}
+.reviewNote svg {
+  flex-shrink: 0;
+  color: var(--accent);
+}
+
+/* waiting for all six digits, not for a request */
+.codeSubmit:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
 /* --- phones: full screen, one column, the button pinned to the bottom ------------------------ */
 
 @media (max-width: 767px) {

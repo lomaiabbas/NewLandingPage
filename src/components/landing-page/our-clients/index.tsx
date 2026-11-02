@@ -28,13 +28,13 @@ export default async function OurClients({ lng }: { lng: string }) {
       <div className="container">
         <div className="text-center mb-14 flex flex-col gap-3 items-center">
           <span
-            className="text-[var(--accent)] text-[13px] font-bold tracking-[0.03em] rounded-xl px-[15px] py-[10px] relative before:absolute before:inset-0 before:bg-[var(--accent)] before:opacity-10 before:rounded-xl"
+            className="inline-block rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-white ring-1 ring-white/20"
             data-aos="fade-up"
           >
             {t('OurClients')}
           </span>
           <h2
-            className="font-bold text-[var(--text)] m-0"
+            className="font-bold text-white m-0"
             style={{ fontSize: 'var(--h2-fs)', lineHeight: 'var(--h2-line)' }}
             data-aos="fade-up"
             data-aos-delay="200"
@@ -42,21 +42,21 @@ export default async function OurClients({ lng }: { lng: string }) {
             {t('TrustedByLeadingBrands')}
           </h2>
           <p
-            className="text-base text-[#182620]/70 max-w-[520px] leading-relaxed m-0"
+            className="text-base md:text-lg text-white/75 max-w-[520px] leading-relaxed m-0"
             data-aos="fade-up"
             data-aos-delay="300"
           >
             {lng === 'ar' ? (
               <>
                 انضم إلى قائمة الشركات التي تعتمد على{' '}
-                <span className="text-[var(--accent)] font-extrabold tracking-wide text-[1.1rem]">
+                <span className="text-[var(--primary-color)] font-extrabold tracking-wide text-[1.1rem]">
                   AtrasLink
                 </span>
               </>
             ) : (
               <>
                 Join the list of businesses that rely on{' '}
-                <span className="text-[var(--accent)] font-extrabold tracking-wide text-[1.1rem]">
+                <span className="text-[var(--primary-color)] font-extrabold tracking-wide text-[1.1rem]">
                   AtrasLink
                 </span>
               </>

@@ -34,6 +34,7 @@ import {
   type RegisterValues,
 } from './register-modal.data'
 import DialCodePicker from './dial-code-picker'
+import PhoneSignup from './phone-signup'
 import {
   // allCountryCodes,
   buildSignupPayload,
@@ -51,6 +52,9 @@ import {
 import styles from './register-modal.module.css'
 
 const EXIT_MS = 160
+/* true: the leader's sign-up (company, name, WhatsApp number, then a code), design only, nothing is
+   sent (phone-signup.tsx). false: the full form below, which signs the company up for real. */
+const PHONE_SIGNUP_DESIGN = true
 const FOCUSABLE =
   'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
 
@@ -577,7 +581,9 @@ export default function RegisterModal({
           </button>
         </header>
 
-        {registeredDomain ? (
+        {PHONE_SIGNUP_DESIGN ? (
+          <PhoneSignup lng={lng} onClose={onClose} firstFieldRef={firstFieldRef} />
+        ) : registeredDomain ? (
           <div className={styles.sheet}>
             <div className={`${styles.body} ${styles.success}`}>
               <span className={styles.successIcon} aria-hidden>

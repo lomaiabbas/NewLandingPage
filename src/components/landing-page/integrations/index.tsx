@@ -47,7 +47,6 @@ export default function Integrations({ lng }: { lng: string }) {
     <section className={styles.section} id="integrations">
       <div className="container">
         <div className={styles.head} data-aos="fade-up">
-          <span className={styles.eyebrow}>{t('IntegrationsEyebrow')}</span>
           <h2 className={styles.title}>{t('IntegrationsTitle')}</h2>
           <p className={styles.subtitle}>{t('IntegrationsSubtitle')}</p>
         </div>

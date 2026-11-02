@@ -2,17 +2,18 @@
 
 import { getClientTranslation } from '@/app/i18n/client';
 import { Col, Row } from 'antd';
-import { Maximize2, Minimize2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Maximize2, Minimize2 } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react'
 import styles from './hero.module.css';
 import { initScrollReveal } from '../scroll-reveal';
 
-/* 16:10 rather than 2:1 — the wide strip rendered the dashboard as a short band at ~0.42 scale,
-   leaving its text unreadable and most of the hero empty. 1280 rather than 1440 wide so the same
-   frame shows the UI ~12% larger; the demo's own breakpoints start at 1250px, so its desktop
-   layout is unchanged. Keep the iframe size in hero.module.css in sync. */
-const DEMO_DESIGN_WIDTH = 1280;
-const DEMO_DESIGN_HEIGHT = 800;
+/* 4:3 rather than 2:1 — the wide strip rendered the dashboard as a short band at ~0.42 scale,
+   leaving its text unreadable and most of the hero empty; the taller frame also fills the band
+   above it. 1200 rather than 1440 wide so the same frame shows the UI ~20% larger; the demo's main
+   layout holds down to 1180px (its chat page wraps below that), only its templates grid drops to
+   two columns under 1250px. Keep the iframe size and the frame ratio in hero.module.css in sync. */
+const DEMO_DESIGN_WIDTH = 1200;
+const DEMO_DESIGN_HEIGHT = 900;
 
 export default function Hero({ lng }: { lng: string }) {
   const { t } = getClientTranslation(lng);
@@ -132,7 +133,10 @@ export default function Hero({ lng }: { lng: string }) {
               <p className={`${styles.heroDesc} text-base leading-relaxed text-white text-pretty`}>
                 {t("HeroDesc1")}{t("HeroDesc2")}{t("HeroDesc3")}</p>
               <div className={styles.heroActions}>
-                <a href="#contact" className={styles.demoBtn}>{t("HeroRequestDemo")}</a>
+                <a href="#contact" className={styles.demoBtn}>
+                  {t("HeroRequestDemo")}
+                  {lng === 'ar' ? <ArrowLeft size={16} aria-hidden="true" /> : <ArrowRight size={16} aria-hidden="true" />}
+                </a>
               </div>
             </div>
           </Col>

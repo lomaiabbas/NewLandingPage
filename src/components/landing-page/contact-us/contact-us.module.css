@@ -4,7 +4,7 @@
   color: var(--text);
   position: relative;
   isolation: isolate;
-  background: var(--band);
+  background: var(--bg);
   margin-top: calc(-1 * var(--section-slant));
   padding: calc(var(--section-slant) + 72px) 0 96px;
   clip-path: polygon(0 0, 100% var(--section-slant), 100% 100%, 0 100%);
@@ -21,7 +21,8 @@
   position: relative;
   overflow: hidden;
   border-radius: 2rem;
-  background: #0b2e24;
+  /* the page's --hero-grad stops, darkened */
+  background: linear-gradient(135deg, #0a7a56 0%, #0a6648 10%, #084d38 45%, #073d2d 100%);
   color: #fff;
   padding: 32px;
   /* the global .container centres its text */
@@ -54,6 +55,7 @@
 @media (min-width: 992px){
   .grid{
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: center;
   }
 }
 

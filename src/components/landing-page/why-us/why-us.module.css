@@ -1,0 +1,128 @@
+/* The leader's "Why AtrasLink?" section, its Tailwind classes written out one to one on the
+   light band (--bg, the leader's bg-muted). */
+.section{
+  position: relative;
+  isolation: isolate;
+  background: var(--bg);
+  /* cuts into the dark get-started band above; the clients band below cuts into this one, so the
+     bottom keeps that depth on top of the 80px */
+  margin-top: calc(-1 * var(--section-slant));
+  padding: calc(var(--section-slant) + 72px) 0 calc(var(--section-slant) + 80px);
+  clip-path: polygon(0 0, 100% var(--section-slant), 100% 100%, 0 100%);
+  scroll-margin-top: 80px;
+}
+
+/* ---------- heading ---------- */
+
+.head{
+  max-width: 672px;
+  margin: 0 auto 48px;
+  text-align: center;
+}
+
+.eyebrow{
+  display: inline-block;
+  margin-bottom: 12px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  color: var(--accent);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+}
+
+.title{
+  margin: 0;
+  font-size: var(--h2-fs);
+  line-height: 1.25;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.subtitle{
+  margin: 16px 0 0;
+  font-size: 16px;
+  line-height: 1.625;
+  color: var(--muted);
+}
+
+/* ---------- cards ---------- */
+
+.grid{
+  display: grid;
+  gap: 16px;
+}
+
+.card{
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 20px;
+  border-radius: 22px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  text-align: center;
+  box-shadow: 0 1px 2px rgba(11, 46, 36, 0.04), 0 8px 24px -12px rgba(11, 46, 36, 0.12);
+  transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+
+.card:hover{
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--primary-color) 40%, transparent);
+  box-shadow: var(--shadow);
+}
+
+.icon{
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--primary-color) 12%, white);
+  color: var(--accent);
+  transition: background-color .2s ease, color .2s ease;
+}
+
+.card:hover .icon{
+  background: var(--primary-color);
+  color: #fff;
+}
+
+.cardTitle{
+  margin: 16px 0 0;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.cardDesc{
+  margin: 8px 0 0;
+  font-size: 14px;
+  line-height: 1.625;
+  color: var(--muted);
+}
+
+/* ---------- breakpoints (the leader's sm / md / lg) ---------- */
+
+@media (min-width: 640px){
+  .grid{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 768px){
+  .subtitle{
+    font-size: 18px;
+  }
+}
+
+@media (min-width: 1024px){
+  .grid{
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 20px;
+  }
+}

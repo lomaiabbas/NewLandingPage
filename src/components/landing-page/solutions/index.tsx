@@ -58,7 +58,7 @@ export default function Solutions({ lng }: { lng: string }) {
                       </span>
                       <h3 className={styles.cardTitle}>{t(s.titleKey)}</h3>
                       <p className={styles.cardDesc}>{t(s.descKey)}</p>
-                      <ul className={styles.points}>
+                      <ul className={`${styles.points} ${s.id === 'invitations' ? styles.pointsOneLine : ''}`}>
                         {s.pointKeys.map((key) => (
                           <li key={key}>{t(key)}</li>
                         ))}
@@ -137,7 +137,7 @@ function WhatsAppInvite({ t }: { t: T }) {
         </div>
       </div>
       <div className={styles.entryCard}>
-        <QrCode size={64} strokeWidth={1.2} className={styles.entryQr} />
+        <QrCode size={48} strokeWidth={1.2} className={styles.entryQr} />
         <div className={styles.entryLabel}>{t('SolMockEntryCard')}</div>
       </div>
     </div>
@@ -217,9 +217,26 @@ function SolutionVisual({ id, t }: { id: SolutionId; t: T }) {
     return (
       <div className={styles.visCampaigns}>
         <div className={styles.offerCard}>
-          <div className={styles.offerBanner} />
-          <b>{t('SolMockOfferTitle')}</b>
-          <p className={styles.muted}>{t('SolMockOfferText')}</p>
+          <div className={styles.offerHead}>
+            <span className={styles.offerAvatar}>A</span>
+            <div className={styles.offerSender}>
+              <b>{t('SolMockChannelName')}</b>
+              <div className={styles.offerSub}>{t('SolMockVerifiedChannel')}</div>
+            </div>
+            <span className={styles.offerSub}>10:24</span>
+          </div>
+          <div className={styles.offerBanner}>
+            <span className={styles.offerTag}>{t('SolMockLimitedOffer')}</span>
+            <span className={styles.offerOff}>
+              25% {t('SolMockOff')}
+            </span>
+          </div>
+          <p className={styles.muted}>{t('SolMockOfferFull')}</p>
+          <div className={styles.offerCta}>{t('SolMockShopNow')}</div>
+          <div className={styles.offerFoot}>
+            <Check size={12} className={styles.orderCheck} />
+            {t('SolMockTemplateSent')}
+          </div>
         </div>
         <div className={styles.visCampaignsStats}>
           <Stat v="812" l={t('SolMockDelivered')} pct={99} />
