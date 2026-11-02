@@ -70,6 +70,7 @@ export default function ContactUs({ lng }: { lng: string }) {
               <p className={styles.desc}>{t('ContactCtaDesc')}</p>
 
               <div className={styles.info}>
+                <p className={styles.lead}>{t('ContactTitle')}</p>
                 <div className={styles.infoRow}>
                   <MapPin className={styles.infoIcon} />
                   <div>
