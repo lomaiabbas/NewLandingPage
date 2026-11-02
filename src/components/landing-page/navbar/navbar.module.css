@@ -50,8 +50,8 @@
   border: 1px solid rgba(255, 255, 255, 0.6);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.85),
-    0 0 10px 1px rgba(83, 255, 184, 0.1),
-    0 12px 28px -20px rgba(7, 198, 146, 0.2),
+    0 0 10px 1px rgba(83, 255, 184, 0.04),
+    0 12px 28px -20px rgba(7, 198, 146, 0.08),
     0 8px 18px -16px rgba(4, 32, 23, 0.3);
   transition:
     padding 0.2s cubic-bezier(0.4, 0, 0.2, 1),
@@ -73,7 +73,7 @@
   border-color: rgba(7, 198, 146, 0.3);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 3px 12px 0 rgba(7, 198, 146, 0.14);
+    0 3px 12px 0 rgba(7, 198, 146, 0.06);
 }
 .isScrolled .navBrand::after {
   background: rgba(255, 255, 255, 0.18);
@@ -167,10 +167,10 @@
 }
 .navLink {
   font-family: 'IBM Plex Sans Arabic', var(--font-sans), sans-serif !important;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 14px;
   line-height: 1.4;
-  color: #2b6753;
+  color: #082a1e;
   white-space: nowrap;
   cursor: pointer;
   padding: 6px 14px;
@@ -187,13 +187,13 @@
    green-tinted gradient. The sliding indicator already marks the active link, so it gets no
    hover pill on top of it. */
 .navLink:not([aria-current='page']):hover {
-  color: #0b2e24;
+  color: #041a12;
   background: rgba(7, 198, 146, 0.16);
   box-shadow: inset 0 0 0 1px rgba(7, 198, 146, 0.4);
 }
 /* the weight stays the same as the other links — bolding it would reflow its neighbours mid-slide */
 .navLink[aria-current='page'] {
-  color: #0b2e24;
+  color: #041a12;
 }
 
 /* an underline that glides between links: transform + width only, so it never triggers layout.
@@ -231,7 +231,7 @@
 .langLink {
   margin-inline-start: 6px;
   padding: 5px 12px;
-  color: #2b6753;
+  color: #082a1e;
   border: 1px solid rgba(11, 46, 36, 0.16);
 }
 /* the language switch already has a border, so it lights that up instead of adding a second rim */
