@@ -18,7 +18,7 @@ export const SOCIAL_PROOF_TOASTS: SocialProofToast[] = [
     icon: 'send',
     titleKey: 'SocialProofToast1Title',
     ctaKey: 'SocialProofToast1Cta',
-    href: (lng) => `/${lng}#why-us`,
+    href: (lng) => `/${lng}#solutions`,
   },
   {
     id: 'invitees-logged-in',
@@ -38,10 +38,10 @@ export const SOCIAL_PROOF_TOASTS: SocialProofToast[] = [
   },
 ]
 
-export const SOCIAL_PROOF_HIDDEN_SECTIONS = ['hero', 'why-us']
+export const SOCIAL_PROOF_HIDDEN_SECTIONS = ['hero']
 
 export const SOCIAL_PROOF_SECTION_TOAST: Record<string, string> = {
-  'key-features': 'ditch-spreadsheets',
+  solutions: 'ditch-spreadsheets',
   about: 'invitations-sent',
   'our-clients': 'invitees-logged-in',
   contact: 'invitations-sent',

@@ -60,9 +60,9 @@ html {
 }
 
 /* the nav bar is fixed, so a hash jump would otherwise land the section heading underneath it */
-#key-features,
+#solutions,
 #about,
-#why-us,
+#get-started,
 #contact {
   scroll-margin-top: 90px;
 }
@@ -2140,9 +2140,7 @@ html[dir='ltr'] .coming-soon-ribbon.details div div span {
   opacity: 0.5 !important;
 }
 
-/* locks the page behind the hero demo's and the why-us stage's CSS fullscreen on iPhone (see
-   hero.module.css, why-us.module.css) */
-body.demo-pseudo-fullscreen,
-body.why-us-pseudo-fullscreen {
+/* locks the page behind the hero demo's CSS fullscreen on iPhone (see hero.module.css) */
+body.demo-pseudo-fullscreen {
   overflow: hidden;
 }

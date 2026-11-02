@@ -131,6 +131,9 @@ export default function Hero({ lng }: { lng: string }) {
               </h1>
               <p className={`${styles.heroDesc} text-base leading-relaxed text-white text-pretty`}>
                 {t("HeroDesc1")}{t("HeroDesc2")}{t("HeroDesc3")}</p>
+              <div className={styles.heroActions}>
+                <a href="#contact" className={styles.demoBtn}>{t("HeroRequestDemo")}</a>
+              </div>
             </div>
           </Col>
           <Col xs={24} lg={14} className={`relative z-10 min-w-0 ${styles.demoCol}`}>

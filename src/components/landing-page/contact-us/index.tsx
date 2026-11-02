@@ -2,219 +2,187 @@
 
 import { getClientTranslation } from '@/app/i18n/client'
 import { resolvePersianAndArabicNumbers } from '@/lib/helpers'
-import { Col, Input, Row, Select } from 'antd'
-import { Mail, Phone, Pin } from 'lucide-react'
-import { useState } from 'react'
-import Star1 from '../shared/star1'
-import Star2 from '../shared/star2'
+import { MapPin, Phone } from 'lucide-react'
+import { FormEvent, useState } from 'react'
 import styles from './contact-us.module.css'
 
+const CONTACT_EMAIL = 'support@atraslink.com'
+const CONTACT_PHONE = '+966 53 955 5262'
+const CONTACT_PHONE_HREF = 'tel:+966539555262'
+
+const MESSAGE_TYPES = [
+  'ContactTypeDemo',
+  'ContactTypeGeneral',
+  'ContactTypeSupport',
+  'ContactTypePartnership',
+] as const
+
+type MessageType = (typeof MESSAGE_TYPES)[number]
+
+/* The reference's CTA + contact band: a dark rounded card with the call to action and contact
+   details on one side and the contact form on a white card on the other. */
 export default function ContactUs({ lng }: { lng: string }) {
   const { t } = getClientTranslation(lng)
   const [name, setName] = useState('')
+  const [company, setCompany] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
-  const [personPosition, setPersonPosition] = useState('')
-  const [personName, setPersonName] = useState('')
-
-  const [type, setType] = useState('-1')
+  const [type, setType] = useState<MessageType>('ContactTypeDemo')
   const [content, setContent] = useState('')
-   
-  const [errors, setErrors] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    type: '',
-    content: '',
-  })
+  const [sent, setSent] = useState(false)
+  const [errors, setErrors] = useState<{ name?: string; email?: string; content?: string }>({})
 
   const validateForm = () => {
-    const _errors: any = {}
-    const emailReqex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-    if (!name) _errors.name = t('ThisFieldIsMandatory')
+    const _errors: typeof errors = {}
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+    if (!name.trim()) _errors.name = t('ThisFieldIsMandatory')
     if (!email) _errors.email = t('ThisFieldIsMandatory')
-    else if (email && !emailReqex.test(email)) _errors.email = t('ThisEmailIsInvalid')
-    if (!phone) _errors.phone = t('ThisFieldIsMandatory')
-    if (type === '-1') _errors.type = t('ThisFieldIsMandatory')
-    if (!content) _errors.content = t('ThisFieldIsMandatory')
-
+    else if (!emailRegex.test(email)) _errors.email = t('ThisEmailIsInvalid')
+    if (!content.trim()) _errors.content = t('ThisFieldIsMandatory')
     setErrors(_errors)
     return Object.keys(_errors).length === 0
   }
 
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (!validateForm()) return
+    const body = [
+      `${t('ContactFormName')}: ${name}`,
+      `${t('ContactFormCompany')}: ${company}`,
+      `${t('ContactFormEmail')}: ${email}`,
+      `${t('ContactFormPhone')}: ${phone}`,
+      '',
+      content,
+    ].join('\n')
+    const subject = `[${t(type)}] AtrasLink`
+    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+    setSent(true)
+  }
+
   return (
     <section className={styles.contactUs} id="contact">
-      <Star2 styles={styles} />
-
-      <Star1 styles={styles} />
       <div className="container">
-        <div className={styles.titleArea}>
-          <span className={styles.subTitle} data-aos="fade-up">
-            {t('Contact')}
-          </span>
-          <h2 className={styles.secTitle} data-aos="fade-up" data-aos-delay="200">
-            {t('ContactTitle')}
-          </h2>
-          {/* <p className="sec-text"></p> */}
+        <div className={styles.card} data-aos="fade-up">
+          <div className={styles.glow} aria-hidden />
+          <div className={styles.grid}>
+            <div>
+              <h2 className={styles.title}>{t('ContactCtaTitle')}</h2>
+              <p className={styles.desc}>{t('ContactCtaDesc')}</p>
+
+              <div className={styles.info}>
+                <div className={styles.infoRow}>
+                  <MapPin className={styles.infoIcon} />
+                  <div>
+                    <b>{t('OurLocation')}</b>
+                    <div className={styles.dim}>{t('AtrasLinkLocation')}</div>
+                  </div>
+                </div>
+                <div className={styles.infoRow}>
+                  <Phone className={styles.infoIcon} />
+                  <div>
+                    <b>{t('SayHello')}</b>
+                    <div>
+                      <a href={CONTACT_PHONE_HREF} dir="ltr" className={styles.infoLink}>
+                        {CONTACT_PHONE}
+                      </a>
+                    </div>
+                    <div>
+                      <a href={`mailto:${CONTACT_EMAIL}`} className={styles.infoLink}>
+                        {CONTACT_EMAIL}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <form onSubmit={onSubmit} noValidate className={styles.form}>
+              <h3 className={styles.formTitle}>{t('Contact')}</h3>
+              <div className={styles.fields}>
+                <label className={styles.label}>
+                  <span>{t('ContactFormName')} *</span>
+                  <input
+                    name="name"
+                    value={name}
+                    onChange={(e) => setName(resolvePersianAndArabicNumbers(e.target.value))}
+                    className={styles.field}
+                  />
+                  {errors.name && <span className="error-msg">{errors.name}</span>}
+                </label>
+                <label className={styles.label}>
+                  <span>{t('ContactFormCompany')}</span>
+                  <input
+                    name="company"
+                    value={company}
+                    onChange={(e) => setCompany(resolvePersianAndArabicNumbers(e.target.value))}
+                    className={styles.field}
+                  />
+                </label>
+                <label className={styles.label}>
+                  <span>{t('ContactFormEmail')} *</span>
+                  <input
+                    name="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(resolvePersianAndArabicNumbers(e.target.value))}
+                    className={styles.field}
+                  />
+                  {errors.email && <span className="error-msg">{errors.email}</span>}
+                </label>
+                <label className={styles.label}>
+                  <span>{t('ContactFormPhone')}</span>
+                  <input
+                    name="phone"
+                    type="tel"
+                    dir="ltr"
+                    value={phone}
+                    onChange={(e) => setPhone(resolvePersianAndArabicNumbers(e.target.value))}
+                    className={styles.field}
+                  />
+                </label>
+              </div>
+
+              <fieldset className={styles.typeSet}>
+                <legend className={styles.legend}>{t('ContactFormType')} *</legend>
+                <div className={styles.chips}>
+                  {MESSAGE_TYPES.map((x) => (
+                    <button
+                      key={x}
+                      type="button"
+                      aria-pressed={type === x}
+                      onClick={() => setType(x)}
+                      className={`${styles.chip} ${type === x ? styles.chipActive : ''}`}
+                    >
+                      {t(x)}
+                    </button>
+                  ))}
+                </div>
+              </fieldset>
+
+              <label className={`${styles.label} ${styles.messageLabel}`}>
+                <span>{t('ContactFormMessage')} *</span>
+                <textarea
+                  name="message"
+                  rows={4}
+                  value={content}
+                  onChange={(e) => setContent(resolvePersianAndArabicNumbers(e.target.value))}
+                  className={styles.field}
+                />
+                {errors.content && <span className="error-msg">{errors.content}</span>}
+              </label>
+
+              <button type="submit" className={`${styles.btn} ${styles.submit}`}>
+                {t('SendYourMassage')}
+              </button>
+              {sent && (
+                <p role="status" className={styles.sent}>
+                  {t('ContactFormSent')}
+                </p>
+              )}
+            </form>
+          </div>
         </div>
       </div>
-
-      <div className="container relative mt-10 md:mt-14 mb-12 md:mb-0">
-        <Row gutter={[24, 40]}>
-          {/* on phones the form comes first; the address block would otherwise push it a screen down */}
-          <Col xs={{ span: 24, order: 2 }} md={{ span: 8, order: 1 }}>
-            <div>
-              <div className="flex flex-col gap-2 mb-6 border-b-2 border-gray-500 w-fit pb-3 text-start">
-                <h3 className="text-lg mb-2" data-aos="fade-up" data-aos-delay="400">
-                  {t('OurLocation')}
-                </h3>
-                <div className="flex gap-2" data-aos="fade-up" data-aos-delay="600">
-                  <Pin size={18} />
-                  <span> {t('AtrasLinkLocation')}</span>
-                </div>
-              </div>
-              <div className="flex flex-col gap-2 mb-6 text-start">
-                <h3 className="text-lg mb-2" data-aos="fade-up" data-aos-delay="800">
-                  {t('SayHello')}
-                </h3>
-                <div className="flex gap-2" data-aos="fade-up" data-aos-delay="1000">
-                  <Phone size={18} />
-                  <span style={{ direction: 'ltr', display: 'inline-block' }}>
-                    +966 53 955 5262
-                  </span>
-                </div>
-
-                <div className="flex gap-2" data-aos="fade-up" data-aos-delay="1100">
-                  <Mail size={18} />
-                  <span>support@atraslink.com</span>
-                </div>
-              </div>
-            </div>
-          </Col>
-          <Col xs={{ span: 24, order: 1 }} md={{ span: 16, order: 2 }}>
-            <div>
-              <form
-                action=""
-                className="contact-form"
-                data-aos="fade-up"
-                data-aos-delay="600"
-                onSubmit={(e) => {
-                  e.preventDefault()
-                  if (validateForm()) {
-                    fetch('https://apis.cequens.net/email/send', {}).then(function (data) {
-                      if (data.ok) {
-                        // Swal.fire({
-                        //     title: t('DoneSuccessfully'),
-                        //     text: t('DoneSuccessfully1'),
-                        //     icon: 'success',
-                        //     confirmButtonText: t('Close')
-                        // });
-                        setName('')
-                        setEmail('')
-                        setPhone('')
-                        setContent('')
-                        setType('-1')
-                      } else {
-                        // Swal.fire({
-                        //     title: t('AnErrorOccurred'),
-                        //     text: t('AnErrorOccurred1'),
-                        //     icon: "error",
-                        //     confirmButtonText: t("OK"),
-                        // });
-                      }
-                    })
-                  }
-                }}
-              >
-                <Row gutter={[20, 20]}>
-                  <Col xs={24} md={12}>
-                    <Input
-                      type="text"
-                      value={name}
-                      size="large"
-                      onChange={(e) => setName(resolvePersianAndArabicNumbers(e.target.value))}
-                      placeholder={t('CompanyName*')}
-                    />
-                    {errors.name && <span className="error-msg">{errors.name}</span>}
-                  </Col>
-                  <Col xs={24} md={12}>
-                    <Input
-                      type="text"
-                      size="large"
-                      value={email}
-                      onChange={(e) => setEmail(resolvePersianAndArabicNumbers(e.target.value))}
-                      placeholder={t('Email*')}
-                    />
-                    {errors.email && <span className="error-msg">{errors.email}</span>}
-                  </Col>
-                  <Col xs={24} md={12}>
-                    <Input
-                      type="text"
-                      value={personName}
-                      size="large"
-                      onChange={(e) =>
-                        setPersonName(resolvePersianAndArabicNumbers(e.target.value))
-                      }
-                      placeholder={t('ContactPersonName')}
-                    />
-                  </Col>
-                  <Col xs={24} md={12}>
-                    <Input
-                      type="text"
-                      value={personPosition}
-                      size="large"
-                      onChange={(e) =>
-                        setPersonPosition(resolvePersianAndArabicNumbers(e.target.value))
-                      }
-                      placeholder={t('ContactPersonPosition')}
-                    />
-                  </Col>
-                  <Col xs={24} md={12}>
-                    <Input
-                      size="large"
-                      type="text"
-                      value={phone}
-                      onChange={(e) => setPhone(resolvePersianAndArabicNumbers(e.target.value))}
-                      placeholder={t('Phone')}
-                    />
-                    {errors.phone && <span className="error-msg">{errors.phone}</span>}
-                  </Col>
-                  <Col xs={24} md={12}>
-                    <Select
-                      value={type}
-                      className="w-full text-start"
-                      virtual={false}
-                      size="large"
-                      popupClassName="landing-select"
-                      onChange={(value) => setType(value)}
-                    >
-                      <Select.Option value={'-1'} disabled>
-                        {t('MessageType*')}
-                      </Select.Option>
-                      <Select.Option value={t('1')}>{t('1')}</Select.Option>
-                      <Select.Option value={t('2')}>{t('2')}</Select.Option>
-                    </Select>
-                    {errors.type && <span className="error-msg">{errors.type}</span>}
-                  </Col>
-                  <Col xs={24}>
-                    <Input.TextArea
-                      value={content}
-                      rows={5}
-                      onChange={(e) => setContent(resolvePersianAndArabicNumbers(e.target.value))}
-                      placeholder={t('YourMessage*')}
-                    ></Input.TextArea>
-                    {errors.content && <span className="error-msg">{errors.content}</span>}
-                  </Col>
-                  <Col xs={24} className="text-start">
-                    <button className={styles.btn}>{t('SendYourMassage')}</button>
-                  </Col>
-                </Row>
-              </form>
-            </div>
-          </Col>
-        </Row>
-      </div>
-
     </section>
   )
 }

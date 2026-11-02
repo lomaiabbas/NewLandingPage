@@ -44,7 +44,7 @@ export function initScrollReveal({ duration, easing }: { duration: number; easin
         watched.add(el);
         io.observe(el);
       } else if (inView.has(el) && !el.classList.contains('aos-animate')) {
-        // React rewrote its className while it was on screen (the why-us stage going fullscreen)
+        // React rewrote its className while it was on screen
         el.classList.add('aos-animate');
       }
     });

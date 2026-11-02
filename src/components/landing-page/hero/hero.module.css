@@ -127,7 +127,40 @@
   max-width:500px;
 }
 
+.heroActions{
+  margin-top:8px;
+  display:flex;
+  justify-content:center;
+}
+
+.heroActions .demoBtn{
+  display:inline-flex;
+  align-items:center;
+  padding:13px 30px;
+  border-radius:999px;
+  font-weight:700;
+  font-size:16px;
+  color:var(--accent-2);
+  background:var(--band);
+  box-shadow:0 8px 24px rgba(0,0,0,.18);
+  transition:transform .2s ease, background-color .2s ease;
+}
+
+.heroActions .demoBtn:hover{
+  background:#f4f2ea;
+  transform:translateY(-2px);
+}
+
+.heroActions .demoBtn:focus-visible{
+  outline:2px solid #fff;
+  outline-offset:3px;
+}
+
 @media (min-width: 992px){
+  .heroActions .demoBtn{
+    margin-inline-end:64px;
+  }
+
   .heroDesc{
     max-width:none;
   }

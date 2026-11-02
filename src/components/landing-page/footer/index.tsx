@@ -48,8 +48,8 @@ export default async function Footer({ lng }: { lng: string }) {
                     <Link href="#about">{t('AboutUs')}</Link>
                   </li>
                   <li>
-                    {/* there's no #services section; the services are the key features */}
-                    <Link href="#key-features">{t('OurServices')}</Link>
+                    {/* there's no #services section; the services are the solutions */}
+                    <Link href="#solutions">{t('OurServices')}</Link>
                   </li>
                   <li>
                     <Link href="#contact">{t('Contact')}</Link>

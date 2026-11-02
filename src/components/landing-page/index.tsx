@@ -2,9 +2,9 @@ import PublicLayout from '@/layout/public-layout';
 import React from 'react'
 import Navbar from './navbar';
 import Hero from './hero';
-import Features from './features';
-import AboutUs from './about-us';
-import WhyUs from './why-us';
+import Solutions from './solutions';
+import Integrations from './integrations';
+import GetStarted from './get-started';
 import ContactUs from './contact-us';
 import Footer from './footer';
 import OurClients from './our-clients';
@@ -40,10 +40,10 @@ export default function LandingPage({lng}:{lng:string}) {
 
                 <Navbar lng={lng} />
                 <Hero lng={lng} />
-                <Features lng={lng} />
-                <AboutUs lng={lng} />
-                <WhyUs lng={lng} />
+                <Solutions lng={lng} />
+                <Integrations lng={lng} />
                 <OurClients lng={lng} />
+                <GetStarted lng={lng} />
                 <ContactUs lng={lng} />
                 <Footer lng={lng} />
                 <SocialProof lng={lng} />

@@ -9,10 +9,12 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import styles from './navbar.module.css'
 
+// in the order the sections appear on the page
 const NAV_LINKS = [
-  { key: 'KeyFeatures', hash: 'key-features' },
+  { key: 'Solutions', hash: 'solutions' },
+  { key: 'IntegrationsEyebrow', hash: 'integrations' },
+  { key: 'NavClients', hash: 'our-clients' },
   { key: 'AboutUs', hash: 'about' },
-  { key: 'WhyChooseAtrasLink', hash: 'why-us' },
   { key: 'Contact', hash: 'contact' },
 ] as const
 

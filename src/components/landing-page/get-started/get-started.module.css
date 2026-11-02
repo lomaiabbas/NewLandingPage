@@ -1,0 +1,166 @@
+/* The reference's "Steps" band: the deep brand gradient, the three steps joined by a line on one
+   side and the About / Vision / Mission drawers on the other. */
+.section{
+  position: relative;
+  isolation: isolate;
+  color: #fff;
+  background: linear-gradient(225deg, #0b2e24 0%, #0f6b4e 38%, #0e9e6d 100%);
+  margin-top: calc(-1 * var(--section-slant));
+  clip-path: polygon(0 0, 100% var(--section-slant), 100% 100%, 0 100%);
+  padding: calc(var(--section-slant) + 72px) 0 calc(var(--section-slant) + 96px);
+}
+
+.head{
+  max-width: 672px;
+  margin: 0 auto 48px;
+  text-align: center;
+}
+
+/* the Solutions / Our clients label pill, in white for the dark band */
+.eyebrow{
+  display: inline-block;
+  margin-bottom: 12px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+}
+
+.title{
+  margin: 0;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #fff;
+}
+@media (min-width: 768px){
+  .title{
+    font-size: 2.6rem;
+  }
+}
+
+.grid{
+  display: grid;
+  align-items: center;
+  gap: 48px;
+}
+@media (min-width: 992px){
+  .grid{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ---------- steps ---------- */
+.steps{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step{
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.line{
+  position: absolute;
+  inset-inline-start: 28px;
+  top: 56px;
+  height: calc(100% - 24px);
+  width: 1px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.stepNum{
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: 22px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25), 0 8px 20px -8px rgba(7, 198, 146, 0.7);
+}
+
+.stepText{
+  padding-top: 6px;
+}
+.stepText h3{
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+}
+.stepText p{
+  margin: 6px 0 0;
+  max-width: 384px;
+  font-size: 14px;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* ---------- drawers ---------- */
+.drawers{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  scroll-margin-top: 96px;
+}
+
+.drawer{
+  overflow: hidden;
+  border-radius: 22px;
+  background: #0b2e24;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.drawerBtn{
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 24px;
+  border: 0;
+  background: transparent;
+  text-align: start;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+}
+
+.chevron{
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--primary-color);
+  transition: transform .2s ease;
+}
+.chevronOpen{
+  transform: rotate(180deg);
+}
+
+.drawerBody{
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: color-mix(in srgb, var(--primary-color) 20%, transparent);
+  padding: 20px 24px;
+}
+.drawerBody p{
+  margin: 0;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.85);
+}
