@@ -7,13 +7,13 @@ import React, { useEffect, useRef, useState } from 'react'
 import styles from './hero.module.css';
 import { initScrollReveal } from '../scroll-reveal';
 
-/* 4:3 rather than 2:1 — the wide strip rendered the dashboard as a short band at ~0.42 scale,
-   leaving its text unreadable and most of the hero empty; the taller frame also fills the band
-   above it. 1200 rather than 1440 wide so the same frame shows the UI ~20% larger; the demo's main
-   layout holds down to 1180px (its chat page wraps below that), only its templates grid drops to
-   two columns under 1250px. Keep the iframe size and the frame ratio in hero.module.css in sync. */
+/* 16:10 rather than 2:1 — the wide strip rendered the dashboard as a short band at ~0.42 scale,
+   leaving its text unreadable and most of the hero empty. 1200 rather than 1440 wide so the same
+   frame shows the UI ~20% larger; the demo's main layout holds down to 1180px (its chat page wraps
+   below that), only its templates grid drops to two columns under 1250px. Keep the iframe size and
+   the frame ratio in hero.module.css in sync. */
 const DEMO_DESIGN_WIDTH = 1200;
-const DEMO_DESIGN_HEIGHT = 900;
+const DEMO_DESIGN_HEIGHT = 750;
 
 export default function Hero({ lng }: { lng: string }) {
   const { t } = getClientTranslation(lng);

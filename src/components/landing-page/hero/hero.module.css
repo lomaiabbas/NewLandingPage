@@ -69,7 +69,7 @@
   .hero{
     /* a short bottom, well under the cut's depth, so the cut runs across the lower part of the
        dashboard and the corner its backdrop drops shows on the light band below */
-    padding:150px 0 0;
+    padding:180px 0 0;
   }
 }
 
@@ -90,8 +90,7 @@
 @media (min-width: 992px){
   .heroContent{
     max-width:none;
-    /* headline, paragraph and button share one centre line */
-    text-align:center;
+    text-align:start;
     margin-inline:0;
   }
 }
@@ -135,9 +134,6 @@
 .heroDesc{
   font-size:16px;
   max-width:500px;
-  /* centred over the demo button, which sits in the middle of the column */
-  text-align:center;
-  margin-inline:auto;
 }
 
 @media (min-width: 768px){
@@ -176,6 +172,10 @@
 }
 
 @media (min-width: 992px){
+  .heroActions .demoBtn{
+    margin-inline-end:64px;
+  }
+
   .heroDesc{
     max-width:none;
   }
@@ -215,9 +215,9 @@
     margin-inline: auto -16px;
     /* on short screens the dashboard also gives way to the screen height, so the whole hero, the
        cut and the scroll hint just under the dashboard all fit the first screen. The height left
-       over after the hero's top padding and the hint, times the 4:3 frame ratio */
-    max-width: calc((100 * var(--u-vh, 1vh) - 224px) * 1.3333);
-    max-width: calc((100 * var(--u-vh, 1svh) - 224px) * 1.3333);
+       over after the hero's top padding and the hint, times the 16:10 frame ratio */
+    max-width: calc((100 * var(--u-vh, 1vh) - 258px) * 1.6);
+    max-width: calc((100 * var(--u-vh, 1svh) - 258px) * 1.6);
   }
 }
 
@@ -277,7 +277,7 @@
   top:0;
   left:0;
   width:1200px;
-  height:900px;
+  height:750px;
   transform-origin:top left;
   border:0;
   background:#fff;

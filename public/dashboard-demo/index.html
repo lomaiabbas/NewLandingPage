@@ -1120,15 +1120,6 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .x-tars-p{bottom:150px;left:22px;display:grid;gap:8px}
 .x-tars-p .a{background:var(--teal-050);border-radius:10px;padding:9px 11px;font-size:13.5px;white-space:pre-line}
 .x-tars-p .q{display:block;width:100%;text-align:start;font-size:13.5px;padding:6px 9px;border:1px solid var(--line);border-radius:8px;margin-top:4px}
-/* داخل الهيرو (?demo=1) الإطار 1200px فقط: نضيّق الأعمدة الجانبية ليأخذ عمود المحادثة مساحة كافية دون قص */
-html.demo{--sidebar-w:230px}
-html.demo .chat-list-col{width:330px;flex:0 0 330px}
-html.demo .chat-det{width:240px;flex:0 0 240px}
-html.demo .chat-tabs{flex-wrap:wrap;overflow-x:visible}
-html.demo .topbar{padding:0 12px}
-html.demo .tb-group{gap:6px;min-width:0}
-html.demo .tb-chip{padding:0 8px;font-size:13px;white-space:nowrap}
-html.demo .tb-chips .tb-chip:first-child:not(:last-child){display:none}
 @media (max-width:1180px){
   .chat-shell{flex-wrap:wrap;height:auto}
   .chat-thread-col{flex:1 1 360px;min-height:520px}
@@ -1152,7 +1143,6 @@ html.demo .tb-chips .tb-chip:first-child:not(:last-child){display:none}
 }
 </style>
 </head>
-<script>if(/[?&]demo=1\b/.test(location.search))document.documentElement.classList.add('demo')</script>
 <body>
 
 <div class="app">
