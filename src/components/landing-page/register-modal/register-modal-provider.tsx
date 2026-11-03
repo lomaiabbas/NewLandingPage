@@ -14,7 +14,7 @@ import {
 import { REGISTER_QUERY_PARAM, isRegisterHref } from './register-modal.data'
 
 /* the form, its validation and libphonenumber only load once somebody heads for the modal */
-const loadRegisterModal = () => import('./index')
+const loadRegisterModal = () => import('../signup-modal')
 const RegisterModal = dynamic(loadRegisterModal, { ssr: false })
 
 type RegisterModalContextValue = {

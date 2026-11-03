@@ -22,7 +22,7 @@ export default function GetStarted({ lng }: { lng: string }) {
   const [openDrawer, setOpenDrawer] = useState(0)
 
   return (
-    <section className={styles.section} id="get-started">
+    <section className={styles.section} id="about">
       <div className="container">
         <div className={styles.head} data-aos="fade-up">
           <span className={styles.eyebrow}>{t('GetStartedEyebrow')}</span>
@@ -43,9 +43,9 @@ export default function GetStarted({ lng }: { lng: string }) {
             ))}
           </ol>
 
-          {/* the About / Vision / Mission drawers stand in for the old About section, so the
-              navbar's "About us" link lands here */}
-          <div id="about" className={styles.drawers}>
+          {/* the About / Vision / Mission drawers stand in for the old About section; the
+              section itself is the "About us" anchor so the jump lands on its heading */}
+          <div className={styles.drawers}>
             {DRAWERS.map((d, i) => {
               const isOpen = openDrawer === i
               return (

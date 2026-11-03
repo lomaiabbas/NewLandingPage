@@ -4,11 +4,9 @@ import { getClientTranslation } from '@/app/i18n/client'
 import { resolvePersianAndArabicNumbers } from '@/lib/helpers'
 import { MapPin, Phone } from 'lucide-react'
 import { FormEvent, useState } from 'react'
+import { CONTACT_EMAIL, CONTACT_PHONE, CONTACT_PHONE_HREF } from '../contact-info'
 import styles from './contact-us.module.css'
 
-const CONTACT_EMAIL = 'support@atraslink.com'
-const CONTACT_PHONE = '+966 53 955 5262'
-const CONTACT_PHONE_HREF = 'tel:+966539555262'
 
 const MESSAGE_TYPES = [
   'ContactTypeDemo',

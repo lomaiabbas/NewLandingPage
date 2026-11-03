@@ -6,10 +6,14 @@ import Solutions from './solutions';
 import Integrations from './integrations';
 import GetStarted from './get-started';
 import WhyUs from './why-us';
+// The "Added value with AtrasLink" section is switched off for now; its files are kept in
+// ./added-value. To show it again, uncomment this import and <AddedValue> below.
+// import AddedValue from './added-value';
 import ContactUs from './contact-us';
 import Footer from './footer';
 import OurClients from './our-clients';
 import SocialProof from './social-proof';
+import FloatingSignup from './floating-signup';
 import RegisterModalProvider from './register-modal/register-modal-provider';
 import styles from './landing-page.module.css';
 
@@ -46,11 +50,13 @@ export default function LandingPage({lng}:{lng:string}) {
                 <Solutions lng={lng} />
                 <GetStarted lng={lng} />
                 <WhyUs lng={lng} />
+                {/* <AddedValue lng={lng} /> */}
                 <OurClients lng={lng} />
                 <Integrations lng={lng} />
                 <ContactUs lng={lng} />
                 <Footer lng={lng} />
                 <SocialProof lng={lng} />
+                <FloatingSignup lng={lng} />
                 </RegisterModalProvider>
             </div>
 

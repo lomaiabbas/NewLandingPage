@@ -14,14 +14,14 @@
   --section-slant: clamp(28px, calc(3.5 * var(--u-vw, 1vw)), 52px);
   /* the cut under the hero alone runs deeper, so the step from the green hero into the
      page reads clearly while the dividers further down stay gentle */
-  --hero-slant: clamp(48px, calc(6 * var(--u-vw, 1vw)), 115px);
+  --hero-slant: clamp(80px, calc(10 * var(--u-vw, 1vw)), 190px);
 }
 
 /* below the split layout the dashboard spans the width, so at 6vw the cut would only nick its
    corner; a steeper one runs clearly across its lower part, as on desktop */
 @media (max-width: 991px) {
   .landingPage {
-    --hero-slant: clamp(64px, 16vw, 120px);
+    --hero-slant: clamp(100px, 26vw, 190px);
   }
 }
 

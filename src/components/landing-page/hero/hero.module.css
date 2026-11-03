@@ -48,6 +48,11 @@
   align-items:center;
   /* bottom padding leaves the scroll hint its own band below the mockup */
   padding:120px 0 130px;
+  /* the first screen shows the hero and the scroll hint under it, nothing more: the hint ends
+     94px below the hero and the next section's eyebrow starts 132px below it, so a hero 110px
+     short of the screen leaves the hint on screen and the eyebrow just past the fold */
+  min-height:calc(100 * var(--u-vh, 1vh) - 110px);
+  min-height:calc(100 * var(--u-vh, 1svh) - 110px);
 }
 
 .hero::before{
@@ -61,6 +66,12 @@
   clip-path:polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - var(--hero-slant)));
 }
 
+/* the cut is mirrored in English so it runs deepest under the copy, as it does in Arabic: the
+   copy and its button then sit on the green, not across the cut. Solutions mirrors its top to match */
+:global([dir="ltr"]) .hero::before{
+  clip-path:polygon(0 0, 100% 0, 100% calc(100% - var(--hero-slant)), 0 100%);
+}
+
 /* sized to its content: a viewport-height floor left wide bands of empty green above and below,
    which pulled the copy and dashboard away from the navbar. The top clears the 112px navbar plus
    the corner the tilted backdrop lifts above the dashboard, with room to spare; the bottom clears
@@ -69,7 +80,7 @@
   .hero{
     /* a short bottom, well under the cut's depth, so the cut runs across the lower part of the
        dashboard and the corner its backdrop drops shows on the light band below */
-    padding:180px 0 0;
+    padding:120px 0 0;
   }
 }
 
@@ -118,7 +129,8 @@
   text-wrap:balance;
 }
 @media (min-width: 992px){
-  .heroTitle{
+  /* only the Arabic headline is short enough for one line; the English one wraps in its column */
+  :global([dir="rtl"]) .heroTitle{
     white-space:nowrap;
   }
 }
@@ -185,13 +197,13 @@
    dashboard's lower part */
 @media (max-width: 991px){
   .hero{
-    padding:108px 0 40px
+    padding:96px 0 20px
   }
 }
 
 @media (max-width: 575px){
   .hero{
-    padding:95px 0 20px
+    padding:88px 0 8px
   }
 }
 
@@ -204,6 +216,8 @@
   max-width: 520px;
   margin-inline: auto;
   margin-top: 0;
+  /* shifted down past the cut without moving the hero's height (and so the cut line itself) */
+  top: 25px;
 }
 
 /* in the split layout a fixed cap left the dashboard floating small inside its column on wide
@@ -216,8 +230,8 @@
     /* on short screens the dashboard also gives way to the screen height, so the whole hero, the
        cut and the scroll hint just under the dashboard all fit the first screen. The height left
        over after the hero's top padding and the hint, times the 16:10 frame ratio */
-    max-width: calc((100 * var(--u-vh, 1vh) - 258px) * 1.6);
-    max-width: calc((100 * var(--u-vh, 1svh) - 258px) * 1.6);
+    max-width: calc((100 * var(--u-vh, 1vh) - 228px) * 1.6);
+    max-width: calc((100 * var(--u-vh, 1svh) - 228px) * 1.6);
   }
 }
 
@@ -276,8 +290,8 @@
   position:absolute;
   top:0;
   left:0;
-  width:1200px;
-  height:750px;
+  width:1312px;
+  height:820px;
   transform-origin:top left;
   border:0;
   background:#fff;
@@ -455,20 +469,12 @@
 	background: #d3ece0;
 	position: absolute;
   left: 50%;
-  /* sits on the light band just under the diagonal cut, which crosses the centre half its depth
-     above the hero's bottom: the highest spot that keeps it off the green, so it shows on load
-     on as many screens as possible. The navbar hides it once the page scrolls */
-  top: calc(100% - var(--hero-slant) / 2 + 14px);
+  /* the dashboard hangs across the cut and covers the centre, so the hint sits just under the
+     dashboard (which ends at the hero's bottom), already past the cut. The navbar hides it once
+     the page scrolls */
+  top: calc(100% + 44px);
   z-index: 9;
   transform: translateX(-50%);
-}
-
-/* the dashboard hangs across the cut and covers the centre, so the hint sits just under the
-   dashboard (which ends at the hero's bottom on desktop), already past the cut. Phones hide it. */
-@media (min-width: 601px){
-  .mouse{
-    top: calc(100% + 44px);
-  }
 }
 .mouse::before {
 		content: '';
@@ -485,12 +491,6 @@
 		-webkit-animation: wheel 2s infinite;
 	}
 
-  /* !important: the navbar's scroll handler toggles an inline display on this element */
-  @media(max-width:600px) {
-    .mouse{
-      display:none !important;
-    }
-  }
 @keyframes wheel {
 	to {
 		opacity: 0;
@@ -503,4 +503,39 @@
 		opacity: 0;
 		top: 40px;
 	}
+}
+
+/* phones and tablets: the dashboard hangs lower so the cut under the hero runs clearly across its
+   lower part, as on desktop (it only nicked the bottom corner before). A relative offset, so the
+   hero's height and the cut line itself do not move; the next section's top padding (slant + 120px)
+   leaves room for it. */
+@media (max-width: 991px){
+  .demoMockup{
+    top: 30px;
+    /* wider than the column (nearly edge to edge) so the dashboard keeps pace with the larger copy */
+    width: calc(100% + 16px);
+    max-width: none;
+    margin-inline: -8px;
+  }
+}
+
+/* phones and tablets: larger copy and a taller hero so the space is used instead of left empty */
+@media (max-width: 991px){
+  .heroTitle{
+    font-size:clamp(2.2rem, calc(2.2 * var(--u-vw, 1vw)) + 1.3rem, 3rem);
+  }
+  .heroDesc{
+    font-size:17px;
+    line-height:1.75;
+  }
+  .heroActions{
+    margin-top:14px;
+  }
+  .heroActions .demoBtn{
+    font-size:17px;
+    padding:16px 32px;
+  }
+  .hero{
+    padding-top:112px;
+  }
 }

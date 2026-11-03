@@ -60,11 +60,18 @@ html {
 }
 
 /* the nav bar is fixed, so a hash jump would otherwise land the section heading underneath it */
-#solutions,
-#about,
-#get-started,
 #contact {
   scroll-margin-top: 90px;
+}
+
+/* Solutions and About us are slanted bands that overlap the section above and start with a lot of
+   top padding, so their box top sits well above the heading. Offset by that padding so the jump
+   lands the heading just under the fixed nav (heading ≈ 100px from the top). */
+#solutions {
+  scroll-margin-top: calc(-1 * (var(--hero-slant) + 20px));
+}
+#about {
+  scroll-margin-top: calc(28px - var(--section-slant));
 }
 
 body {
@@ -2140,7 +2147,9 @@ html[dir='ltr'] .coming-soon-ribbon.details div div span {
   opacity: 0.5 !important;
 }
 
-/* locks the page behind the hero demo's CSS fullscreen on iPhone (see hero.module.css) */
-body.demo-pseudo-fullscreen {
+/* locks the page behind the hero demo's and the added-value stage's CSS fullscreen on iPhone (see
+   hero.module.css, added-value.module.css) */
+body.demo-pseudo-fullscreen,
+body.why-us-pseudo-fullscreen {
   overflow: hidden;
 }

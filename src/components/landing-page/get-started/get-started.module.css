@@ -97,6 +97,7 @@
 
 .stepText{
   padding-top: 6px;
+  text-align: start;
 }
 .stepText h3{
   margin: 0;
@@ -159,8 +160,21 @@
   background: color-mix(in srgb, var(--primary-color) 20%, transparent);
   padding: 20px 24px;
 }
+.drawerBody{
+  text-align: start;
+}
+:global([dir='rtl']) .drawerBody,
+:global([dir='rtl']) .drawerBody p{
+  direction: rtl;
+  text-align: right;
+}
 .drawerBody p{
   margin: 0;
   line-height: 1.7;
   color: rgba(255, 255, 255, 0.85);
+}
+
+/* phones: eyebrow label was 12px */
+@media (max-width: 639px){
+  .eyebrow{ font-size: 14px; }
 }

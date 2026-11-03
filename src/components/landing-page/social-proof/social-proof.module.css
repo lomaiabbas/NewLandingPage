@@ -255,3 +255,18 @@
     width: 100%;
   }
 }
+
+/* phones: the toast text was 10-13px */
+@media (max-width: 639px) {
+  .brandName { font-size: 12px; }
+  .timestamp { font-size: 11.5px; }
+  .title { font-size: 14.5px; }
+  .cta { font-size: 13.5px; }
+}
+
+/* phones get the floating sign-up button instead of the toast */
+@media (max-width: 767px) {
+  .wrap {
+    display: none;
+  }
+}

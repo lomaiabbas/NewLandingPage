@@ -126,3 +126,14 @@
     gap: 20px;
   }
 }
+
+/* phones: eyebrow label was 12px, subtitle 16px */
+@media (max-width: 639px){
+  .eyebrow{ font-size: 14px; }
+  .subtitle{ font-size: 17px; }
+}
+
+/* slightly scaled-down content (about 10%) */
+.section > :global(.container) > *{
+  zoom: 0.9;
+}

@@ -20,15 +20,20 @@
      carousel controls end the band, so a shorter gap keeps it from trailing off into white) */
   margin-top: calc(-1 * var(--hero-slant));
   /* the top also leaves room for the hero's scroll hint, which hangs 94px below the hero's bottom */
-  padding: calc(var(--hero-slant) + 132px) 0 calc(var(--section-slant) + 48px);
+  padding: calc(var(--hero-slant) + 120px) 0 calc(var(--section-slant) + 32px);
   clip-path: polygon(0 0, 100% var(--hero-slant), 100% 100%, 0 100%);
+}
+
+/* English mirrors the hero's cut (see hero.module.css), so this top follows it */
+:global([dir="ltr"]) .section {
+  clip-path: polygon(0 var(--hero-slant), 100% 0, 100% 100%, 0 100%);
 }
 
 /* ---------- heading ---------- */
 
 .head{
   max-width: 672px;
-  margin: 0 auto 48px;
+  margin: 0 auto 32px;
   text-align: center;
 }
 
@@ -76,7 +81,7 @@
   display: flex;
   width: 100%;
   flex-shrink: 0;
-  padding: 24px;
+  padding: 18px;
   border-radius: 26px;
   border: 1px solid var(--sol-border);
   background: var(--surface);
@@ -90,7 +95,7 @@
   width: 100%;
   align-content: center;
   align-items: center;
-  gap: 32px;
+  gap: 24px;
 }
 
 .num{
@@ -104,7 +109,7 @@
 /* ---------- arrows and dots ---------- */
 
 .controls{
-  margin-top: 32px;
+  margin-top: 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -212,7 +217,7 @@
 .visualWrap{
   min-width: 0;
   /* one shared height, with each illustration centred in it, so the five cards read alike */
-  min-height: 380px;
+  min-height: 300px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -728,7 +733,7 @@
   }
 
   .card{
-    padding: 40px;
+    padding: 28px;
   }
 
   .cardTitle{
@@ -763,4 +768,31 @@
 
 .pointsOneLine li{
   white-space: nowrap;
+}
+
+/* phones: the mockup captions were 9-11px, unreadable at this width; lift them to 12-13px */
+@media (max-width: 639px){
+  .eyebrow{ font-size: 14px; line-height: 20px; }
+  .subtitle{ font-size: 17px; }
+  .badge,
+  .scanText,
+  .visStores{ font-size: 14px; }
+  .statPct,
+  .statLabel,
+  .phone,
+  .scanGate,
+  .offerCard,
+  .offerAvatar,
+  .offerSub,
+  .offerFoot,
+  .orderSub,
+  .assigned,
+  .ticketLabel,
+  .ticketList{ font-size: 13px; }
+  .offerTag{ font-size: 12px; }
+}
+
+/* slightly scaled-down content (about 10%) */
+.section > :global(.container) > *{
+  zoom: 0.9;
 }

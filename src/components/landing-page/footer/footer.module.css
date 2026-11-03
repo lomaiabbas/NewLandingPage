@@ -1,182 +1,147 @@
-  .footer {
-    position: relative;
-    isolation: isolate;
-    color: var(--text);
-    /* the leader's light footer (bg-surface) */
-    background: #fafaf7;
-    margin-top: calc(-1 * var(--section-slant));
-    padding-top: var(--section-slant);
-    clip-path: polygon(0 0, 100% var(--section-slant), 100% 100%, 0 100%);
-  }
-
-  /* html[lang='en'] .footer {
-    background: -webkit-gradient(linear, left top, right top, from(#323232), to(var(--primary-color)));
-    background: -moz-linear-gradient(left, #323232 0%, var(--primary-color) 100%);
-    background: linear-gradient(to right, #323232 0%, var(--primary-color) 80%);
-  } */
-
-  .footer .footerInner {
-    padding: 60px 0;
-  }
-  
-  .footer .widget.footerWidget .widgetTitle {
-    font-size: 14px;
-    font-weight: 700;
-    margin-bottom: 30px;
-    border-bottom: 0;
-    padding-bottom: 0;
-  }
-  
-  .footer .widget.footerWidget p {
-    margin-bottom: 40px;
-  }
-  
-  .footer .footerMenu {
-    margin-bottom: 40px;
-    padding: 0;
-    list-style: none;
-  }
-  
-  .footer .footerMenu li:not(:last-child) {
-    margin-bottom: 5px;
-  }
-  
-  .footer .footerMenu li a {
-    display: block;
-    color: var(--muted);
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 30px;
-  }
-
-  .footer .footerMenu li a:hover {
-    color: var(--accent);
-  }
-  
-  .footer .footerLogo {
-    display: block;
-    margin-bottom: 30px;
-  }
-  
-  
-  .footer .footerSocialLink {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    display: flex;
-    gap: 15px;
-    margin-top: -20px;
-  }
-  
-  .footer .footerSocialLink li {
-    display: inline-block;
-    height: 45px;
-    width: 45px;
-  }
-  
-  .footer .footerSocialLink li a {
-    height: 45px;
-    width: 45px;
-    border: 1px solid var(--border);
-    background: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 12px;
-  }
-
-  .footer .footerSocialLink li svg{
-    fill:var(--text);
-    width: 30px;
-  }
-  .footer .footerSocialLink li svg.twitter{
-    width: 37px;
-  }
-  .footer .footerSocialLink li a:hover {
-    border-color: var(--primary-color);
-    background-color: var(--primary-color);
-    -webkit-box-shadow: 0px 20px 30px 0px rgba(7, 198, 146, .25);
-    box-shadow: 0px 20px 30px 0px rgba(7, 198, 146, .25);
-  }
-
-  .footer .footerSocialLink li:hover svg{
-    fill:#fff;
-  }
-
-  @media (max-width: 991px) {
-    .footer .footerInner {
-      padding: 60px 0 22px;
-    }
-  
-    .footer .widget.footerWidget {
-      margin-bottom: 30px;
-    }
-  
-    .footer .widget.footerWidget .widgetTitle {
-      margin-bottom: 25px;
-    }
-  }
-  
-  @media (max-width: 768px) {
-    .footer .footerMenu {
-      margin-bottom: 40px;
-    }
-  }
-/* 
-  .widgetTitle{
-    position: relative;
-  }
- .widgetTitle:before,.widgetTitle:after{
-  content:'';
-  position:absolute;
-  left:0;
-  bottom:0;
-  width:61px;
-  height:2px;
-  background:#fff
-}
-.widgetTitle:after{
-  width:16px;
-  border:2px solid var(--primary-color);
-  height:10px;
-  background:transparent;
-  bottom:-3px;
-  left:40px;
-  -webkit-animation:footerLine 7s linear infinite;
-  animation:footerLine 7s linear infinite
+/* The footer follows the reference's structure (brand column + two link columns over a bottom bar),
+   on the same green as the hero, cut at the top by the usual section slant. */
+.footer {
+  position: relative;
+  isolation: isolate;
+  color: rgba(255, 255, 255, 0.78);
+  background: linear-gradient(225deg, #0b2e24 0%, #0f6b4e 38%, #0e9e6d 100%);
+  margin-top: calc(-1 * var(--section-slant));
+  padding-top: calc(var(--section-slant) + 20px);
+  clip-path: polygon(0 0, 100% var(--section-slant), 100% 100%, 0 100%);
 }
 
-@-webkit-keyframes footerLine{0%{left:40px}50%{left:0}100%{left:40px}}@keyframes footerLine{0%{left:40px}50%{left:0}100%{left:40px}} */
-  /* the -20px pull assumed the paragraph above always had its 40px bottom margin intact;
-     on narrow columns the links ended up overlapping the address block */
-  .footer .footerSocialLink {
-    margin-top: 0;
-    flex-wrap: wrap;
+.grid {
+  display: grid;
+  gap: 28px;
+  padding-bottom: 24px;
+  text-align: start;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: 1.4fr 1fr 1fr;
   }
+}
 
-  @media (max-width: 767px) {
-    .footer .footerInner {
-      padding: 48px 0 16px;
-    }
+.logo {
+  display: block;
+}
 
-    .footer .widget.footerWidget .widgetTitle {
-      font-size: 18px;
-      margin-bottom: 18px;
-    }
+.slogan {
+  margin: 12px 0 0;
+  font-weight: 600;
+  color: #7ff0c8;
+}
 
-    .footer .widget.footerWidget p {
-      margin-bottom: 24px;
-    }
+.tagline {
+  max-width: 320px;
+  margin: 8px 0 0;
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.78);
+}
 
-    .footer .footerMenu {
-      margin-bottom: 24px;
-    }
+.social {
+  display: flex;
+  gap: 8px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
 
-    .footer .footerLogo {
-      margin-bottom: 20px;
-    }
+.social a {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  transition: background-color 0.15s, border-color 0.15s;
+}
 
-    .footer .footerSocialLink {
-      gap: 12px;
-    }
-  }
+.social svg {
+  width: 16px;
+  height: 16px;
+  fill: #fff;
+}
+
+.social a:hover {
+  border-color: #fff;
+  background: #fff;
+}
+
+.social a:hover svg {
+  fill: #0b2e24;
+}
+
+.title {
+  margin: 0 0 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.links {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+}
+
+.links li + li {
+  margin-top: 6px;
+}
+
+.links a {
+  color: rgba(255, 255, 255, 0.72) !important;
+  transition: color 0.15s;
+}
+
+.links a:hover {
+  color: #fff !important;
+}
+
+.contact {
+  margin-top: 12px;
+}
+
+.contact li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.contact li + li {
+  margin-top: 8px;
+}
+
+.bar {
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.barInner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-block: 12px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.switchLang {
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.switchLang:hover {
+  color: #fff !important;
+}
+
+/* phones: footer links and the legal bar were 12-14px */
+@media (max-width: 639px){
+  .barInner{ font-size: 13px; }
+  .tagline{ font-size: 15px; }
+}
