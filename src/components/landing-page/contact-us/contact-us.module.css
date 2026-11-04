@@ -1,36 +1,18 @@
-/* A copy of the reference's CTA + contact band (CTAContact in atraslink-brand-beacon), in plain
-   CSS. Only the section wrapper differs: it keeps the page's slanted band. */
+/* CTA + contact band: a dark card with the call to action and contact details, and the form on a
+   white card. The section wrapper keeps the page's slanted band. */
 .contactUs{
   color: #182620;
   position: relative;
   isolation: isolate;
   background: #f5f3ec;
   margin-top: calc(-1 * var(--section-slant));
-  padding: calc(var(--section-slant) + 48px) 0 64px;
+  padding: calc(var(--section-slant) + 48px) 0 128px;
   clip-path: polygon(0 0, 100% var(--section-slant), 100% 100%, 0 100%);
   scroll-margin-top: 80px;
 }
-/* the reference's border-t border-border/60 (rgba(24,38,32,.1) at 60%), drawn along the slanted
-   top edge because a straight border would be clipped away by the clip-path */
-.contactUs::before{
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: var(--section-slant);
-  pointer-events: none;
-  background: linear-gradient(
-    to top right,
-    transparent calc(50% - 1px),
-    rgba(24, 38, 32, 0.06) calc(50% - 1px),
-    rgba(24, 38, 32, 0.06) 50%,
-    transparent 50%
-  );
-}
 @media (max-width: 767px){
   .contactUs{
-    padding: calc(var(--section-slant) + 28px) 0 40px;
+    padding: calc(var(--section-slant) + 28px) 0 80px;
   }
 }
 
@@ -125,7 +107,7 @@
 .dim{
   opacity: 0.8;
 }
-/* the page's global link colour is brand green; the reference keeps these white */
+/* the page's global link colour is brand green; these stay white */
 .info a.infoLink{
   color: #fff;
   opacity: 0.8;
@@ -271,10 +253,11 @@
   color: #0f6b4e;
 }
 
-/* phones: form labels, chips and buttons were 13px */
+/* phones: larger form labels, chips and buttons */
 @media (max-width: 639px){
   .info,
   .btn,
   .field,
   .chip{ font-size: 15px; }
 }
+

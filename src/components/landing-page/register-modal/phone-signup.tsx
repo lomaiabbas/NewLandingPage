@@ -15,9 +15,9 @@ import styles from './register-modal.module.css'
 
 type Step = 'form' | 'otp' | 'done'
 
-/* The sign-up as the leader's page has it (atraslink-brand-beacon, Signup.tsx): company, name and
-   WhatsApp number, then a 6-digit code sent to that number, then "request received".
-   Design only for now: nothing is sent anywhere, each button just moves on to the next step. */
+/* Sign-up: company, name and WhatsApp number, then a 6-digit code sent to that number, then
+   "request received". Design only for now: nothing is sent anywhere, each button just moves on to
+   the next step. */
 export default function PhoneSignup({
   lng,
   onClose,

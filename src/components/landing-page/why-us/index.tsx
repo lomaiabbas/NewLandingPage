@@ -13,8 +13,7 @@ const ITEMS = [
   { icon: BadgeCheck, titleKey: 'WhyItem5Title', descKey: 'WhyItem5Desc' },
 ];
 
-/* The leader's "Why AtrasLink?" section, carried over as is: five centred cards, an icon circle
-   that fills with the brand green on hover. */
+/* "Why AtrasLink?": five centred cards, an icon circle that fills with the brand green on hover. */
 export default function WhyUs({ lng }: { lng: string }) {
   const { t } = getClientTranslation(lng);
 

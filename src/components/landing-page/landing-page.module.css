@@ -1,7 +1,6 @@
-/* The shared Tailwind .container utility caps at 1400px (see tailwind.config.ts), which left
-   it narrower than the navbar pill above it. Scoped to the landing page only (not the shared
-   .container used elsewhere in the app) so both share the exact same width ceiling as the
-   navbar (navbar/navbar.module.css). */
+/* The shared Tailwind .container utility caps at 1400px (see tailwind.config.ts). Scoped to the
+   landing page only (not the shared .container used elsewhere in the app) so it shares the exact
+   same width ceiling as the navbar (navbar/navbar.module.css). */
 .landingPage :global(.container) {
   max-width: min(calc(100 * var(--u-vw, 1vw) - 24px), 1200px);
 }
@@ -9,8 +8,6 @@
 /* depth of the diagonal cut at the top of each band section; one value so every
    divider on the page shares the same angle. Scales with width so phones stay gentle. */
 .landingPage {
-  /* gentler than the earlier clamp(40px, 5vw, 72px): six identical steep cuts in a row made
-     the page feel templated */
   --section-slant: clamp(28px, calc(3.5 * var(--u-vw, 1vw)), 52px);
   /* the cut under the hero alone runs deeper, so the step from the green hero into the
      page reads clearly while the dividers further down stay gentle */
@@ -40,8 +37,8 @@
   --u-vh: calc(1vh / var(--landing-zoom, 1));
 }
 
-/* section headings at the leader's sizes (30px, 2.6rem from 768px); overrides the app-wide
-   --h2-fs for the landing page only */
+/* section headings at 30px, 2.6rem from 768px; overrides the app-wide --h2-fs for the landing page
+   only */
 .landingPage {
   --h2-fs: 30px;
   --h2-line: 1.25;
@@ -55,4 +52,35 @@
 /* a fullscreen demo sizes itself to the real screen, which the zoom would throw off */
 .landingPage:has(:fullscreen) {
   zoom: 1 !important;
+}
+
+/* a straight hairline halfway between the integrations cards and the contact card, as wide as the
+   contact card (it is a .container). It is a zero-height sibling stacked above both slanted bands, so
+   their clip-paths can't cut it. It sits at the bottom edge of the integrations band, and goes up by
+   half the slant plus half the gap (96px of padding above, 48px below). */
+.sectionDivider{
+  position: relative;
+  z-index: 2;
+  height: 0;
+  pointer-events: none;
+}
+.sectionDivider::before{
+  content: "";
+  position: absolute;
+  inset-inline: 1rem;
+  bottom: calc(24px + var(--section-slant) / 2);
+  height: 1px;
+  background: rgba(24, 38, 32, 0.1);
+}
+@media (max-width: 767px){
+  .sectionDivider::before{
+    bottom: calc(34px + var(--section-slant) / 2);
+  }
+}
+/* the line spans the container's content box, so it takes the same gutters (tailwind.config.ts) */
+@media (min-width: 640px){
+  .sectionDivider::before{ inset-inline: 1.5rem; }
+}
+@media (min-width: 1024px){
+  .sectionDivider::before{ inset-inline: 2rem; }
 }

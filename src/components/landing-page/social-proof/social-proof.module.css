@@ -24,7 +24,7 @@
   }
 }
 
-/* the toast now sits on the right in Arabic, so it has to grow from that corner */
+/* the toast sits on the right in Arabic, so it has to grow from that corner */
 :global(html[dir='rtl']) .toast {
   transform-origin: bottom right;
   animation-name: socialProofPopRtl, socialProofGradient;
@@ -256,7 +256,7 @@
   }
 }
 
-/* phones: the toast text was 10-13px */
+/* phones: larger toast text */
 @media (max-width: 639px) {
   .brandName { font-size: 12px; }
   .timestamp { font-size: 11.5px; }

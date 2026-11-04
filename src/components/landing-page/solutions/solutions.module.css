@@ -1,6 +1,5 @@
-/* The leader's "Solutions" carousel, carried over with its layout, spacing and radii, in this
-   site's colours (globals.css): the tints and fills come from --accent / --accent-soft, the panels
-   from --surface-2, the banners from the hero gradient. */
+/* "Solutions" carousel, in this site's colours (globals.css): the tints and fills come from
+   --accent / --accent-soft, the panels from --surface-2, the banners from the hero gradient. */
 .section{
   --sol-tint: color-mix(in srgb, var(--accent) 10%, transparent);
   --sol-surface: var(--surface-2);
@@ -620,7 +619,6 @@
   color: var(--muted);
 }
 
-
 /* ---------- events ---------- */
 
 .visEvents{
@@ -710,7 +708,7 @@
   margin: 4px 0 0;
 }
 
-/* ---------- breakpoints (the leader's sm / md / lg) ---------- */
+/* ---------- breakpoints (sm / md / lg) ---------- */
 
 @media (min-width: 640px){
   .visInvitesStats{
@@ -770,7 +768,7 @@
   white-space: nowrap;
 }
 
-/* phones: the mockup captions were 9-11px, unreadable at this width; lift them to 12-13px */
+/* phones: lift the mockup captions to 12-13px so they stay readable */
 @media (max-width: 639px){
   .eyebrow{ font-size: 14px; line-height: 20px; }
   .subtitle{ font-size: 17px; }

@@ -13,7 +13,7 @@
 const ROOT_MARGIN = '0px 0px 80px 0px';
 
 export function initScrollReveal({ duration, easing }: { duration: number; easing: string }) {
-  // aos.css reads the timing from these, as AOS.init used to set them
+  // aos.css reads the timing from these attributes
   document.body.setAttribute('data-aos-duration', String(duration));
   document.body.setAttribute('data-aos-easing', easing);
   document.body.setAttribute('data-aos-delay', '0');

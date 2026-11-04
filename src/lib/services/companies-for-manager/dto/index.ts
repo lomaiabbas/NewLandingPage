@@ -18,9 +18,6 @@ export interface SignupDto {
     commercialNumber: string;
     commercialNumberIssuanceDate: Date;
     enName: string;
-    // latitude: number;
-    // link: string;
-    // longitude: number;
     latitude: number | null;
     link: string | null;
     longitude: number | null;

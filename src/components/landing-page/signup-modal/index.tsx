@@ -13,9 +13,9 @@ import {
 import { createPortal } from 'react-dom'
 import styles from './signup-modal.module.css'
 
-/* Design only, as in atraslink-brand-beacon's sign-up page: the three steps (details, code, done)
-   are all there, but nothing is validated server-side or sent anywhere. The register-modal provider
-   opens it over the landing page (?register=1, or any link to /register). */
+/* Design only: the three steps (details, code, done) are all there, but nothing is validated
+   server-side or sent anywhere. The register-modal provider opens it over the landing page
+   (?register=1, or any link to /register). */
 const COPY = {
   ar: {
     slogan: 'نَدور لنصلك بعملائك',

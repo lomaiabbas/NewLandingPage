@@ -18,11 +18,6 @@ export const isRegisterHref = (href: string) => {
 export const EMPTY_REGISTER_VALUES = {
   companyName: '',
   subdomain: '',
-  // countryId: '',
-  // cityId: '',
-  // phone: '',
-  // firstName: '',
-  // lastName: '',
   fullName: '',
   email: '',
   phone: '',
@@ -75,8 +70,8 @@ export const SIGNUP_PLACEHOLDERS = {
   longitude: null,
 }
 
-/* The modal no longer asks for the country and the city: every sign-up goes in as Riyadh, Saudi
-   Arabia. 6 is Riyadh in the backend's location list (a city of country 1, Saudi Arabia). */
+/* Every sign-up goes in as Riyadh, Saudi Arabia: 6 is Riyadh in the backend's location list (a city
+   of country 1, Saudi Arabia). */
 export const SIGNUP_DEFAULT_LOCATION = {
   cityId: 6,
   address: { ar: 'الرياض، المملكة العربية السعودية', en: 'Riyadh, Saudi Arabia' },
@@ -93,9 +88,5 @@ export const SIGNUP_ERROR_FIELDS: { match: RegExp; field: RegisterField; message
   { match: /Phone|CountryCode/i, field: 'phone' },
   { match: /Password/i, field: 'password' },
   { match: /ArName|EnName/i, field: 'companyName' },
-  // { match: /SureName|LastName/i, field: 'lastName' },
-  // { match: /(^|[:.])Name/i, field: 'firstName' },
-  // { match: /City/i, field: 'cityId' },
-  // first and last name are one field now
   { match: /SureName|LastName|(^|[:.])Name/i, field: 'fullName' },
 ]

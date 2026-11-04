@@ -183,9 +183,8 @@
     border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
     box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
-/* a filled pill with a green rim: a plain 10% tint all but vanished against the nav's own
-   green-tinted gradient. The sliding indicator already marks the active link, so it gets no
-   hover pill on top of it. */
+/* a filled pill with a green rim, so it shows against the nav's own green-tinted gradient. The
+   sliding indicator already marks the active link, so it gets no hover pill on top of it. */
 .navLink:not([aria-current='page']):hover {
   color: #041a12;
   background: rgba(7, 198, 146, 0.16);

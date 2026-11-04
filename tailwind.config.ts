@@ -12,7 +12,7 @@ const config = {
   theme: {
     container: {
       center: true,
-      /* a flat 2rem eats a fifth of a 320px screen, so the gutter grows with the viewport */
+      /* the gutter grows with the viewport */
       padding: {
         DEFAULT: '1rem',
         sm: '1.5rem',

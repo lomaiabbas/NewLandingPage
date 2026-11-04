@@ -7,13 +7,10 @@ import React, { useEffect, useRef, useState } from 'react'
 import styles from './hero.module.css';
 import { initScrollReveal } from '../scroll-reveal';
 
-/* 16:10 rather than 2:1 — the wide strip rendered the dashboard as a short band at ~0.42 scale,
-   leaving its text unreadable and most of the hero empty. 1200 rather than 1440 wide so the same
-   frame shows the UI ~20% larger; the demo's main layout holds down to 1180px (its chat page wraps
-   below that), only its templates grid drops to two columns under 1250px. Keep the iframe size and
-   the frame ratio in hero.module.css in sync. 1312×820 rather than 1200×750: the same 16:10 frame,
-   but tall enough that the analytics cards and the sidebar's last item (API keys) aren't cut off;
-   the content is drawn a little smaller to fit. */
+/* A 16:10 frame, 1312×820: the demo's main layout holds down to 1180px (its chat page wraps below
+   that, its templates grid drops to two columns under 1250px), and this height keeps the analytics
+   cards and the sidebar's last item (API keys) in view. Keep the iframe size and the frame ratio in
+   hero.module.css in sync. */
 const DEMO_DESIGN_WIDTH = 1312;
 const DEMO_DESIGN_HEIGHT = 820;
 

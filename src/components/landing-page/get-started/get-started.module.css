@@ -1,5 +1,5 @@
-/* The reference's "Steps" band: the deep brand gradient, the three steps joined by a line on one
-   side and the About / Vision / Mission drawers on the other. */
+/* "Steps" band: the deep brand gradient, the three steps joined by a line on one side and the About
+   / Vision / Mission drawers on the other. */
 .section{
   position: relative;
   isolation: isolate;
@@ -174,7 +174,7 @@
   color: rgba(255, 255, 255, 0.85);
 }
 
-/* phones: eyebrow label was 12px */
+/* phones: larger eyebrow label */
 @media (max-width: 639px){
   .eyebrow{ font-size: 14px; }
 }

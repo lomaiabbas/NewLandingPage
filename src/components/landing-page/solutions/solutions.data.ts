@@ -9,7 +9,7 @@ export type SolutionItem = {
   badgeKey?: string;
 };
 
-/* The five cards of the leader's landing page (src/content/landing.ts), same order and copy */
+/* The five solution cards, in order */
 export const SOLUTIONS: SolutionItem[] = [
   {
     id: 'invitations',

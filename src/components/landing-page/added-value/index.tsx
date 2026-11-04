@@ -274,10 +274,9 @@ export default function AddedValue({ lng }: { lng: string }) {
                 />
               </div>
             )}
-            {/* Tabs hold different amounts of copy, so rendering only the current one made the
-                stage grow when the walkthrough reached a longer tab. All of them are rendered in
-                one grid cell (see .panels) with the inactive ones hidden, so the stage takes the
-                longest tab's height from the start, at any width and in either language. */}
+            {/* All tabs are rendered in one grid cell (see .panels) with the inactive ones hidden, so the stage
+                takes the longest tab's height from the start, at any width and in either language.
+                */}
             <div className={styles.panels}>
               {WHY_US_TABS.map((tabItem, ti) => {
                 const isActive = ti === tabIndex;

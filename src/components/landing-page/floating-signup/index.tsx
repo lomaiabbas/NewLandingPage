@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import styles from './floating-signup.module.css'
 
-/* Phones only (hidden by CSS from 768px up, where the navbar button is visible). Replaces the
+/* Phones only (hidden by CSS from 768px up, where the navbar button is visible), in place of the
    social-proof toast, which is hidden at the same breakpoint. Same target as the navbar button. */
 export default function FloatingSignup({ lng }: { lng: string }) {
   const { t } = getClientTranslation(lng)

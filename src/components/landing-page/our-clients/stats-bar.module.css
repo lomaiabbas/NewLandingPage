@@ -1,4 +1,4 @@
-/* ---------- the leader's light stats card on the dark clients band ---------- */
+/* ---------- light stats card on the dark clients band ---------- */
 .panelA {
   position: relative;
   isolation: isolate;
@@ -48,9 +48,8 @@
 
 /* ---------- responsive ---------- */
 
-/* Below ~900px four stat columns cannot hold their numbers side by side. Wrapping the flex row
-   left the 1px stretched dividers floating at the start of each new line, so switch to a
-   2-up grid and drop the dividers entirely instead. */
+/* Below ~900px four stat columns cannot hold their numbers side by side, so switch to a 2-up grid
+   without the dividers. */
 @media (max-width: 900px) {
   .panelA {
     display: grid;

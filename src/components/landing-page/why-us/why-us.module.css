@@ -1,5 +1,4 @@
-/* The leader's "Why AtrasLink?" section, its Tailwind classes written out one to one on the
-   light band (--bg, the leader's bg-muted). */
+/* "Why AtrasLink?" section, on the light band (--bg). */
 .section{
   position: relative;
   isolation: isolate;
@@ -106,7 +105,7 @@
   color: var(--muted);
 }
 
-/* ---------- breakpoints (the leader's sm / md / lg) ---------- */
+/* ---------- breakpoints (sm / md / lg) ---------- */
 
 @media (min-width: 640px){
   .grid{
@@ -127,7 +126,7 @@
   }
 }
 
-/* phones: eyebrow label was 12px, subtitle 16px */
+/* phones: larger eyebrow label and subtitle */
 @media (max-width: 639px){
   .eyebrow{ font-size: 14px; }
   .subtitle{ font-size: 17px; }

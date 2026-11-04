@@ -1,7 +1,6 @@
-/* The leader's "Integrations" section (Integrations in atraslink-brand-beacon), its Tailwind
-   classes written out one to one with the leader's exact colours (src/styles.css there). */
+/* "Integrations" section: two panels (channels, e-commerce), three cards each. */
 .section{
-  /* the leader's tokens */
+  /* section colour tokens */
   --int-muted: #f5f3ec;
   --int-card: #ffffff;
   --int-text: #182620;
@@ -13,7 +12,6 @@
 
   position: relative;
   isolation: isolate;
-  /* bg-muted */
   background: var(--int-muted);
   color: var(--int-text);
   /* cuts into the clients band above with the usual slant; the contact band below cuts into
@@ -24,7 +22,7 @@
   scroll-margin-top: 80px;
 }
 
-/* ---------- heading (SectionHead without an eyebrow) ---------- */
+/* ---------- heading ---------- */
 
 .head{
   max-width: 672px;
@@ -65,7 +63,6 @@
   .groups{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
-/* rounded-[2rem] border bg-card/60 p-4 shadow-soft */
 .panel{
   border-radius: 32px;
   border: 1px solid var(--int-border);
@@ -115,7 +112,7 @@
   transform: translateY(-4px);
 }
 
-/* WhatsApp: bg-hero-gradient text-primary-foreground shadow-brand ring-1 ring-primary/40 */
+/* WhatsApp: live, on the hero gradient */
 .hero{
   background-image: linear-gradient(135deg, #0e9e6d, #108760);
   color: #fff;
@@ -137,7 +134,7 @@
   color: #fff;
 }
 
-/* border border-dashed bg-card text-muted-foreground */
+/* upcoming: dashed border, muted text */
 .soon{
   border: 1px dashed var(--int-border);
   background: var(--int-card);
@@ -171,13 +168,11 @@
   font-weight: 600;
 }
 
-/* bg-white/20 text-white */
 .pillLive{
   background: rgba(255, 255, 255, 0.2);
   color: #fff;
 }
 
-/* bg-muted text-muted-foreground */
 .pillSoon{
   background: var(--int-muted);
   color: var(--int-muted-text);
@@ -202,3 +197,4 @@
   .subtitle{ font-size: 17px; }
   .pill{ font-size: 12px; line-height: 16px; padding: 2px 10px; }
 }
+

@@ -8,9 +8,9 @@ import { SOLUTIONS, type SolutionId } from './solutions.data';
 
 type T = ReturnType<typeof getClientTranslation>['t'];
 
-/* A carousel of solutions, one card at a time, as on the leader's page: arrows, dots and swipe.
-   Each card puts its copy beside an illustration drawn in markup (sample data, not real
-   screenshots), alternating sides on desktop. */
+/* A carousel of solutions, one card at a time: arrows, dots and swipe. Each card puts its copy
+   beside an illustration drawn in markup (sample data, not real screenshots), alternating sides on
+   desktop. */
 export default function Solutions({ lng }: { lng: string }) {
   const { t } = getClientTranslation(lng);
   const rtl = lng === 'ar';

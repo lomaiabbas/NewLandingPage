@@ -92,8 +92,6 @@ export function validateRegisterField(
   dialCode: string
 ): FieldIssue | undefined {
   const value = values[field]
-  // the city list only fills in once a country is picked
-  // if (field === 'cityId' && !values.countryId) return { key: 'RegisterModalCountryFirst' }
   if (!value.trim()) return { key: 'ThisFieldIsMandatory' }
 
   switch (field) {
@@ -252,14 +250,10 @@ export function phoneExample(iso2: string) {
 export function buildSignupPayload({
   values,
   dialCode,
-  // countryName,
-  // cityName,
   lng,
 }: {
   values: RegisterValues
   dialCode: string
-  // countryName: string
-  // cityName: string
   lng: string
 }): SignupDto {
   const companyName = values.companyName.trim()
@@ -276,14 +270,10 @@ export function buildSignupPayload({
     arName: companyName,
     enName: companyName,
     subDomainName: values.subdomain,
-    // cityId: Number(values.cityId),
-    // address: [cityName, countryName].filter(Boolean).join(lng === 'ar' ? '، ' : ', '),
     cityId: SIGNUP_DEFAULT_LOCATION.cityId,
     address: SIGNUP_DEFAULT_LOCATION.address[lng === 'ar' ? 'ar' : 'en'],
     commercialNumberIssuanceDate: issuanceDate,
     managerInfo: {
-      // name: values.firstName.trim(),
-      // lastName: values.lastName.trim(),
       name,
       lastName,
       countryCode: dialCode,

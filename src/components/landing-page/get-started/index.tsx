@@ -43,8 +43,7 @@ export default function GetStarted({ lng }: { lng: string }) {
             ))}
           </ol>
 
-          {/* the About / Vision / Mission drawers stand in for the old About section; the
-              section itself is the "About us" anchor so the jump lands on its heading */}
+          {/* the section itself is the "About us" anchor so the jump lands on its heading */}
           <div className={styles.drawers}>
             {DRAWERS.map((d, i) => {
               const isOpen = openDrawer === i

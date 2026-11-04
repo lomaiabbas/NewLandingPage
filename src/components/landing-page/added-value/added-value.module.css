@@ -48,8 +48,7 @@
 .stage{
   position: relative;
   isolation: isolate;
-  /* what shows before a step's screenshot has loaded (the tint leaves its far side clear): the
-     same deep tone as the no-image state, so it reads as intentional rather than an empty box */
+  /* placeholder while a step's screenshot loads: the same deep tone as the no-image state */
   background: linear-gradient(
     145deg,
     color-mix(in srgb, var(--accent-2) 96%, black) 0%,
@@ -283,7 +282,7 @@
 }
 
 /* every tab's steps share one cell with the inactive ones hidden, so the stage is as tall as the
-   longest tab from the start instead of growing when the walkthrough reaches it */
+   longest tab from the start */
 .panels{
   display: grid;
   width: 100%;
@@ -307,7 +306,7 @@
   inset: -4px;
   background-size: cover;
   background-position: center;
-  /* blur(1px) was imperceptible but forced both full-size layers onto the GPU on every step */
+  /* no blur: it forces both full-size layers onto the GPU on every step */
   filter: saturate(1.05);
   opacity: 0;
   transition: opacity 0.5s ease;
@@ -502,10 +501,8 @@
 
 /* ---------- responsive ---------- */
 
-/* The tint is a start-to-end gradient sized for the desktop split layout, where the copy
-   occupies the first 420px and the screenshot shows through on the other side. On a phone the
-   panel is the full width, so the end of the copy sat on top of a bright screenshot. Below
-   tablet, tint top-to-bottom instead and keep the copy fully covered. */
+/* The tint is a start-to-end gradient sized for the desktop split layout. On a phone the panel is
+   the full width, so below tablet tint top-to-bottom instead and keep the copy fully covered. */
 @media (max-width: 1199px){
   .bgTint{
     background: linear-gradient(
@@ -583,10 +580,7 @@
     font-size: 13.5px;
   }
 
-  /* There are only three short labels, so scrolling them was never worth it: the strip sized
-     itself to the content, so it changed width with every tab, and the label that did not fit
-     ("مشرف الدخول") was cut off by the overflow. Lay them out as three fixed columns instead —
-     constant width, nothing clipped, nothing to scroll. */
+  /* three fixed columns: constant width, nothing clipped, nothing to scroll */
   .tabs{
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -613,7 +607,7 @@
     white-space: normal;
   }
 
-  /* the arrow costs ~20px per tab, which is most of what pushed the last label out */
+  /* the arrow costs ~20px per tab, too much at this width */
   .tabArrow{
     display: none;
   }
@@ -670,20 +664,12 @@
   }
 }
 
-/* ---------- desktop split layout (≥1200px) ----------
-
-   Before: the screenshot covered the whole stage (background-size: cover) and the tabs and steps
-   were laid on top of it. The stage's height came from the screen height (--why-h) and its width
-   from the container, so its shape (~2.2:1) never matched the 16:9 screenshots. Every screen size
-   cropped them differently, and the tabs/steps landed on a different part of the picture each time.
-
-   Now the stage is a two-column grid: the copy (tabs + steps) gets its own track at the inline
-   start (right in Arabic), and the screenshot gets its own track at the inline end.
-   The stage's shape comes from its width, not the screen height: the screenshot track is 7/12 of
-   the width at 16:10, so height = width × 7/12 ÷ 1.6, i.e. aspect-ratio 96 / 35.
-   16:9 shots lose ~10% of their width, the two 3:2 shots ~6% of their height.
-   If a tab's copy ever needs more height, aspect-ratio lets the stage grow to fit it (min-height
-   stays auto), so nothing gets clipped. */
+/* ---------- desktop split layout (≥1200px) ---------- The stage is a two-column grid: the copy
+   (tabs + steps) gets its own track at the inline start (right in Arabic), and the screenshot gets
+   its own track at the inline end. The stage's shape comes from its width, not the screen height:
+   the screenshot track is 7/12 of the width at 16:10, so height = width × 7/12 ÷ 1.6, i.e.
+   aspect-ratio 96 / 35. If a tab's copy ever needs more height, aspect-ratio lets the stage grow to
+   fit it (min-height stays auto), so nothing gets clipped. */
 @media (min-width: 1200px){
   :global(#why-us).bandSection{
     /* land the badge just under the floating navbar (it still clears it by ~25px) so the whole
@@ -746,8 +732,7 @@
     inset: 0;
   }
 
-  /* the copy no longer sits on the picture, so the tint is just a soft seam where the
-     screenshot meets the copy column */
+  /* the tint is just a soft seam where the screenshot meets the copy column */
   .bgTint{
     background: linear-gradient(
       to right,
@@ -783,7 +768,7 @@
 }
 
 /* =====================================================================
-   Light theme ("A5"): only the colours already used on the landing page
+   Light theme: only the colours already used on the landing page
    ---------------------------------------------------------------------
    #192D25  ink (the "أتراس لينك" wordmark)      #37664E → #477F60  hero green
    #6AC396  mint (CTA button)                      #AAEFC9  light mint ("نَدور")
@@ -830,7 +815,7 @@
   background: #FFFFFF;
 }
 
-/* the dark tint is gone everywhere (below 1200px it used to cover the whole stage) */
+/* no dark tint at any width */
 .bgTint,
 .bgTint.bgTintSolid,
 :global(html[dir='rtl']) .bgTint,

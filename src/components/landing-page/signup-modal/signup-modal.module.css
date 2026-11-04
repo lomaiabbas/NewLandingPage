@@ -1,5 +1,4 @@
-/* The sign-up popup over the landing page. Colours and shapes follow atraslink-brand-beacon's
-   sign-up page (src/styles.css tokens), the same as the page this replaces. */
+/* The sign-up popup over the landing page. */
 .overlay {
   --primary: #07c692;
   --primary-deep: #0f6b4e;

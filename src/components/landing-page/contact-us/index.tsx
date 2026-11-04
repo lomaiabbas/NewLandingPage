@@ -7,7 +7,6 @@ import { FormEvent, useState } from 'react'
 import { CONTACT_EMAIL, CONTACT_PHONE, CONTACT_PHONE_HREF } from '../contact-info'
 import styles from './contact-us.module.css'
 
-
 const MESSAGE_TYPES = [
   'ContactTypeDemo',
   'ContactTypeGeneral',
@@ -17,8 +16,8 @@ const MESSAGE_TYPES = [
 
 type MessageType = (typeof MESSAGE_TYPES)[number]
 
-/* The reference's CTA + contact band: a dark rounded card with the call to action and contact
-   details on one side and the contact form on a white card on the other. */
+/* CTA + contact band: a dark rounded card with the call to action and contact details on one side
+   and the contact form on a white card on the other. */
 export default function ContactUs({ lng }: { lng: string }) {
   const { t } = getClientTranslation(lng)
   const [name, setName] = useState('')

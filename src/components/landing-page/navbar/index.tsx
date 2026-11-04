@@ -34,7 +34,7 @@ export default function Navbar({ lng }: { lng: string }) {
     const date = new Date()
     date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000)
     const expires = '; expires=' + date.toUTCString()
-    // `expires` already carries its own "; expires=" (the old string doubled it)
+    // `expires` already carries its own "; expires="
     document.cookie = `NEXT_LOCALE=${newLocale}${expires}; path=/`
 
     if (lng === i18nConfig.defaultLocale && !i18nConfig.prefixDefault) {
@@ -60,9 +60,7 @@ export default function Navbar({ lng }: { lng: string }) {
   }
 
   useEffect(() => {
-    /* This used to run on every scroll event, unthrottled, and query + write the DOM each time —
-       a forced style recalc per frame for the whole duration of a smooth scroll. Now it coalesces
-       into one rAF and only touches anything when a threshold is actually crossed. */
+    /* Coalesced into one rAF, and only touches the DOM when a threshold is actually crossed. */
     let raf = 0
     let hintEl: HTMLElement | null = null
     let scrolled: boolean | null = null
@@ -228,9 +226,7 @@ export default function Navbar({ lng }: { lng: string }) {
           </a>
         </div>
 
-        {/* <Link href={`/${lng}/register`} className={styles.navCta}> */}
-        {/* ?register=1 opens the sign-up modal; the old link went to the /register page, which is
-            where a click landed before the page had finished loading */}
+        {/* ?register=1 opens the sign-up modal */}
         <Link href={`/${lng}?register=1`} className={styles.navCta}>
           {t('Register')}
         </Link>
@@ -252,7 +248,7 @@ export default function Navbar({ lng }: { lng: string }) {
       <Drawer
         id="nav-drawer"
         zIndex={1005}
-        /* 70% meant a 540px drawer on a tablet and a cramped 224px one on a small phone */
+        /* capped so the drawer is neither too wide on a tablet nor cramped on a small phone */
         width={'min(340px, 85vw)'}
         title={
           <div className="flex flex-row gap-3 font-bold text-lg items-center justify-center text-[#e9e4d9]">
@@ -291,7 +287,6 @@ export default function Navbar({ lng }: { lng: string }) {
         </div>
         <div className={styles.drawerCta}>
           <Link
-            // href={`/${lng}/register`}
             href={`/${lng}?register=1`}
             className={styles.drawerCtaBtn}
             onClick={() => setOpenDrawer(false)}

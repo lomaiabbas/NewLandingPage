@@ -1,5 +1,5 @@
-/* The footer follows the reference's structure (brand column + two link columns over a bottom bar),
-   on the same green as the hero, cut at the top by the usual section slant. */
+/* Footer: a brand column + two link columns over a bottom bar, on the same green as the hero, cut
+   at the top by the usual section slant. */
 .footer {
   position: relative;
   isolation: isolate;
@@ -140,7 +140,7 @@
   color: #fff !important;
 }
 
-/* phones: footer links and the legal bar were 12-14px */
+/* phones: larger footer links and legal bar */
 @media (max-width: 639px){
   .barInner{ font-size: 13px; }
   .tagline{ font-size: 15px; }

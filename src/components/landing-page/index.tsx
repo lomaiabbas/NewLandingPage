@@ -40,19 +40,19 @@ export default function LandingPage({lng}:{lng:string}) {
             <div className={`relative ${styles.landingPage}`}>
                 {/* The sign-up modal: links to /register on this page open it instead of the page.
                     To go back to the /register page, comment out <RegisterModalProvider lng={lng}>
-                    and </RegisterModalProvider> below; nothing else changed. */}
+                    and </RegisterModalProvider> below. */}
                 <RegisterModalProvider lng={lng}>
 
                 <Navbar lng={lng} />
                 <Hero lng={lng} />
-                {/* the order and band colours follow the leader's page (atraslink-brand-beacon):
-                    dark hero, light, dark, light, dark, then light to the end */}
+                {/* band colours alternate: dark hero, light, dark, light, dark, then light to the end */}
                 <Solutions lng={lng} />
                 <GetStarted lng={lng} />
                 <WhyUs lng={lng} />
                 {/* <AddedValue lng={lng} /> */}
                 <OurClients lng={lng} />
                 <Integrations lng={lng} />
+                <div className={`container ${styles.sectionDivider}`} aria-hidden />
                 <ContactUs lng={lng} />
                 <Footer lng={lng} />
                 <SocialProof lng={lng} />

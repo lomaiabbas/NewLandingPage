@@ -190,13 +190,6 @@ export default function DialCodePicker({
           else openList()
         }}
       >
-        {/* the green button with two lines that stood before the flag:
-        <span className={styles.dialButton} aria-hidden>
-          <span />
-          <span />
-        </span>
-        <Flag iso={value} />
-        */}
         <Flag iso={value} large />
         <span className={styles.dialValue} aria-hidden>
           {dialCode}

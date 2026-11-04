@@ -9,8 +9,8 @@ import { InstagramGlyph, SallaGlyph, ShopifyGlyph, WhatsAppGlyph, ZidGlyph } fro
 type CardStyle = 'hero' | 'instagram' | 'salla' | 'zid' | 'soon';
 type Item = { n: string; icon: React.ReactNode; style: CardStyle };
 
-/* The leader's "Integrations" section, carried over as is: two panels (channels, e-commerce),
-   three cards each; the live ones in their brand colour, the upcoming ones dashed. */
+/* "Integrations": two panels (channels, e-commerce), three cards each; the live ones in their brand
+   colour, the upcoming ones dashed. */
 export default function Integrations({ lng }: { lng: string }) {
   const { t } = getClientTranslation(lng);
 

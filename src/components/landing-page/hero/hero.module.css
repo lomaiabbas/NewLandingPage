@@ -60,7 +60,7 @@
   position:absolute;
   inset:0;
   z-index:-1;
-  /* the leader's steps gradient (atraslink-brand-beacon --gradient-steps) */
+  /* the steps gradient */
   background:linear-gradient(225deg, #0b2e24 0%, #0f6b4e 38%, #0e9e6d 100%);
   /* the same line the next section's top follows, so the two meet edge to edge */
   clip-path:polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - var(--hero-slant)));
@@ -72,10 +72,9 @@
   clip-path:polygon(0 0, 100% 0, 100% calc(100% - var(--hero-slant)), 0 100%);
 }
 
-/* sized to its content: a viewport-height floor left wide bands of empty green above and below,
-   which pulled the copy and dashboard away from the navbar. The top clears the 112px navbar plus
-   the corner the tilted backdrop lifts above the dashboard, with room to spare; the bottom clears
-   the next section's slant and the scroll hint. */
+/* sized to its content. The top clears the 112px navbar plus the corner the tilted backdrop lifts
+   above the dashboard, with room to spare; the bottom clears the next section's slant and the
+   scroll hint. */
 @media (min-width: 992px){
   .hero{
     /* a short bottom, well under the cut's depth, so the cut runs across the lower part of the
@@ -106,9 +105,8 @@
   }
 }
 
-/* the copy column used to carry an inner end padding; it now gives up exactly that width
-   (the copy box stays the same size, so the headline still fits on one line) and the
-   dashboard column takes it */
+/* the copy column has no inner end padding (the copy box keeps its size, so the headline still fits
+   on one line); the dashboard column takes that width */
 @media (min-width: 992px){
   .hero :global(.ant-row) > .copyCol{
     flex:0 0 calc(41.667% - clamp(1rem, calc(2.4 * var(--u-vw, 1vw)), 2.5rem));
@@ -135,10 +133,9 @@
   }
 }
 
-/* --primary-color is the same green as the hero gradient, so the highlighted word needs a
-   lighter mint to stay readable; #d3ffee was so close to white the word didn't read as accented.
-   This one holds ~4.8:1 on --accent and >3.3:1 at the lightest point it can sit on, above the
-   3:1 minimum for headline-size text. */
+/* --primary-color is the same green as the hero gradient, so the highlighted word needs a lighter
+   mint to stay readable: ~4.8:1 on --accent and >3.3:1 at the lightest point it can sit on, above
+   the 3:1 minimum for headline-size text. */
 .heroHighlight{
   color:#86f2c6;
 }
@@ -211,8 +208,8 @@
   position: relative;
   isolation: isolate;
   width: 100%;
-  /* the mockup faces the viewer flat now, so it is centred in its column and kept
-     narrow enough to leave an even band of green on both sides */
+  /* the mockup is centred in its column and kept narrow enough to leave an even band of green on both
+     sides */
   max-width: 520px;
   margin-inline: auto;
   margin-top: 0;
@@ -220,8 +217,8 @@
   top: 25px;
 }
 
-/* in the split layout a fixed cap left the dashboard floating small inside its column on wide
-   screens, so it fills the column out to the container edge and balances the copy opposite */
+/* in the split layout the dashboard fills the column out to the container edge and balances the
+   copy opposite */
 @media (min-width: 992px){
   .demoMockup{
     /* runs out over the column's end padding to the container edge, a little more width to scale up */
@@ -506,7 +503,7 @@
 }
 
 /* phones and tablets: the dashboard hangs lower so the cut under the hero runs clearly across its
-   lower part, as on desktop (it only nicked the bottom corner before). A relative offset, so the
+   lower part, as on desktop. A relative offset, so the
    hero's height and the cut line itself do not move; the next section's top padding (slant + 120px)
    leaves room for it. */
 @media (max-width: 991px){
