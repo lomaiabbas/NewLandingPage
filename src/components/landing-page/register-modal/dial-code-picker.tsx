@@ -14,13 +14,26 @@ import {
 } from 'react'
 import { createPortal } from 'react-dom'
 import { DEFAULT_DIAL_CODE } from './register-modal.data'
-import styles from './register-modal.module.css'
+import registerStyles from './register-modal.module.css'
+
+/* the classes the picker draws with; another modal can pass its own module with the same names
+   (dialCode, dialValue, dialChevron, dialList, dialOption, dialOptionName, dialOptionCode, flag,
+   flagLarge) */
+type PickerStyles = Record<string, string>
 
 const isoOf = (code: CountryCodeDto) => code.iso2Code.toUpperCase()
 const withPlus = (code: string) => (code.startsWith('+') ? code : `+${code}`)
 
 /* the same flag files the /register page's phone dropdown shows; `large` on the button itself */
-function Flag({ iso, large = false }: { iso: string; large?: boolean }) {
+function Flag({
+  iso,
+  large = false,
+  styles,
+}: {
+  iso: string
+  large?: boolean
+  styles: PickerStyles
+}) {
   return (
     <Image
       src={`/images/flags/${iso.toLowerCase()}.svg`}
@@ -43,6 +56,7 @@ export default function DialCodePicker({
   onChange,
   label,
   containerRef,
+  styles = registerStyles,
 }: {
   codes: CountryCodeDto[]
   /** upper-case ISO code of the chosen country */
@@ -51,6 +65,8 @@ export default function DialCodePicker({
   label: string
   /** read when the list opens: on the first render the container isn't mounted yet */
   containerRef: RefObject<HTMLElement>
+  /** the register modal's classes unless another modal passes its own */
+  styles?: PickerStyles
 }) {
   const id = useId()
   const buttonRef = useRef<HTMLButtonElement>(null)
@@ -190,7 +206,7 @@ export default function DialCodePicker({
           else openList()
         }}
       >
-        <Flag iso={value} large />
+        <Flag iso={value} large styles={styles} />
         <span className={styles.dialValue} aria-hidden>
           {dialCode}
         </span>
@@ -225,7 +241,7 @@ export default function DialCodePicker({
                 onMouseEnter={() => setActive(index)}
                 onClick={() => choose(index)}
               >
-                <Flag iso={code.iso2Code} />
+                <Flag iso={code.iso2Code} styles={styles} />
                 <span className={styles.dialOptionName}>{code.name}</span>
                 <span className={styles.dialOptionCode} dir="ltr">
                   {withPlus(code.dialCode)}

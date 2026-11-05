@@ -2,19 +2,24 @@
 
 import { getClientTranslation } from '@/app/i18n/client'
 import { resolvePersianAndArabicNumbers } from '@/lib/helpers'
+import landingRequestsServiceInstance, {
+  LANDING_FORMS_API_READY,
+  type ContactMessageType,
+} from '@/lib/services/landing-requests'
 import { MapPin, Phone } from 'lucide-react'
 import { FormEvent, useState } from 'react'
 import { CONTACT_EMAIL, CONTACT_PHONE, CONTACT_PHONE_HREF } from '../contact-info'
 import styles from './contact-us.module.css'
 
-const MESSAGE_TYPES = [
-  'ContactTypeDemo',
-  'ContactTypeGeneral',
-  'ContactTypeSupport',
-  'ContactTypePartnership',
-] as const
-
-type MessageType = (typeof MESSAGE_TYPES)[number]
+/* value: the fixed id sent to the backend (the same in every language); label: the translation key
+   shown on the chip and used in the mail subject. To add a type, add a line here and the label in
+   both translation files (and the value to ContactMessageType in the service). */
+const MESSAGE_TYPES: { value: ContactMessageType; label: string }[] = [
+  { value: 'Demo', label: 'ContactTypeDemo' },
+  { value: 'General', label: 'ContactTypeGeneral' },
+  { value: 'Support', label: 'ContactTypeSupport' },
+  { value: 'Partnership', label: 'ContactTypePartnership' },
+]
 
 /* CTA + contact band: a dark rounded card with the call to action and contact details on one side
    and the contact form on a white card on the other. */
@@ -24,9 +29,11 @@ export default function ContactUs({ lng }: { lng: string }) {
   const [company, setCompany] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
-  const [type, setType] = useState<MessageType>('ContactTypeDemo')
+  const [type, setType] = useState<ContactMessageType>('Demo')
   const [content, setContent] = useState('')
   const [sent, setSent] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
   const [errors, setErrors] = useState<{ name?: string; email?: string; content?: string }>({})
 
   const validateForm = () => {
@@ -40,9 +47,33 @@ export default function ContactUs({ lng }: { lng: string }) {
     return Object.keys(_errors).length === 0
   }
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (!validateForm()) return
+  // sent to the backend once it has the endpoint; until then the mail app is opened instead
+  const sendByApi = async () => {
+    setSending(true)
+    try {
+      await landingRequestsServiceInstance.sendContactRequest({
+        name: name.trim(),
+        email: email.trim(),
+        messageType: type,
+        message: content.trim(),
+        company: company.trim() || undefined,
+        phone: phone.trim() || undefined,
+      })
+      setName('')
+      setCompany('')
+      setEmail('')
+      setPhone('')
+      setType('Demo')
+      setContent('')
+      setSent(true)
+    } catch (error: any) {
+      setSubmitError(error?.response ? t('RegisterModalSubmitError') : t('CheckNetwork'))
+    } finally {
+      setSending(false)
+    }
+  }
+
+  const sendByMailApp = () => {
     const body = [
       `${t('ContactFormName')}: ${name}`,
       `${t('ContactFormCompany')}: ${company}`,
@@ -51,9 +82,20 @@ export default function ContactUs({ lng }: { lng: string }) {
       '',
       content,
     ].join('\n')
-    const subject = `[${t(type)}] AtrasLink`
+    const label = MESSAGE_TYPES.find((x) => x.value === type)?.label ?? ''
+    const subject = `[${t(label)}] AtrasLink`
     window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
     setSent(true)
+  }
+
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (sending) return
+    setSent(false)
+    setSubmitError(null)
+    if (!validateForm()) return
+    if (LANDING_FORMS_API_READY) void sendByApi()
+    else sendByMailApp()
   }
 
   return (
@@ -145,13 +187,13 @@ export default function ContactUs({ lng }: { lng: string }) {
                 <div className={styles.chips}>
                   {MESSAGE_TYPES.map((x) => (
                     <button
-                      key={x}
+                      key={x.value}
                       type="button"
-                      aria-pressed={type === x}
-                      onClick={() => setType(x)}
-                      className={`${styles.chip} ${type === x ? styles.chipActive : ''}`}
+                      aria-pressed={type === x.value}
+                      onClick={() => setType(x.value)}
+                      className={`${styles.chip} ${type === x.value ? styles.chipActive : ''}`}
                     >
-                      {t(x)}
+                      {t(x.label)}
                     </button>
                   ))}
                 </div>
@@ -169,12 +211,17 @@ export default function ContactUs({ lng }: { lng: string }) {
                 {errors.content && <span className="error-msg">{errors.content}</span>}
               </label>
 
-              <button type="submit" className={`${styles.btn} ${styles.submit}`}>
+              <button type="submit" disabled={sending} className={`${styles.btn} ${styles.submit}`}>
                 {t('SendYourMassage')}
               </button>
               {sent && (
                 <p role="status" className={styles.sent}>
-                  {t('ContactFormSent')}
+                  {t(LANDING_FORMS_API_READY ? 'ContactFormSentApi' : 'ContactFormSent')}
+                </p>
+              )}
+              {submitError && (
+                <p role="alert" className="error-msg">
+                  {submitError}
                 </p>
               )}
             </form>

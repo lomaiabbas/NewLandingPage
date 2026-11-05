@@ -34,7 +34,7 @@
      vw/vh rule read a viewport that is the wrong size. These are the true units of the zoomed
      layout, so the page lays out exactly as it would in a browser zoomed to the same level. */
   --u-vw: calc(1vw / var(--landing-zoom, 1));
-  --u-vh: calc(1vh / var(--landing-zoom, 1));
+  --u-vh: calc(var(--landing-vh, 1vh) / var(--landing-zoom, 1));
 }
 
 /* section headings at 30px, 2.6rem from 768px; overrides the app-wide --h2-fs for the landing page

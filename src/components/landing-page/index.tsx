@@ -27,7 +27,15 @@ const LANDING_ZOOM_SCRIPT = `(function(){
   if (!s) { s = document.createElement('style'); s.id = 'landing-zoom'; document.head.appendChild(s); }
   function update(){
     var z = innerWidth < 992 ? 1 : Math.max(0.9, Math.min(innerWidth / 1518, innerHeight / 722));
-    s.textContent = ':root{--landing-zoom:' + z.toFixed(3) + '}';
+    var vh = '';
+    /* a phone with "desktop site" on: the browser lays out ~980px wide and ~2000px tall, then shrinks
+       it to the screen, so the tablet layout comes out tiny with a tall empty hero. Enlarge it to a
+       ~600px-wide layout and cap the height it sees. */
+    if (matchMedia('(pointer: coarse)').matches && Math.min(screen.width, screen.height) <= 820 && innerWidth >= 900) {
+      z = innerWidth / 600;
+      vh = '--landing-vh:' + (Math.min(innerHeight, innerWidth * 0.75) / 100).toFixed(2) + 'px;';
+    }
+    s.textContent = ':root{--landing-zoom:' + z.toFixed(3) + ';' + vh + '}';
   }
   update();
   addEventListener('resize', update);
