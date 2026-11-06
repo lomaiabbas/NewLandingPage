@@ -292,7 +292,7 @@
   transform-origin:top left;
   border:0;
   background:#fff;
-  pointer-events:none;
+  pointer-events:auto;
 }
 
 .demoFrame:fullscreen,
