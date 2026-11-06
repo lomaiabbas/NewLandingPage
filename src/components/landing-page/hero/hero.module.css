@@ -78,8 +78,9 @@
 @media (min-width: 992px){
   .hero{
     /* a short bottom, well under the cut's depth, so the cut runs across the lower part of the
-       dashboard and the corner its backdrop drops shows on the light band below */
-    padding:120px 0 0;
+       dashboard and the corner its backdrop drops shows on the light band below. The top also
+       covers the rise that seats the dashboard on the cut (see .demoMockup) on short screens. */
+    padding:150px 0 0;
   }
 }
 
@@ -115,6 +116,17 @@
   .hero :global(.ant-row) > .demoCol{
     flex:1 1 0;
     max-width:none;
+    align-self:flex-end;
+  }
+  /* the row fills the hero, so the copy stays centred while the dashboard rests on the hero's
+     bottom edge, where the cut's depth positions it (see .demoMockup) */
+  .hero > :global(.container){
+    align-self:stretch;
+    display:flex;
+    flex-direction:column;
+  }
+  .hero > :global(.container) > :global(.ant-row){
+    flex:1;
   }
 }
 
@@ -194,7 +206,8 @@
    dashboard's lower part */
 @media (max-width: 991px){
   .hero{
-    padding:96px 0 20px
+    padding:96px 0 20px;
+    align-items:flex-end;
   }
 }
 
@@ -227,8 +240,12 @@
     /* on short screens the dashboard also gives way to the screen height, so the whole hero, the
        cut and the scroll hint just under the dashboard all fit the first screen. The height left
        over after the hero's top padding and the hint, times the 16:10 frame ratio */
-    max-width: calc((100 * var(--u-vh, 1vh) - 228px) * 1.6);
-    max-width: calc((100 * var(--u-vh, 1svh) - 228px) * 1.6);
+    max-width: calc((100 * var(--u-vh, 1vh) - 258px) * 1.6);
+    max-width: calc((100 * var(--u-vh, 1svh) - 258px) * 1.6);
+    /* the cut crosses the dashboard's end edge a little above its corner, not the corner itself:
+       the line is 0.42 of the cut's depth above the hero's bottom there (the dashboard's inner edge
+       sits at ~58% of the width) */
+    top: calc(30px - 0.42 * var(--hero-slant));
   }
 }
 
@@ -508,11 +525,20 @@
    leaves room for it. */
 @media (max-width: 991px){
   .demoMockup{
-    top: 30px;
+    /* the dashboard spans the width, so the cut meets its end edge almost at the hero's bottom:
+       it rests just under that edge (hero bottom padding + 8px) and the cut crosses the edge,
+       not the corner */
+    top: 44px;
     /* wider than the column (nearly edge to edge) so the dashboard keeps pace with the larger copy */
     width: calc(100% + 16px);
     max-width: none;
     margin-inline: -8px;
+  }
+}
+
+@media (max-width: 575px){
+  .demoMockup{
+    top: 32px;
   }
 }
 

@@ -2,7 +2,8 @@
 
 import AtrasLinkLogo from '@/lib/icons/logo'
 import landingRequestsServiceInstance, {
-  LANDING_FORMS_API_READY,
+  readSignupApiError,
+  type SignupApiError,
 } from '@/lib/services/landing-requests'
 import { ArrowLeft, ArrowRight, BadgeCheck, CheckCircle2, MessageCircle, X } from 'lucide-react'
 import {
@@ -30,9 +31,8 @@ import {
 } from '../register-modal/register-modal.helpers'
 import styles from './signup-modal.module.css'
 
-/* The three steps (details, code, done). With NEXT_PUBLIC_LANDING_FORMS_API=true the code is sent
-   and checked by the backend (see lib/services/landing-requests); without it the steps only move
-   on and nothing is sent. The register-modal provider opens it over the landing page
+/* The three steps (details, code, done). The code is sent and checked by the backend (see
+   lib/services/landing-requests). The register-modal provider opens it over the landing page
    (?register=1, or any link to /register). */
 const COPY = {
   ar: {
@@ -57,7 +57,7 @@ const COPY = {
     doneDesc:
       'تم التحقق من رقمك، وسيراجع فريق أتراس لينك طلبك. سنتواصل معك عبر واتساب فور تفعيل حسابك.',
     close: 'إغلاق',
-    backHome: 'العودة للرئيسية',
+    contactUs: 'للاستفسار يرجى التواصل معنا',
     sending: 'جاري الإرسال...',
     sendError: 'تعذّر إرسال الرمز، حاول مرة أخرى.',
     verifyError: 'الرمز غير صحيح أو تعذّر إرسال الطلب، حاول مرة أخرى.',
@@ -71,6 +71,8 @@ const COPY = {
     phoneInvalid: 'رقم الجوال غير صحيح لهذه الدولة.',
     codeDigits: 'الرمز أرقام فقط.',
     codeLength: 'الرمز مكوّن من 6 أرقام.',
+    expiresIn: 'ينتهي الرمز خلال',
+    expired: 'انتهت صلاحية الرمز، اطلب رمزاً جديداً.',
   },
   en: {
     slogan: 'We turn to connect you with your customers',
@@ -95,7 +97,7 @@ const COPY = {
     doneDesc:
       'Your number is verified and the AtrasLink team will review your request. We will contact you on WhatsApp as soon as your account is activated.',
     close: 'Close',
-    backHome: 'Back to home',
+    contactUs: 'For inquiries, please contact us',
     sending: 'Sending...',
     sendError: 'We could not send the code. Please try again.',
     verifyError: 'The code is wrong or the request could not be sent. Please try again.',
@@ -109,6 +111,8 @@ const COPY = {
     phoneInvalid: 'This is not a valid mobile number for this country.',
     codeDigits: 'The code must contain digits only.',
     codeLength: 'The code must be 6 digits.',
+    expiresIn: 'The code expires in',
+    expired: 'The code has expired. Request a new one.',
   },
 }
 
@@ -132,6 +136,10 @@ export default function SignupModal({
   const [step, setStep] = useState<Step>('form')
   const [form, setForm] = useState({ companyName: '', contactName: '', phone: '' })
   const [code, setCode] = useState('')
+  const [sessionId, setSessionId] = useState('')
+  const [expiresAt, setExpiresAt] = useState(0)
+  const [retryAt, setRetryAt] = useState(0)
+  const [now, setNow] = useState(() => Date.now())
   const overlayRef = useRef<HTMLDivElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
 
@@ -185,8 +193,25 @@ export default function SignupModal({
   const formValid = !fieldErrors.companyName && !fieldErrors.contactName && !fieldErrors.phone
   const codeError = codeBadChar ? t.codeDigits : touched.code && code.length < 6 ? t.codeLength : null
 
+  useEffect(() => {
+    if (now >= expiresAt && now >= retryAt) return
+    const timer = window.setInterval(() => setNow(Date.now()), 1000)
+    return () => window.clearInterval(timer)
+  }, [now, expiresAt, retryAt])
+
+  const secondsLeft = (until: number) => Math.max(0, Math.ceil((until - now) / 1000))
+  const expiresLeft = secondsLeft(expiresAt)
+  const retryLeft = secondsLeft(retryAt)
+  const clock = (total: number) =>
+    `${Math.floor(total / 60)}:${String(total % 60).padStart(2, '0')}`
+
   // runs one backend call: shows the busy state, then moves on only if it worked
-  const run = async (call: () => Promise<void>, onOk: () => void, failed: string) => {
+  const run = async (
+    call: () => Promise<void>,
+    onOk: () => void,
+    failed: string,
+    onFail?: (apiError: SignupApiError) => void
+  ) => {
     if (busy) return
     setBusy(true)
     setError(null)
@@ -194,7 +219,18 @@ export default function SignupModal({
       await call()
       onOk()
     } catch (err: any) {
-      setError(err?.response ? failed : t.networkError)
+      const apiError = readSignupApiError(err)
+      if (apiError.retryAfterSeconds) {
+        setNow(Date.now())
+        setRetryAt(Date.now() + apiError.retryAfterSeconds * 1000)
+      }
+      // the server's message is already in the visitor's language
+      setError(
+        apiError.status
+          ? apiError.validationErrors[0]?.message || apiError.message || failed
+          : t.networkError
+      )
+      onFail?.(apiError)
     } finally {
       setBusy(false)
     }
@@ -206,15 +242,15 @@ export default function SignupModal({
       setTouched((s) => ({ ...s, companyName: true, contactName: true, phone: true }))
       return
     }
-    if (!LANDING_FORMS_API_READY) {
-      setCode('')
-      setCodeBadChar(false)
-      setTouched((s) => ({ ...s, code: false }))
-      setStep('otp')
-      return
-    }
     void run(
-      () => landingRequestsServiceInstance.sendSignupOtp({ phoneNumber }),
+      async () => {
+        const { signupSessionId, expiresInSeconds } =
+          await landingRequestsServiceInstance.sendSignupOtp({ phoneNumber }, lng)
+        setNow(Date.now())
+        setExpiresAt(Date.now() + expiresInSeconds * 1000)
+        // a resend replaces the session; only the newest code works
+        setSessionId(signupSessionId)
+      },
       () => {
         setCode('')
         setCodeBadChar(false)
@@ -231,20 +267,39 @@ export default function SignupModal({
       touch('code')
       return
     }
-    if (!LANDING_FORMS_API_READY) {
-      setStep('done')
-      return
-    }
     void run(
       () =>
-        landingRequestsServiceInstance.verifySignup({
-          companyName: form.companyName.trim(),
-          contactName: form.contactName.trim(),
-          phoneNumber,
-          code,
-        }),
+        landingRequestsServiceInstance
+          .verifySignup(
+            {
+              fullName: form.contactName.trim(),
+              companyName: form.companyName.trim(),
+              phoneNumber,
+              otpCode: code,
+              signupSessionId: sessionId,
+            },
+            lng
+          )
+          .then(() => undefined),
       () => setStep('done'),
-      t.verifyError
+      t.verifyError,
+      // a wrong code is typed again; an expired or locked one needs "Resend code"
+      (apiError) => {
+        if (apiError.status === 400 || apiError.status === 429) {
+          setCode('')
+          setCodeBadChar(false)
+          setTouched((s) => ({ ...s, code: false }))
+        }
+      }
+    )
+  }
+
+  // closes the modal, then scrolls once the page behind it is scrollable again
+  const goToContact = () => {
+    onClose()
+    window.setTimeout(
+      () => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }),
+      50
     )
   }
 
@@ -301,8 +356,12 @@ export default function SignupModal({
             <span className={styles.sloganDot} />
             {t.slogan}
           </span>
-          <h2 className={styles.title}>{t.title}</h2>
-          <p className={styles.subtitle}>{t.subtitle}</p>
+          {step === 'form' && (
+            <>
+              <h2 className={styles.title}>{t.title}</h2>
+              <p className={styles.subtitle}>{t.subtitle}</p>
+            </>
+          )}
         </div>
 
         <div className={styles.card}>
@@ -384,11 +443,12 @@ export default function SignupModal({
               </div>
               <button
                 type="submit"
-                disabled={busy}
+                disabled={busy || retryLeft > 0}
                 className={`${styles.btnPrimary} ${styles.btnBlock}`}
               >
                 <MessageCircle size={16} />
                 {busy ? t.sending : t.send}
+                {retryLeft > 0 && <span dir="ltr"> ({clock(retryLeft)})</span>}
               </button>
               <p className={styles.note}>
                 <BadgeCheck size={14} className={styles.noteIcon} />
@@ -412,23 +472,38 @@ export default function SignupModal({
                   inputMode="numeric"
                   autoComplete="one-time-code"
                   dir="ltr"
-                  className={`${styles.input} ${styles.codeInput} ${codeError || error ? styles.inputInvalid : ''}`}
-                  aria-invalid={!!(codeError || error)}
+                  className={`${styles.input} ${styles.codeInput} ${error || codeError ? styles.inputInvalid : ''}`}
+                  aria-invalid={!!(error || codeError)}
                   value={code}
                   onChange={(e) => {
+                    // Arabic-Indic and Persian digits count as digits; spaces and direction marks
+                    // (left behind by pasting) are ignored
                     const raw = e.target.value
+                      .replace(/[٠-٩۰-۹]/g, (digit) =>
+                        String(digit.charCodeAt(0) & 0xf)
+                      )
+                      .replace(/[\s‎‏‪-‮⁦-⁩]/g, '')
                     setCodeBadChar(/\D/.test(raw))
                     setCode(raw.replace(/\D/g, '').slice(0, 6))
                     setError(null)
                     touch('code')
                   }}
                 />
-                {(codeError || error) && (
+                {(error || codeError) && (
                   <span role="alert" className={styles.fieldError}>
-                    {codeError || error}
+                    {error || codeError}
                   </span>
                 )}
               </label>
+              <p className={styles.hint} aria-live="polite">
+                {expiresLeft > 0 ? (
+                  <>
+                    {t.expiresIn} <span dir="ltr">{clock(expiresLeft)}</span>
+                  </>
+                ) : (
+                  t.expired
+                )}
+              </p>
               <button
                 type="submit"
                 disabled={code.length !== 6 || busy}
@@ -451,11 +526,12 @@ export default function SignupModal({
                 </button>
                 <button
                   type="button"
-                  disabled={busy}
+                  disabled={busy || retryLeft > 0}
                   onClick={() => sendCode()}
                   className={styles.linkBrand}
                 >
                   {t.resend}
+                  {retryLeft > 0 && <span dir="ltr"> ({clock(retryLeft)})</span>}
                 </button>
               </div>
             </form>
@@ -468,8 +544,8 @@ export default function SignupModal({
               </span>
               <h3 className={styles.doneTitle}>{t.doneTitle}</h3>
               <p className={styles.doneDesc}>{t.doneDesc}</p>
-              <button type="button" onClick={onClose} className={`${styles.btnPrimary} ${styles.btnDone}`}>
-                {t.backHome}
+              <button type="button" onClick={goToContact} className={`${styles.btnPrimary} ${styles.btnDone}`}>
+                {t.contactUs}
                 <Arrow size={16} />
               </button>
             </div>

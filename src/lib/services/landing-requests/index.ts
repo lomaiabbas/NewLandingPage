@@ -1,18 +1,11 @@
 import type { AxiosRequestConfig } from 'axios'
 import http from '../httpService'
 
-/* The landing page's public forms (contact us, sign-up request).
-
-   Contact us is the real backend endpoint (POST /api/contact-us, no login needed).
-   The sign-up endpoints below are still PROPOSED names and shapes, to be confirmed with the backend
-   team; with NEXT_PUBLIC_LANDING_FORMS_API unset the sign-up form only moves between its steps and
-   sends nothing. Set NEXT_PUBLIC_LANDING_FORMS_API=true once they exist. */
-export const LANDING_FORMS_API_READY = process.env.NEXT_PUBLIC_LANDING_FORMS_API === 'true'
-
+/* The landing page's public forms (contact us, sign-up request). Neither needs a login. */
 const ENDPOINTS = {
   contact: 'api/contact-us',
-  signupSendOtp: 'api/app/signup-requests/send-otp',
-  signupVerify: 'api/app/signup-requests/verify',
+  signupSendOtp: 'api/application-request/send-signup-otp',
+  signupVerify: 'api/application-request/verify-signup',
 }
 
 /* Fixed ids for the message type, the only values the backend accepts (it rejects anything else
@@ -42,16 +35,51 @@ export interface SignupOtpRequestDto {
   phoneNumber: string
 }
 
+export interface SignupOtpResultDto {
+  /** ties the code to this send; a resend issues a new one and voids the previous */
+  signupSessionId: string
+  expiresInSeconds: number
+}
+
 export interface SignupVerifyDto {
+  fullName: string
   companyName: string
-  contactName: string
   phoneNumber: string
-  /** the 6-digit code sent over WhatsApp */
-  code: string
+  /** exactly 6 digits, kept as a string for leading zeros */
+  otpCode: string
+  signupSessionId: string
+}
+
+export interface SignupApiError {
+  /** 0 when the server was not reached */
+  status: number
+  /** already localized by the server through Accept-Language */
+  message?: string
+  retryAfterSeconds?: number
+  validationErrors: { message: string; members: string[] }[]
+}
+
+export function readSignupApiError(error: any): SignupApiError {
+  const info = error?.response?.data?.error
+  return {
+    status: error?.response?.status ?? 0,
+    message: info?.message || undefined,
+    retryAfterSeconds: info?.data?.retryAfterSeconds,
+    validationErrors: info?.validationErrors ?? [],
+  }
 }
 
 // skipErrorHandler: the form shows the error itself instead of httpService's global popup
-const OPTIONS: AxiosRequestConfig & { skipErrorHandler?: boolean } = { skipErrorHandler: true }
+const OPTIONS: AxiosRequestConfig & { skipErrorHandler?: boolean; skipAuth?: boolean } = {
+  skipErrorHandler: true,
+  skipAuth: true,
+}
+
+// the language of the response messages and of the WhatsApp message
+const withLanguage = (lng: string): typeof OPTIONS => ({
+  ...OPTIONS,
+  headers: { 'Accept-Language': lng === 'en' ? 'en' : 'ar' },
+})
 
 class LandingRequestsService {
   public async sendContactRequest(input: ContactRequestDto): Promise<ContactResultDto> {
@@ -59,13 +87,23 @@ class LandingRequestsService {
     return result.data
   }
 
-  public async sendSignupOtp(input: SignupOtpRequestDto): Promise<void> {
-    await http.post(ENDPOINTS.signupSendOtp, input, OPTIONS)
+  public async sendSignupOtp(input: SignupOtpRequestDto, lng: string): Promise<SignupOtpResultDto> {
+    const result = await http.post<{ data: SignupOtpResultDto }>(
+      ENDPOINTS.signupSendOtp,
+      input,
+      withLanguage(lng)
+    )
+    return result.data.data
   }
 
   /** checks the code and, if it is right, records the sign-up request */
-  public async verifySignup(input: SignupVerifyDto): Promise<void> {
-    await http.post(ENDPOINTS.signupVerify, input, OPTIONS)
+  public async verifySignup(input: SignupVerifyDto, lng: string): Promise<number> {
+    const result = await http.post<{ data: { applicationRequestId: number } }>(
+      ENDPOINTS.signupVerify,
+      input,
+      withLanguage(lng)
+    )
+    return result.data.data.applicationRequestId
   }
 }
 
