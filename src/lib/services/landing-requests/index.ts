@@ -1,31 +1,40 @@
 import type { AxiosRequestConfig } from 'axios'
 import http from '../httpService'
 
-/* The landing page's public forms (contact us, sign-up request). The backend endpoints below are
-   PROPOSED names and shapes, to be confirmed with the backend team; change them here only.
+/* The landing page's public forms (contact us, sign-up request).
 
-   Until the backend has them, set nothing: with NEXT_PUBLIC_LANDING_FORMS_API unset the forms keep
-   their old behaviour (contact opens the mail app, sign-up only moves between its steps), so no
-   request reaches the production API. Set NEXT_PUBLIC_LANDING_FORMS_API=true once they exist. */
+   Contact us is the real backend endpoint (POST /api/contact-us, no login needed).
+   The sign-up endpoints below are still PROPOSED names and shapes, to be confirmed with the backend
+   team; with NEXT_PUBLIC_LANDING_FORMS_API unset the sign-up form only moves between its steps and
+   sends nothing. Set NEXT_PUBLIC_LANDING_FORMS_API=true once they exist. */
 export const LANDING_FORMS_API_READY = process.env.NEXT_PUBLIC_LANDING_FORMS_API === 'true'
 
 const ENDPOINTS = {
-  contact: 'api/app/contact-requests',
+  contact: 'api/contact-us',
   signupSendOtp: 'api/app/signup-requests/send-otp',
   signupVerify: 'api/app/signup-requests/verify',
 }
 
-/* Fixed ids for the message type: the same value whatever language the visitor uses, so the
-   backend can filter on it. */
+/* Fixed ids for the message type, the only values the backend accepts (it rejects anything else
+   with ContactUsInvalidMessageType): the same whatever language the visitor uses. */
 export type ContactMessageType = 'Demo' | 'General' | 'Support' | 'Partnership'
 
+/* The backend's limits: fullName, email, companyName up to 256 characters, phoneNumber 32,
+   message 4000. */
+export const CONTACT_LIMITS = { name: 256, email: 256, company: 256, phone: 32, message: 4000 }
+
 export interface ContactRequestDto {
-  name: string
+  fullName: string
   email: string
   messageType: ContactMessageType
   message: string
-  company?: string
-  phone?: string
+  companyName?: string
+  phoneNumber?: string
+}
+
+export interface ContactResultDto {
+  success: boolean
+  message?: string | null
 }
 
 export interface SignupOtpRequestDto {
@@ -45,8 +54,9 @@ export interface SignupVerifyDto {
 const OPTIONS: AxiosRequestConfig & { skipErrorHandler?: boolean } = { skipErrorHandler: true }
 
 class LandingRequestsService {
-  public async sendContactRequest(input: ContactRequestDto): Promise<void> {
-    await http.post(ENDPOINTS.contact, input, OPTIONS)
+  public async sendContactRequest(input: ContactRequestDto): Promise<ContactResultDto> {
+    const result = await http.post<ContactResultDto>(ENDPOINTS.contact, input, OPTIONS)
+    return result.data
   }
 
   public async sendSignupOtp(input: SignupOtpRequestDto): Promise<void> {

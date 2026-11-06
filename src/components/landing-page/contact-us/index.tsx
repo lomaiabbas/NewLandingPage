@@ -3,16 +3,22 @@
 import { getClientTranslation } from '@/app/i18n/client'
 import { resolvePersianAndArabicNumbers } from '@/lib/helpers'
 import landingRequestsServiceInstance, {
-  LANDING_FORMS_API_READY,
+  CONTACT_LIMITS,
   type ContactMessageType,
 } from '@/lib/services/landing-requests'
 import { MapPin, Phone } from 'lucide-react'
-import { FormEvent, useState } from 'react'
+import { FormEvent, useId, useRef, useState } from 'react'
 import { CONTACT_EMAIL, CONTACT_PHONE, CONTACT_PHONE_HREF } from '../contact-info'
 import styles from './contact-us.module.css'
+import {
+  CONTACT_FIELDS,
+  contactError,
+  readContactError,
+  type ContactField,
+} from './contact-us.validation'
 
 /* value: the fixed id sent to the backend (the same in every language); label: the translation key
-   shown on the chip and used in the mail subject. To add a type, add a line here and the label in
+   shown on the chip. To add a type, add a line here and the label in
    both translation files (and the value to ContactMessageType in the service). */
 const MESSAGE_TYPES: { value: ContactMessageType; label: string }[] = [
   { value: 'Demo', label: 'ContactTypeDemo' },
@@ -34,31 +40,82 @@ export default function ContactUs({ lng }: { lng: string }) {
   const [sent, setSent] = useState(false)
   const [sending, setSending] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
-  const [errors, setErrors] = useState<{ name?: string; email?: string; content?: string }>({})
+  const [errors, setErrors] = useState<Partial<Record<ContactField, string>>>({})
+  const uid = useId()
+  const formRef = useRef<HTMLFormElement>(null)
 
-  const validateForm = () => {
-    const _errors: typeof errors = {}
-    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-    if (!name.trim()) _errors.name = t('ThisFieldIsMandatory')
-    if (!email) _errors.email = t('ThisFieldIsMandatory')
-    else if (!emailRegex.test(email)) _errors.email = t('ThisEmailIsInvalid')
-    if (!content.trim()) _errors.content = t('ThisFieldIsMandatory')
-    setErrors(_errors)
-    return Object.keys(_errors).length === 0
+  const values = { name, company, email, phone, content }
+  const setters: Record<ContactField, (value: string) => void> = {
+    name: setName,
+    company: setCompany,
+    email: setEmail,
+    phone: setPhone,
+    content: setContent,
   }
 
-  // sent to the backend once it has the endpoint; until then the mail app is opened instead
-  const sendByApi = async () => {
+  const errorFor = (field: ContactField, current = values) => {
+    const key = contactError(field, current)
+    return key ? t(key) : undefined
+  }
+
+  const focusField = (field: ContactField) =>
+    formRef.current?.querySelector<HTMLElement>(`[data-field="${field}"]`)?.focus()
+
+  const validateForm = () => {
+    const found: typeof errors = {}
+    for (const field of CONTACT_FIELDS) found[field] = errorFor(field)
+    setErrors(found)
+    const firstInvalid = CONTACT_FIELDS.find((field) => found[field])
+    if (firstInvalid) focusField(firstInvalid)
+    return !firstInvalid
+  }
+
+  // the props every text field shares: typing clears its error (the phone is checked as it is
+  // typed), leaving a field checks what was typed
+  const fieldProps = (field: ContactField) => ({
+    'data-field': field,
+    value: values[field],
+    onChange: (e: { target: { value: string } }) => {
+      const next = resolvePersianAndArabicNumbers(e.target.value)
+      setters[field](next)
+      if (field === 'phone') {
+        setErrors((prev) => ({ ...prev, phone: errorFor('phone', { ...values, phone: next }) }))
+      } else if (errors[field]) {
+        setErrors((prev) => ({ ...prev, [field]: undefined }))
+      }
+    },
+    onBlur: () => {
+      if (!values[field].trim()) return // an empty field is only reported when submitting
+      const error = errorFor(field)
+      setErrors((prev) => ({ ...prev, [field]: error }))
+    },
+    'aria-invalid': errors[field] ? true : undefined,
+    'aria-describedby': errors[field] ? `${uid}-${field}` : undefined,
+    className: `${styles.field} ${errors[field] ? styles.fieldInvalid : ''}`,
+  })
+
+  const fieldError = (field: ContactField) =>
+    errors[field] && (
+      <span id={`${uid}-${field}`} className="error-msg" role="alert">
+        {errors[field]}
+      </span>
+    )
+
+  const sendRequest = async () => {
     setSending(true)
     try {
-      await landingRequestsServiceInstance.sendContactRequest({
-        name: name.trim(),
+      const result = await landingRequestsServiceInstance.sendContactRequest({
+        fullName: name.trim(),
         email: email.trim(),
         messageType: type,
         message: content.trim(),
-        company: company.trim() || undefined,
-        phone: phone.trim() || undefined,
+        companyName: company.trim() || undefined,
+        phoneNumber: phone.trim() || undefined,
       })
+      if (!result?.success) {
+        setSubmitError(result?.message || t('RegisterModalSubmitError'))
+        return
+      }
       setName('')
       setCompany('')
       setEmail('')
@@ -67,25 +124,18 @@ export default function ContactUs({ lng }: { lng: string }) {
       setContent('')
       setSent(true)
     } catch (error: any) {
-      setSubmitError(error?.response ? t('RegisterModalSubmitError') : t('CheckNetwork'))
+      // the backend's own message goes under the field it is about, otherwise under the form
+      const { field, messageKey, message } = readContactError(error)
+      const text = message || t(messageKey ?? 'RegisterModalSubmitError')
+      if (field) {
+        setErrors((prev) => ({ ...prev, [field]: text }))
+        focusField(field)
+      } else {
+        setSubmitError(text)
+      }
     } finally {
       setSending(false)
     }
-  }
-
-  const sendByMailApp = () => {
-    const body = [
-      `${t('ContactFormName')}: ${name}`,
-      `${t('ContactFormCompany')}: ${company}`,
-      `${t('ContactFormEmail')}: ${email}`,
-      `${t('ContactFormPhone')}: ${phone}`,
-      '',
-      content,
-    ].join('\n')
-    const label = MESSAGE_TYPES.find((x) => x.value === type)?.label ?? ''
-    const subject = `[${t(label)}] AtrasLink`
-    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
-    setSent(true)
   }
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -93,9 +143,7 @@ export default function ContactUs({ lng }: { lng: string }) {
     if (sending) return
     setSent(false)
     setSubmitError(null)
-    if (!validateForm()) return
-    if (LANDING_FORMS_API_READY) void sendByApi()
-    else sendByMailApp()
+    if (validateForm()) void sendRequest()
   }
 
   return (
@@ -136,38 +184,39 @@ export default function ContactUs({ lng }: { lng: string }) {
               </div>
             </div>
 
-            <form onSubmit={onSubmit} noValidate className={styles.form}>
+            <form ref={formRef} onSubmit={onSubmit} noValidate className={styles.form}>
               <h3 className={styles.formTitle}>{t('Contact')}</h3>
               <div className={styles.fields}>
                 <label className={styles.label}>
                   <span>{t('ContactFormName')} *</span>
                   <input
                     name="name"
-                    value={name}
-                    onChange={(e) => setName(resolvePersianAndArabicNumbers(e.target.value))}
-                    className={styles.field}
+                    autoComplete="name"
+                    maxLength={CONTACT_LIMITS.name}
+                    {...fieldProps('name')}
                   />
-                  {errors.name && <span className="error-msg">{errors.name}</span>}
+                  {fieldError('name')}
                 </label>
                 <label className={styles.label}>
                   <span>{t('ContactFormCompany')}</span>
                   <input
                     name="company"
-                    value={company}
-                    onChange={(e) => setCompany(resolvePersianAndArabicNumbers(e.target.value))}
-                    className={styles.field}
+                    autoComplete="organization"
+                    maxLength={CONTACT_LIMITS.company}
+                    {...fieldProps('company')}
                   />
+                  {fieldError('company')}
                 </label>
                 <label className={styles.label}>
                   <span>{t('ContactFormEmail')} *</span>
                   <input
                     name="email"
                     type="email"
-                    value={email}
-                    onChange={(e) => setEmail(resolvePersianAndArabicNumbers(e.target.value))}
-                    className={styles.field}
+                    autoComplete="email"
+                    maxLength={CONTACT_LIMITS.email}
+                    {...fieldProps('email')}
                   />
-                  {errors.email && <span className="error-msg">{errors.email}</span>}
+                  {fieldError('email')}
                 </label>
                 <label className={styles.label}>
                   <span>{t('ContactFormPhone')}</span>
@@ -175,10 +224,11 @@ export default function ContactUs({ lng }: { lng: string }) {
                     name="phone"
                     type="tel"
                     dir="ltr"
-                    value={phone}
-                    onChange={(e) => setPhone(resolvePersianAndArabicNumbers(e.target.value))}
-                    className={styles.field}
+                    autoComplete="tel"
+                    maxLength={CONTACT_LIMITS.phone}
+                    {...fieldProps('phone')}
                   />
+                  {fieldError('phone')}
                 </label>
               </div>
 
@@ -203,12 +253,11 @@ export default function ContactUs({ lng }: { lng: string }) {
                 <span>{t('ContactFormMessage')} *</span>
                 <textarea
                   name="message"
+                  maxLength={CONTACT_LIMITS.message}
                   rows={4}
-                  value={content}
-                  onChange={(e) => setContent(resolvePersianAndArabicNumbers(e.target.value))}
-                  className={styles.field}
+                  {...fieldProps('content')}
                 />
-                {errors.content && <span className="error-msg">{errors.content}</span>}
+                {fieldError('content')}
               </label>
 
               <button type="submit" disabled={sending} className={`${styles.btn} ${styles.submit}`}>
@@ -216,7 +265,7 @@ export default function ContactUs({ lng }: { lng: string }) {
               </button>
               {sent && (
                 <p role="status" className={styles.sent}>
-                  {t(LANDING_FORMS_API_READY ? 'ContactFormSentApi' : 'ContactFormSent')}
+                  {t('ContactFormSent')}
                 </p>
               )}
               {submitError && (

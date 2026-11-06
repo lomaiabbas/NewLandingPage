@@ -5,13 +5,13 @@ import Link from 'next/link'
 import { CONTACT_EMAIL, CONTACT_PHONE, CONTACT_PHONE_HREF } from '../contact-info'
 import { SOLUTIONS } from '../solutions/solutions.data'
 import styles from './footer.module.css'
+import LangSwitch from './lang-switch'
 
 /* Footer: a brand column with the slogan, the tagline and the social links, a column of the
    solutions, a column of company links with the contact details, and a bottom bar with the
    copyright, the address and the language switch. */
 export default async function Footer({ lng }: { lng: string }) {
   const { t } = await getTranslation(lng)
-  const otherLng = lng === 'ar' ? 'en' : 'ar'
 
   return (
     <footer className={styles.footer}>
@@ -105,9 +105,7 @@ export default async function Footer({ lng }: { lng: string }) {
             © {new Date().getFullYear()} AtrasLink — {t('AllRightsReserved')}
           </span>
           <span>{t('AtrasLinkLocation')}</span>
-          <Link href={`/${otherLng}`} className={styles.switchLang}>
-            {lng === 'en' ? 'العربيّة' : 'English'}
-          </Link>
+          <LangSwitch lng={lng} />
         </div>
       </div>
     </footer>

@@ -86,9 +86,12 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  max-width: 100%;
   padding: 0.25rem 0.875rem;
   border: 1px solid var(--border);
   border-radius: 999px;
+  line-height: 1.4;
+  text-align: center;
   background: #fff;
   color: var(--primary-deep);
   font-size: 0.875rem;
@@ -96,6 +99,7 @@
   box-shadow: 0 1px 2px rgba(11, 46, 36, 0.04), 0 8px 24px -12px rgba(11, 46, 36, 0.12);
 }
 .sloganDot {
+  flex-shrink: 0;
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 50%;
@@ -117,10 +121,14 @@
 
 .form {
   display: grid;
+  /* one column no wider than the panel: a plain `auto` column grows to its widest child's
+     minimum width and pushes the fields out of the panel on a phone */
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.625rem;
 }
 .field {
   display: block;
+  min-width: 0;
   font-size: 0.875rem;
 }
 .label {
@@ -409,5 +417,58 @@
 @media (min-width: 768px) {
   .panel {
     padding: 1.5rem;
+  }
+}
+
+/* phones: 16px text in the fields, or iOS Safari zooms the page in when one is tapped; bigger
+   touch targets */
+@media (max-width: 767px) {
+  .overlay {
+    padding: 12px;
+  }
+  .input,
+  .phoneInput {
+    font-size: 1rem;
+    min-height: 2.75rem;
+  }
+  .dialValue {
+    font-size: 1rem;
+  }
+  .close {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+  .btnPrimary {
+    min-height: 2.75rem;
+  }
+  .codeInput {
+    font-size: 1.375rem;
+    letter-spacing: 0.4em;
+  }
+}
+
+/* narrow phones (iPhone SE and the like) */
+@media (max-width: 359px) {
+  .panel {
+    padding: 1rem;
+  }
+  .title {
+    font-size: 1.25rem;
+  }
+  .slogan {
+    font-size: 0.8125rem;
+  }
+}
+
+/* a phone on its side: the panel is taller than the screen, so drop the lines that only explain */
+@media (max-height: 520px) {
+  .logo,
+  .subtitle {
+    display: none;
+  }
+  .intro {
+    margin-bottom: 0.5rem;
+    /* keeps the slogan clear of the close button, which now sits beside it */
+    padding-inline: 2.5rem;
   }
 }
