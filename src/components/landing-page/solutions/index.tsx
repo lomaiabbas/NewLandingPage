@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef, useState } from 'react';
-import { ArrowLeft, ArrowRight, Check, Package, QrCode, ScanLine, ShoppingBag, Sparkles, Ticket } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, Package, ScanLine, ShoppingBag, Ticket } from 'lucide-react';
 import { getClientTranslation } from '@/app/i18n/client';
 import styles from './solutions.module.css';
 import { SOLUTIONS, type SolutionId } from './solutions.data';
@@ -58,7 +58,7 @@ export default function Solutions({ lng }: { lng: string }) {
                       </span>
                       <h3 className={styles.cardTitle}>{t(s.titleKey)}</h3>
                       <p className={styles.cardDesc}>{t(s.descKey)}</p>
-                      <ul className={`${styles.points} ${s.id === 'invitations' ? styles.pointsOneLine : ''}`}>
+                      <ul className={styles.points}>
                         {s.pointKeys.map((key) => (
                           <li key={key}>{t(key)}</li>
                         ))}
@@ -121,42 +121,7 @@ function Stat({ v, l, pct }: { v: string; l: string; pct: number }) {
   );
 }
 
-function WhatsAppInvite({ t }: { t: T }) {
-  return (
-    <div className={styles.phone}>
-      <div className={styles.phoneHeader}>
-        <img src="/images/logo.svg" alt="" className={styles.phoneLogo} />
-        AtrasLink
-      </div>
-      <div className={styles.inviteCard}>
-        <div className={styles.inviteBanner}>{t('SolMockWedding')}</div>
-        <p>{t('SolMockInviteText')}</p>
-        <div className={styles.inviteActions}>
-          <span className={styles.inviteAccept}>{t('SolMockAccept')}</span>
-          <span className={styles.inviteDecline}>{t('SolMockDecline')}</span>
-        </div>
-      </div>
-      <div className={styles.entryCard}>
-        <QrCode size={48} strokeWidth={1.2} className={styles.entryQr} />
-        <div className={styles.entryLabel}>{t('SolMockEntryCard')}</div>
-      </div>
-    </div>
-  );
-}
-
 function SolutionVisual({ id, t }: { id: SolutionId; t: T }) {
-  if (id === 'invitations') {
-    return (
-      <div className={styles.visInvites}>
-        <WhatsAppInvite t={t} />
-        <div className={styles.visInvitesStats}>
-          <Stat v="281" l={t('SolMockAccepted')} pct={80} />
-          <Stat v="236" l={t('SolMockCheckedIn')} pct={84} />
-        </div>
-      </div>
-    );
-  }
-
   if (id === 'events') {
     return (
       <div className={styles.visEvents}>
@@ -189,25 +154,6 @@ function SolutionVisual({ id, t }: { id: SolutionId; t: T }) {
               </span>
             </div>
           ))}
-        </div>
-      </div>
-    );
-  }
-
-  if (id === 'ai') {
-    return (
-      <div className={styles.visStores}>
-        <div className={styles.bubbleIn}>{t('SolMockAsstQuestion')}</div>
-        <div className={styles.aiCard}>
-          <b className={styles.aiCardHead}>
-            <Sparkles size={14} />
-            {t('SolMockAsstSuggestion')}
-          </b>
-          <p className={styles.aiText}>{t('SolMockAsstReply')}</p>
-        </div>
-        <div className={styles.assigned}>
-          <Check size={14} className={styles.orderCheck} />
-          {t('SolMockAsstReview')}
         </div>
       </div>
     );

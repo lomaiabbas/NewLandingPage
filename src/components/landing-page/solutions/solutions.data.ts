@@ -1,4 +1,4 @@
-export type SolutionId = 'invitations' | 'events' | 'campaigns' | 'stores' | 'ai';
+export type SolutionId = 'events' | 'campaigns' | 'stores';
 
 export type SolutionItem = {
   id: SolutionId;
@@ -9,25 +9,19 @@ export type SolutionItem = {
   badgeKey?: string;
 };
 
-/* The five solution cards, in order */
+/* The three solution cards, in order */
 export const SOLUTIONS: SolutionItem[] = [
-  {
-    id: 'invitations',
-    titleKey: 'SolutionInvitesTitle',
-    descKey: 'SolutionInvitesDesc',
-    pointKeys: ['SolutionInvitesPoint1', 'SolutionInvitesPoint2', 'SolutionInvitesPoint3', 'SolutionInvitesPoint4'],
-  },
   {
     id: 'events',
     titleKey: 'SolutionEventsTitle',
     descKey: 'SolutionEventsDesc',
-    pointKeys: ['SolutionEventsPoint1', 'SolutionEventsPoint2', 'SolutionEventsPoint3'],
+    pointKeys: ['SolutionEventsPoint1', 'SolutionEventsPoint2', 'SolutionEventsPoint3', 'SolutionEventsPoint4'],
   },
   {
     id: 'campaigns',
     titleKey: 'SolutionCampaignsTitle',
     descKey: 'SolutionCampaignsDesc',
-    pointKeys: ['SolutionCampaignsPoint1', 'SolutionCampaignsPoint2', 'SolutionCampaignsPoint3'],
+    pointKeys: ['SolutionCampaignsPoint1', 'SolutionCampaignsPoint2', 'SolutionCampaignsPoint3', 'SolutionCampaignsPoint4'],
   },
   {
     id: 'stores',
@@ -35,11 +29,5 @@ export const SOLUTIONS: SolutionItem[] = [
     descKey: 'SolutionStoresDesc',
     pointKeys: ['SolutionStoresPoint1', 'SolutionStoresPoint2', 'SolutionStoresPoint3'],
     badgeKey: 'SolutionStoresBadge',
-  },
-  {
-    id: 'ai',
-    titleKey: 'SolutionAiTitle',
-    descKey: 'SolutionAiDesc',
-    pointKeys: ['SolutionAiPoint1', 'SolutionAiPoint2', 'SolutionAiPoint3'],
   },
 ];

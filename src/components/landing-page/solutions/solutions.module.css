@@ -6,7 +6,6 @@
   --sol-border: var(--border);
   --sol-bubble: #d9fdd3;
   --sol-shadow-soft: 0 1px 2px rgba(11, 46, 36, 0.04), 0 8px 24px -12px rgba(11, 46, 36, 0.12);
-  --sol-shadow-window: var(--shadow);
   --sol-gradient: var(--hero-grad);
   --sol-fill: linear-gradient(90deg, var(--accent-soft), var(--accent));
 
@@ -278,118 +277,8 @@
   background: var(--sol-fill);
 }
 
-/* ---------- invitations ---------- */
+/* ---------- events: the gate scan beside the ticket count ---------- */
 
-.visInvites{
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 16px;
-}
-
-.visInvitesStats{
-  display: none;
-  width: 160px;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.phone{
-  width: 176px;
-  flex: none;
-  padding: 10px;
-  border-radius: 28px;
-  border: 4px solid var(--accent-2);
-  background: var(--sol-surface);
-  box-shadow: var(--sol-shadow-window);
-  font-size: 11px;
-  line-height: 1.5;
-}
-
-.phoneHeader{
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 10px;
-  border-radius: 18px;
-  background: var(--accent);
-  color: #fff;
-}
-
-.phoneLogo{
-  width: 20px;
-  height: 20px;
-  border-radius: 4px;
-}
-
-.inviteCard{
-  padding: 10px;
-  border-radius: 18px;
-  background: var(--surface);
-  box-shadow: var(--sol-shadow-soft);
-}
-
-.inviteCard p{
-  margin: 0;
-}
-
-.inviteBanner{
-  margin-bottom: 8px;
-  height: 48px;
-  display: grid;
-  place-items: center;
-  border-radius: 14px;
-  background: var(--sol-gradient);
-  color: #fff;
-  font-size: 14px;
-}
-
-.inviteActions{
-  margin-top: 8px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6px;
-  text-align: center;
-  font-weight: 600;
-}
-
-.inviteAccept{
-  padding: 6px 0;
-  border-radius: 12px;
-  background: var(--sol-tint);
-  color: var(--accent);
-}
-
-.inviteDecline{
-  padding: 6px 0;
-  border-radius: 12px;
-  border: 1px solid var(--sol-border);
-  color: var(--muted);
-}
-
-.entryCard{
-  margin-top: 8px;
-  padding: 10px;
-  border-radius: 18px;
-  background: var(--sol-bubble);
-  text-align: center;
-}
-
-.entryQr{
-  display: block;
-  margin: 0 auto;
-  color: var(--accent-2);
-}
-
-.entryLabel{
-  margin-top: 4px;
-  font-weight: 600;
-}
-
-/* the gate scan under the invitation stats */
 .scanTile{
   display: flex;
   flex-direction: column;
@@ -686,35 +575,9 @@
   color: var(--accent);
 }
 
-/* ---------- assistant ---------- */
-
-.aiCard{
-  align-self: flex-end;
-  max-width: 85%;
-  padding: 12px;
-  border-radius: 22px;
-  border: 1px solid color-mix(in srgb, var(--accent-soft) 30%, transparent);
-  background: var(--sol-tint);
-}
-
-.aiCardHead{
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--accent);
-}
-
-.aiText{
-  margin: 4px 0 0;
-}
-
 /* ---------- breakpoints (sm / md / lg) ---------- */
 
 @media (min-width: 640px){
-  .visInvitesStats{
-    display: flex;
-  }
-
   .visCampaigns,
   .visEvents{
     grid-template-columns: 1fr 1fr;
@@ -758,16 +621,6 @@
   }
 }
 
-/* the invitations card shows its chips two per row: the first two, then the last two */
-.pointsOneLine{
-  display: grid;
-  grid-template-columns: repeat(2, max-content);
-}
-
-.pointsOneLine li{
-  white-space: nowrap;
-}
-
 /* phones: lift the mockup captions to 12-13px so they stay readable */
 @media (max-width: 639px){
   .eyebrow{ font-size: 14px; line-height: 20px; }
@@ -777,7 +630,6 @@
   .visStores{ font-size: 14px; }
   .statPct,
   .statLabel,
-  .phone,
   .scanGate,
   .offerCard,
   .offerAvatar,
