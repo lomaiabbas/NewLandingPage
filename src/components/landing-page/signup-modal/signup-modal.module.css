@@ -468,7 +468,7 @@
   }
   .intro {
     margin-bottom: 0.5rem;
-    /* keeps the slogan clear of the close button, which now sits beside it */
+    /* keeps the slogan clear of the close button, which sits beside it */
     padding-inline: 2.5rem;
   }
 }
