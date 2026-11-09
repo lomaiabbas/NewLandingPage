@@ -2526,7 +2526,7 @@
   "ContactFormSentTitle": "تم استلام رسالتك",
   "ContactErrNameShort": "الاسم قصير جداً، أدخل حرفين على الأقل",
   "ContactErrNameInvalid": "الاسم يجب أن يحتوي على حروف",
-  "ContactErrPhoneInvalid": "رقم الجوال غير صحيح، أدخل من 7 إلى 15 رقماً (مثال: +966555555555)",
+  "ContactErrPhoneInvalid": "رقم الجوال غير صحيح، أدخل من 7 إلى 15 رقماً (مثال: \u2066+966555555555\u2069)",
   "ContactErrMessageShort": "الرسالة قصيرة جداً، اكتب 10 أحرف على الأقل",
   "ContactErrTooLong": "النص أطول من الحد المسموح",
   "PhoneSignupSubtitle": "أدخل بياناتك وسنرسل رمز تحقق إلى رقمك عبر واتساب، ثم يراجع فريقنا طلبك ويفعّل حسابك.",

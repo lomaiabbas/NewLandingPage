@@ -75,10 +75,18 @@ export default function ContactUs({ lng }: { lng: string }) {
     return !firstInvalid
   }
 
+  // the email and the phone are typed left to right; the other fields follow the language of what
+  // is typed (the page's direction while empty), so the cursor stays at the end of the text
+  const directionOf = (field: ContactField): 'ltr' | 'auto' | undefined => {
+    if (field === 'email' || field === 'phone') return 'ltr'
+    return values[field] ? 'auto' : undefined
+  }
+
   // the props every text field shares: typing clears its error (the phone is checked as it is
   // typed), leaving a field checks what was typed
   const fieldProps = (field: ContactField) => ({
     'data-field': field,
+    dir: directionOf(field),
     value: values[field],
     onChange: (e: { target: { value: string } }) => {
       const next = resolvePersianAndArabicNumbers(e.target.value)
@@ -228,7 +236,6 @@ export default function ContactUs({ lng }: { lng: string }) {
                   <input
                     name="phone"
                     type="tel"
-                    dir="ltr"
                     autoComplete="tel"
                     maxLength={CONTACT_LIMITS.phone}
                     {...fieldProps('phone')}
