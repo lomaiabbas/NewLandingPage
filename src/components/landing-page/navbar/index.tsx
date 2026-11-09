@@ -183,12 +183,12 @@ export default function Navbar({ lng }: { lng: string }) {
         className={`${styles.nav} ${isScrolled ? styles.isScrolled : ''}`}
         aria-label={lng === 'ar' ? 'التنقل الرئيسي' : 'Main navigation'}
       >
-        <Link href={`/${lng}`} className={styles.navBrand}>
+        <div className={styles.navBrand}>
           <span className={styles.navMark}>
             <AtrasLinkLogo />
           </span>
           <span className={styles.navWord}>{t('AtrasLink')}</span>
-        </Link>
+        </div>
 
         <div className={styles.navLinks}>
           {/* plain anchors, not next/link: these point at sections of the page that is already

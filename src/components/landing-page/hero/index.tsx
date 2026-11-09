@@ -6,7 +6,7 @@ import { ArrowLeft, ArrowRight, Maximize2, Minimize2 } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react'
 import styles from './hero.module.css';
 import { initScrollReveal } from '../scroll-reveal';
-import WhatsAppTrustBadge from './whatsapp-trust-badge';
+import WhatsAppTrustLine from './whatsapp-trust-line';
 
 /* A 16:10 frame, 1312×820: the demo's main layout holds down to 1180px (its chat page wraps below
    that, its templates grid drops to two columns under 1250px), and this height keeps the analytics
@@ -132,18 +132,16 @@ export default function Hero({ lng }: { lng: string }) {
               </h1>
               <p className={styles.heroDesc}>
                 {t("HeroDesc1")}{t("HeroDesc2")}{t("HeroDesc3")}</p>
-              <WhatsAppTrustBadge
-                label={t("HeroMetaBadgeLabel")}
-                before={t("HeroMetaBadgeBefore")}
-                brand={t("HeroMetaBadgeBrand")}
-                after={t("HeroMetaBadgeAfter")}
-              />
               <div className={styles.heroActions}>
                 <a href="#contact" className={styles.demoBtn}>
                   {t("HeroRequestDemo")}
                   {lng === 'ar' ? <ArrowLeft size={16} aria-hidden="true" /> : <ArrowRight size={16} aria-hidden="true" />}
                 </a>
               </div>
+              <WhatsAppTrustLine
+                label={t("HeroMetaBadgeLabel")}
+                rest={`${t("HeroMetaBadgeBefore")} ${t("HeroMetaBadgeBrand")} ${t("HeroMetaBadgeAfter")}`}
+              />
             </div>
           </Col>
           <Col xs={24} lg={14} className={`relative z-10 min-w-0 ${styles.demoCol}`}>

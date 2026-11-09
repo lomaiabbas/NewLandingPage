@@ -19,7 +19,13 @@
 
 @media (min-width: 768px) {
   .grid {
-    grid-template-columns: 1.4fr 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
   }
 }
 
@@ -100,10 +106,6 @@
 
 .links a:hover {
   color: #fff !important;
-}
-
-.contact {
-  margin-top: 12px;
 }
 
 .contact li {

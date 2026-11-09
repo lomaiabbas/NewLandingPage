@@ -7,8 +7,10 @@ import landingRequestsServiceInstance, {
   type ContactMessageType,
 } from '@/lib/services/landing-requests'
 import { MapPin, Phone } from 'lucide-react'
-import { FormEvent, useId, useRef, useState } from 'react'
+import { FormEvent, useEffect, useId, useRef, useState } from 'react'
 import { CONTACT_EMAIL, CONTACT_PHONE, CONTACT_PHONE_HREF } from '../contact-info'
+import { onContactPrefill } from './contact-prefill'
+import ContactSentDialog from './contact-sent-dialog'
 import styles from './contact-us.module.css'
 import {
   CONTACT_FIELDS,
@@ -43,6 +45,9 @@ export default function ContactUs({ lng }: { lng: string }) {
   const [errors, setErrors] = useState<Partial<Record<ContactField, string>>>({})
   const uid = useId()
   const formRef = useRef<HTMLFormElement>(null)
+
+  // other parts of the page can open the form with a message type already chosen
+  useEffect(() => onContactPrefill(setType), [])
 
   const values = { name, company, email, phone, content }
   const setters: Record<ContactField, (value: string) => void> = {
@@ -251,23 +256,25 @@ export default function ContactUs({ lng }: { lng: string }) {
 
               <label className={`${styles.label} ${styles.messageLabel}`}>
                 <span>{t('ContactFormMessage')} *</span>
-                <textarea
-                  name="message"
-                  maxLength={CONTACT_LIMITS.message}
-                  rows={4}
-                  {...fieldProps('content')}
-                />
+                <div className={styles.textareaWrap}>
+                  <textarea
+                    name="message"
+                    maxLength={CONTACT_LIMITS.message}
+                    rows={4}
+                    {...fieldProps('content')}
+                  />
+                  <span className={styles.counter}>
+                    <bdi dir="ltr">
+                      {content.length} / {CONTACT_LIMITS.message}
+                    </bdi>
+                  </span>
+                </div>
                 {fieldError('content')}
               </label>
 
               <button type="submit" disabled={sending} className={`${styles.btn} ${styles.submit}`}>
                 {t('SendYourMassage')}
               </button>
-              {sent && (
-                <p role="status" className={styles.sent}>
-                  {t('ContactFormSent')}
-                </p>
-              )}
               {submitError && (
                 <p role="alert" className="error-msg">
                   {submitError}
@@ -277,6 +284,14 @@ export default function ContactUs({ lng }: { lng: string }) {
           </div>
         </div>
       </div>
+      {sent && (
+        <ContactSentDialog
+          title={t('ContactFormSentTitle')}
+          message={t('ContactFormSent')}
+          closeLabel={t('Close')}
+          onClose={() => setSent(false)}
+        />
+      )}
     </section>
   )
 }

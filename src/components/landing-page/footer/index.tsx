@@ -8,8 +8,8 @@ import styles from './footer.module.css'
 import LangSwitch from './lang-switch'
 
 /* Footer: a brand column with the slogan, the tagline and the social links, a column of the
-   solutions, a column of company links with the contact details, and a bottom bar with the
-   copyright, the address and the language switch. */
+   solutions, a column of company links, a column with the contact details, and a bottom bar with
+   the copyright, the address and the language switch. */
 export default async function Footer({ lng }: { lng: string }) {
   const { t } = await getTranslation(lng)
 
@@ -18,9 +18,9 @@ export default async function Footer({ lng }: { lng: string }) {
       <div className="container">
         <div className={styles.grid}>
           <div>
-            <Link href={`/${lng}`} className={styles.logo}>
+            <div className={styles.logo}>
               <AtrasLinkLogo XL />
-            </Link>
+            </div>
             <p className={styles.slogan}>
               {t('HeroTitle1')}
               {t('HeroTitle2')}
@@ -83,6 +83,10 @@ export default async function Footer({ lng }: { lng: string }) {
                 <Link href={`/${lng}/terms-and-conditions`}>{t('TermsAndConditions')}</Link>
               </li>
             </ul>
+          </div>
+
+          <div>
+            <h3 className={styles.title}>{t('Contact')}</h3>
             <ul className={`${styles.links} ${styles.contact}`}>
               <li>
                 <Mail size={14} />

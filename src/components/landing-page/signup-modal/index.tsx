@@ -16,6 +16,7 @@ import {
   type MutableRefObject,
 } from 'react'
 import { createPortal } from 'react-dom'
+import { prefillContactType } from '../contact-us/contact-prefill'
 import DialCodePicker from '../register-modal/dial-code-picker'
 import {
   DEFAULT_DIAL_CODE,
@@ -294,9 +295,11 @@ export default function SignupModal({
     )
   }
 
-  // closes the modal, then scrolls once the page behind it is scrollable again
+  // closes the modal, then scrolls once the page behind it is scrollable again; the contact form
+  // opens on "Partnership", which the visitor can change
   const goToContact = () => {
     onClose()
+    prefillContactType('Partnership')
     window.setTimeout(
       () => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }),
       50

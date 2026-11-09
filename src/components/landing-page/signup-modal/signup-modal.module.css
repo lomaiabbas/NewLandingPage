@@ -38,8 +38,11 @@
   transition: opacity 0.16s ease, visibility 0s 0.16s;
 }
 
+/* the popup sits outside the zoomed landing page (a portal), so it takes the same zoom to keep its
+   size relative to the page on large screens; DialCodePicker reads it to place its list */
 .panel {
   position: relative;
+  zoom: var(--landing-zoom, 1);
   width: min(26rem, 100%);
   margin: auto;
   padding: 1.25rem;

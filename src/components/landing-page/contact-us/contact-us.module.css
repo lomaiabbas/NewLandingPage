@@ -185,6 +185,27 @@
 .messageLabel{
   margin-top: 16px;
 }
+.textareaWrap{
+  position: relative;
+}
+.textareaWrap textarea{
+  display: block;
+  padding-bottom: 30px;
+}
+/* inside the field, at its end edge, clear of the resize handle; the pill keeps the text that
+   scrolls underneath from showing through */
+.counter{
+  position: absolute;
+  inset-inline-end: 26px;
+  inset-block-end: 8px;
+  padding: 0 6px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.9);
+  font-size: 12px;
+  line-height: 18px;
+  color: #5b6960;
+  pointer-events: none;
+}
 
 .field{
   width: 100%;
@@ -253,11 +274,96 @@
   width: 100%;
 }
 
-.sent{
-  margin: 12px 0 0;
+/* ---------- sent popup ---------- */
+.sentOverlay{
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(11, 46, 36, 0.5);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  animation: sentFade 0.2s ease;
+}
+/* the global rule sets every element's font with !important; the popup uses the navbar's */
+.sentOverlay,
+.sentOverlay *{
+  font-family: 'IBM Plex Sans Arabic', var(--font-sans), sans-serif !important;
+}
+/* the popup sits outside the zoomed landing page (a portal), so it takes the same zoom to keep its
+   size relative to the page on large screens */
+.sentPanel{
+  position: relative;
+  zoom: var(--landing-zoom, 1);
+  width: min(24rem, 100%);
+  padding: 36px 24px 28px;
+  border: 1px solid rgba(24, 38, 32, 0.1);
+  border-radius: 26px;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(11, 46, 36, 0.04), 0 40px 80px -30px rgba(11, 46, 36, 0.5);
   text-align: center;
-  font-size: 14px;
-  color: #0f6b4e;
+  animation: sentRise 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.sentIcon{
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #07c692, #0f6b4e);
+  color: #fff;
+  box-shadow: 0 0 0 8px rgba(7, 198, 146, 0.14);
+}
+.sentTitle{
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #182620;
+}
+.sentText{
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.7;
+  color: #5b6960;
+}
+.sentClose{
+  position: absolute;
+  inset-block-start: 12px;
+  inset-inline-end: 12px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #5b6960;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+}
+.sentClose:hover{
+  background: rgba(24, 38, 32, 0.06);
+  color: #182620;
+}
+.sentClose:focus-visible{
+  outline: 3px solid rgba(7, 198, 146, 0.45);
+  outline-offset: 2px;
+}
+@keyframes sentFade{
+  from{ opacity: 0; }
+  to{ opacity: 1; }
+}
+@keyframes sentRise{
+  from{ opacity: 0; transform: translateY(12px) scale(0.98); }
+  to{ opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce){
+  .sentOverlay,
+  .sentPanel{ animation: none; }
 }
 
 /* phones: larger form labels, chips and buttons */
