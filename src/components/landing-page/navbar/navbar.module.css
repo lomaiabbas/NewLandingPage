@@ -1,3 +1,20 @@
+/* Page-level scrolling for the pages that show this navbar (landing, register, privacy policy,
+   terms, technical support). Applied only while the navbar is mounted, so the rest of the app keeps
+   the browser defaults. */
+:global(html):has(.headerLayout) {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :global(html):has(.headerLayout) {
+    scroll-behavior: auto;
+  }
+}
+
+:global(body):has(.headerLayout) {
+  overflow-x: hidden;
+}
+
 .headerLayout {
   /* always fixed, never gated behind the scroll-state JS: that state only attaches its
      listener after hydration, and on a real deployment (slower JS/network than local dev)
