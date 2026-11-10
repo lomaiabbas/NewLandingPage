@@ -8,7 +8,8 @@
   margin-top: calc(-1 * var(--section-slant));
   padding: calc(var(--section-slant) + 48px) 0 128px;
   clip-path: polygon(0 0, 100% var(--section-slant), 100% 100%, 0 100%);
-  scroll-margin-top: 80px;
+  /* the nav bar is fixed, so a hash jump would otherwise land the heading underneath it */
+  scroll-margin-top: 90px;
 }
 @media (max-width: 767px){
   .contactUs{
@@ -183,7 +184,7 @@
   color: #5b6960;
 }
 .messageLabel{
-  margin-top: 16px;
+  margin-top: 12px;
 }
 .textareaWrap{
   position: relative;
@@ -205,6 +206,10 @@
   line-height: 18px;
   color: #5b6960;
   pointer-events: none;
+}
+.counterOver{
+  color: #d50000;
+  font-weight: 600;
 }
 
 .field{
@@ -232,7 +237,7 @@
 }
 
 .typeSet{
-  margin: 16px 0 0;
+  margin: 12px 0 0;
   border: 0;
   padding: 0;
 }

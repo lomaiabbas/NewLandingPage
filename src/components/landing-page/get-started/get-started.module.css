@@ -8,6 +8,9 @@
   margin-top: calc(-1 * var(--section-slant));
   clip-path: polygon(0 0, 100% var(--section-slant), 100% 100%, 0 100%);
   padding: calc(var(--section-slant) + 72px) 0 calc(var(--section-slant) + 96px);
+  /* the slanted band starts well above its heading (the top padding), so the jump offsets that
+     padding and lands the heading just under the fixed nav */
+  scroll-margin-top: calc(28px - var(--section-slant));
 }
 
 .head{

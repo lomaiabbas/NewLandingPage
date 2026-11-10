@@ -1,0 +1,15 @@
+/* Page-level scrolling for the public pages (landing, register, privacy, terms, ...), applied only
+   while one of them is mounted so the admin area keeps the browser defaults. */
+:global(html):has(.publicLayout) {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :global(html):has(.publicLayout) {
+    scroll-behavior: auto;
+  }
+}
+
+:global(body):has(.publicLayout) {
+  overflow-x: hidden;
+}

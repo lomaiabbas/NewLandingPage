@@ -6,7 +6,6 @@ import ar_EG from 'antd/lib/locale/ar_EG'
 import en_US from 'antd/lib/locale/en_US'
 import { dir } from 'i18next'
 import type { Metadata } from 'next'
-import { El_Messiri as FontSans } from 'next/font/google'
 import localFont from 'next/font/local'
 
 import { AppProvider } from '@/lib/context'
@@ -22,8 +21,29 @@ export async function generateStaticParams() {
   return languages.map((lng) => ({ lng }))
 }
 
-const fontSans = FontSans({
-  subsets: ['latin'],
+const fontSans = localFont({
+  src: [
+    {
+      path: '../../../public/fonts/el-messiri-400.ttf',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../../../public/fonts/el-messiri-500.ttf',
+      weight: '500',
+      style: 'normal',
+    },
+    {
+      path: '../../../public/fonts/el-messiri-600.ttf',
+      weight: '600',
+      style: 'normal',
+    },
+    {
+      path: '../../../public/fonts/el-messiri-700.ttf',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
   variable: '--font-sans',
 })
 

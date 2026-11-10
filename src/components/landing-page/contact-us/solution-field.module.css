@@ -1,0 +1,75 @@
+/* Multi-select for the contact form: three small icon cards in a row. */
+.root{
+  margin-top: 12px;
+}
+.head{
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0 16px;
+  margin-bottom: 6px;
+}
+.title{
+  font-size: 14px;
+  line-height: 20px;
+  color: #5b6960;
+}
+.hint{
+  font-size: 12.5px;
+  line-height: 20px;
+  color: #5b6960;
+}
+
+.grid{
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.tile{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  min-width: 0;
+  margin: 0;
+  border-radius: 12px;
+  border: 1px solid rgba(24, 38, 32, 0.1);
+  background: #fff;
+  padding: 8px 6px;
+  font: inherit;
+  font-size: 12px;
+  line-height: 16px;
+  text-align: center;
+  color: #182620;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+.tile:hover{
+  border-color: color-mix(in oklab, #07c692 45%, white);
+  background: color-mix(in oklab, #07c692 6%, white);
+}
+.tile:focus-visible{
+  outline: none;
+  border-color: #07c692;
+  box-shadow: 0 0 0 4px rgba(7, 198, 146, 0.15);
+}
+.icon{
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: #5b6960;
+  transition: color .15s ease;
+}
+.tile[aria-pressed="true"],
+.tile[aria-pressed="true"]:hover{
+  border-color: #07c692;
+  background: color-mix(in oklab, #07c692 12%, white);
+  color: #0f6b4e;
+  font-weight: 600;
+}
+.tile[aria-pressed="true"] .icon{
+  color: #07c692;
+}

@@ -51,7 +51,7 @@ export function contactError(field: ContactField, values: ContactValues): string
     case 'content':
       if (!value) return 'ThisFieldIsMandatory'
       if (value.length < MIN_MESSAGE) return 'ContactErrMessageShort'
-      return value.length > CONTACT_LIMITS.message ? 'ContactErrTooLong' : undefined
+      return value.length > CONTACT_LIMITS.message ? 'ContactErrMessageLong' : undefined
   }
 }
 

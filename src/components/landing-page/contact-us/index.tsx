@@ -18,6 +18,7 @@ import {
   readContactError,
   type ContactField,
 } from './contact-us.validation'
+import SolutionField, { SOLUTIONS, type SolutionId } from './solution-field'
 
 /* value: the fixed id sent to the backend (the same in every language); label: the translation key
    shown on the chip. To add a type, add a line here and the label in
@@ -29,6 +30,8 @@ const MESSAGE_TYPES: { value: ContactMessageType; label: string }[] = [
   { value: 'Partnership', label: 'ContactTypePartnership' },
 ]
 
+const DRAFT_KEY = 'contact-form-draft'
+
 /* CTA + contact band: a dark rounded card with the call to action and contact details on one side
    and the contact form on a white card on the other. */
 export default function ContactUs({ lng }: { lng: string }) {
@@ -38,6 +41,7 @@ export default function ContactUs({ lng }: { lng: string }) {
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
   const [type, setType] = useState<ContactMessageType>('Demo')
+  const [solutions, setSolutions] = useState<SolutionId[]>([])
   const [content, setContent] = useState('')
   const [sent, setSent] = useState(false)
   const [sending, setSending] = useState(false)
@@ -45,6 +49,33 @@ export default function ContactUs({ lng }: { lng: string }) {
   const [errors, setErrors] = useState<Partial<Record<ContactField, string>>>({})
   const uid = useId()
   const formRef = useRef<HTMLFormElement>(null)
+
+  // switching the language reloads the page under another route, so the draft is kept in the
+  // session and restored here
+  useEffect(() => {
+    try {
+      const draft = JSON.parse(sessionStorage.getItem(DRAFT_KEY) ?? 'null')
+      if (!draft) return
+      setName(draft.name ?? '')
+      setCompany(draft.company ?? '')
+      setEmail(draft.email ?? '')
+      setPhone(draft.phone ?? '')
+      setContent(draft.content ?? '')
+      if (MESSAGE_TYPES.some((x) => x.value === draft.type)) setType(draft.type)
+      if (Array.isArray(draft.solutions)) {
+        setSolutions(SOLUTIONS.map((x) => x.value).filter((v) => draft.solutions.includes(v)))
+      }
+    } catch {}
+  }, [])
+
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(
+        DRAFT_KEY,
+        JSON.stringify({ name, company, email, phone, type, solutions, content })
+      )
+    } catch {}
+  }, [name, company, email, phone, type, solutions, content])
 
   // other parts of the page can open the form with a message type already chosen
   useEffect(() => onContactPrefill(setType), [])
@@ -60,7 +91,7 @@ export default function ContactUs({ lng }: { lng: string }) {
 
   const errorFor = (field: ContactField, current = values) => {
     const key = contactError(field, current)
-    return key ? t(key) : undefined
+    return key ? t(key, { max: CONTACT_LIMITS.message }) : undefined
   }
 
   const focusField = (field: ContactField) =>
@@ -82,8 +113,8 @@ export default function ContactUs({ lng }: { lng: string }) {
     return values[field] ? 'auto' : undefined
   }
 
-  // the props every text field shares: typing clears its error (the phone is checked as it is
-  // typed), leaving a field checks what was typed
+  // the props every text field shares: typing clears its error (the phone and the message length
+  // are checked as they are typed), leaving a field checks what was typed
   const fieldProps = (field: ContactField) => ({
     'data-field': field,
     dir: directionOf(field),
@@ -93,6 +124,8 @@ export default function ContactUs({ lng }: { lng: string }) {
       setters[field](next)
       if (field === 'phone') {
         setErrors((prev) => ({ ...prev, phone: errorFor('phone', { ...values, phone: next }) }))
+      } else if (field === 'content' && next.trim().length > CONTACT_LIMITS.message) {
+        setErrors((prev) => ({ ...prev, content: errorFor('content', { ...values, content: next }) }))
       } else if (errors[field]) {
         setErrors((prev) => ({ ...prev, [field]: undefined }))
       }
@@ -122,6 +155,10 @@ export default function ContactUs({ lng }: { lng: string }) {
         email: email.trim(),
         messageType: type,
         message: content.trim(),
+        solutionType:
+          SOLUTIONS.map((x) => x.value)
+            .filter((v) => solutions.includes(v))
+            .join(',') || undefined,
         companyName: company.trim() || undefined,
         phoneNumber: phone.trim() || undefined,
       })
@@ -134,6 +171,7 @@ export default function ContactUs({ lng }: { lng: string }) {
       setEmail('')
       setPhone('')
       setType('Demo')
+      setSolutions([])
       setContent('')
       setSent(true)
     } catch (error: any) {
@@ -244,6 +282,8 @@ export default function ContactUs({ lng }: { lng: string }) {
                 </label>
               </div>
 
+              <SolutionField lng={lng} value={solutions} onChange={setSolutions} />
+
               <fieldset className={styles.typeSet}>
                 <legend className={styles.legend}>{t('ContactFormType')} *</legend>
                 <div className={styles.chips}>
@@ -266,11 +306,14 @@ export default function ContactUs({ lng }: { lng: string }) {
                 <div className={styles.textareaWrap}>
                   <textarea
                     name="message"
-                    maxLength={CONTACT_LIMITS.message}
-                    rows={4}
+                    rows={3}
                     {...fieldProps('content')}
                   />
-                  <span className={styles.counter}>
+                  <span
+                    className={`${styles.counter} ${
+                      content.length > CONTACT_LIMITS.message ? styles.counterOver : ''
+                    }`}
+                  >
                     <bdi dir="ltr">
                       {content.length} / {CONTACT_LIMITS.message}
                     </bdi>

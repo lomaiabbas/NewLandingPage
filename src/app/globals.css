@@ -48,35 +48,6 @@
   }
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-}
-
-/* the nav bar is fixed, so a hash jump would otherwise land the section heading underneath it */
-#contact {
-  scroll-margin-top: 90px;
-}
-
-/* Solutions and About us are slanted bands that overlap the section above and start with a lot of
-   top padding, so their box top sits well above the heading. Offset by that padding so the jump
-   lands the heading just under the fixed nav (heading ≈ 100px from the top). */
-#solutions {
-  scroll-margin-top: calc(-1 * (var(--hero-slant) + 20px));
-}
-#about {
-  scroll-margin-top: calc(28px - var(--section-slant));
-}
-
-body {
-  overflow-x: hidden;
-}
-
 *,
 *::after,
 *::before,

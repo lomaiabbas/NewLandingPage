@@ -20,6 +20,9 @@
   /* the top also leaves room for the hero's scroll hint, which hangs 94px below the hero's bottom */
   padding: calc(var(--hero-slant) + 120px) 0 calc(var(--section-slant) + 32px);
   clip-path: polygon(0 0, 100% var(--hero-slant), 100% 100%, 0 100%);
+  /* the band overlaps the hero and starts well above its heading (the top padding), so the jump
+     offsets that padding and lands the heading just under the fixed nav */
+  scroll-margin-top: calc(-1 * (var(--hero-slant) + 20px));
 }
 
 /* English mirrors the hero's cut (see hero.module.css), so this top follows it */

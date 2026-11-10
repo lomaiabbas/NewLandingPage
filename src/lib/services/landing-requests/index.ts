@@ -23,6 +23,8 @@ export interface ContactRequestDto {
   message: string
   companyName?: string
   phoneNumber?: string
+  /** the chosen solutions (Events, Campaigns, Stores) separated by commas; up to 128 characters */
+  solutionType?: string
 }
 
 export interface ContactResultDto {
